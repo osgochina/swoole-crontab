@@ -45,7 +45,12 @@ class Main
     }
     static public function do_something($interval)
     {
-       var_dump(TurnTable::get_task());
+        $tasks = TurnTable::get_task();
+        if(empty($tasks)) return false;
+        foreach($tasks as $task){
+            (new Process())->create_process($task);
+        }
+        return true;
     }
 
     static public function log_write($message)

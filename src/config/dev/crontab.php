@@ -10,7 +10,7 @@ return [
     [
         "id"=>"taskid1",
         "name"=>"php -i",
-        "time"=>'*/4 * * * * *',
+        "time"=>'* * * * * *',
         "task"=>[
             "parse"=>"Cmd",
             "cmd" =>"php -i",
@@ -20,11 +20,21 @@ return [
     [
         "id"=>"taskid2",
         "name"=>"gearman",
-        "time"=>'*/8 * * * * *',
+        "time"=>'* * * * * *',
         "task"=>[
             "parse"=>"Gearman",
             "services"=>"127.0.0.1:4730",
             "function"=>"tool/sendMail"
         ],
-    ]
+    ],
+    [
+        "id"=>"taskid3",
+        "name"=>"gearman",
+        "time"=>'* * * * * *',
+        "task"=>[
+            "parse"=>"Gearman",
+            "services"=>"127.0.0.1:4730",
+            "function"=>"tool/sendMail"
+        ],
+    ],
 ];

@@ -42,9 +42,15 @@ class TurnTable
     {
         $task = array();
         if(self::$cur_turntable == 1){
-            $task = isset(self::$turntable2[self::$current])?self::$turntable2[self::$current]:array();
+            if(isset(self::$turntable2[self::$current])){
+                $task = self::$turntable2[self::$current];
+                unset(self::$turntable2[self::$current]);
+            }
         }elseif(self::$cur_turntable == 2){
-            $task = isset(self::$turntable1[self::$current])?self::$turntable1[self::$current]:array();
+            if(isset(self::$turntable1[self::$current])){
+                $task = self::$turntable1[self::$current];
+                unset(self::$turntable1[self::$current]);
+            }
         }
         self::next_sec();
         return $task;
@@ -62,6 +68,6 @@ class TurnTable
     static public function debug()
     {
         var_dump(self::$turntable1);
-        //var_dump(self::$turntable2);
+        var_dump(self::$turntable2);
     }
 }
