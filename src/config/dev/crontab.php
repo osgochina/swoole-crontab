@@ -8,19 +8,21 @@
 
 return [
     [
+        "id"=>"taskid1",
         "name"=>"php -i",
-        "time"=>'* * * * *',
+        "time"=>'*/4 * * * * *',
         "task"=>[
-            "type"=>"cli",
+            "parse"=>"Cmd",
             "cmd" =>"php -i",
             "output"=>"/tmp/test.log"
         ]
     ],
     [
+        "id"=>"taskid2",
         "name"=>"gearman",
-        "time"=>'* * * * *',
+        "time"=>'*/8 * * * * *',
         "task"=>[
-            "type"=>"gearman",
+            "parse"=>"Gearman",
             "services"=>"127.0.0.1:4730",
             "function"=>"tool/sendMail"
         ],

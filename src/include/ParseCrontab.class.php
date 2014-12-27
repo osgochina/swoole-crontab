@@ -6,8 +6,9 @@
  * Date: 14-12-27
  * Time: 上午11:59
  */
-class ParamsCrontab
+class ParseCrontab
 {
+    static public $error;
     /**
      *  解析crontab的定时格式，linux只支持到分钟/，这个类支持到秒
      *  @param string $crontab_string:
@@ -29,10 +30,12 @@ class ParamsCrontab
     static public function parse($crontab_string, $start_time = null)
     {
         if (!preg_match('/^((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)$/i', trim($crontab_string))) {
-            throw new InvalidArgumentException("Invalid cron string: " . $crontab_string);
+            self::$error = "Invalid cron string: " . $crontab_string;
+            return false;
         }
         if ($start_time && !is_numeric($start_time)) {
-            throw new InvalidArgumentException("\$start_time must be a valid unix timestamp ($start_time given)");
+            self::$error = "\$start_time must be a valid unix timestamp ($start_time given)";
+            return false;
         }
         $cron = preg_split("/[\s]+/i", trim($crontab_string));
         $start = empty($start_time) ? time() : $start_time;
@@ -75,10 +78,3 @@ class ParamsCrontab
         return $result;
     }
 }
-
-$start = microtime(true);
-$r = ParamsCrontab::parse("0 26,28,27 * * * *");
-var_dump($r);
-$end = microtime(true);
-
-echo $end - $start, "\n";

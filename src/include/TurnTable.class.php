@@ -23,11 +23,18 @@ class TurnTable
         foreach($sec_list as $sec){
             if(self::$cur_turntable == 1){
                 self::$turntable1[$sec][$task["id"]] = $task;
-                self::$cur_turntable = 2;
+
             }elseif(self::$cur_turntable == 2){
                 self::$turntable2[$sec][$task["id"]] = $task;
-                self::$cur_turntable = 1;
             }
+        }
+    }
+    static public function turn()
+    {
+        if(self::$cur_turntable == 1){
+            self::$cur_turntable = 2;
+        }elseif(self::$cur_turntable == 2){
+            self::$cur_turntable = 1;
         }
     }
 
@@ -50,5 +57,11 @@ class TurnTable
         }else{
             self::$current+=1;
         }
+    }
+
+    static public function debug()
+    {
+        var_dump(self::$turntable1);
+        //var_dump(self::$turntable2);
     }
 }
