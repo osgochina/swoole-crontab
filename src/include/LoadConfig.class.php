@@ -1,19 +1,23 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: vic
+ * User: ClownFish 187231450@qq.com
  * Date: 14-12-27
  * Time: 下午3:46
  */
 
 class LoadConfig
 {
-    static public $config_path;
+    static public $config_file;
     static protected $config;
 
     static protected function load_config()
     {
-        self::$config = include(self::$config_path."crontab.php");
+        if(is_dir(self::$config_file)){
+            self::$config = include(self::$config_file."crontab.php");
+        }elseif(is_file(self::$config_file)){
+            self::$config = include(self::$config_file);
+        }
     }
 
     static protected function parse_config()
