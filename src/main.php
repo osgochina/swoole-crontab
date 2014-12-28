@@ -15,8 +15,8 @@ define('ROOT_PATH', realpath(dirname(__FILE__)) . DS);
 class Main
 {
 
-    static private $options = "hdrp:s:l:c:";
-    static private $longopts = array("help", "daemon","reload", "pid:", "log:", "config:");
+    static private $options = "hdrmp:s:l:c:";
+    static private $longopts = array("help", "daemon","reload","monitor", "pid:", "log:", "config:");
     static private $help = <<<EOF
 
   帮助信息:
@@ -33,6 +33,7 @@ class Main
                      下的所有文件.)
   -d [--daemon]      是否后台运行
   -r [--reload]      重新载入配置文件
+  -m [--monitor]     监控进程是否在运行,如果在运行则不管,未运行则启动进程
 
 EOF;
 
@@ -49,6 +50,7 @@ EOF;
         self::params_l($opt);
         self::params_c($opt);
         self::params_r($opt);
+        $opt = self::params_m($opt);
         self::params_s($opt);
     }
 
@@ -102,6 +104,24 @@ EOF;
             }
             Main::log_write("进程" . $pid . "不存在");
         }
+    }
+
+    /**
+     * 监控进程是否在运行
+     * @param $opt
+     * @return array
+     */
+    static public function params_m($opt)
+    {
+        if (isset($opt["m"]) || isset($opt["monitor"])) {
+            $pid = @file_get_contents(Crontab::$pid_file);
+            if ($pid && swoole_process::kill($pid, 0)) {
+                   exit;
+            }else{
+                $opt=array("s"=>"restart");
+            }
+        }
+        return $opt;
     }
 
     /**
