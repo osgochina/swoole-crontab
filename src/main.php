@@ -20,7 +20,7 @@ class Main
     static private $help = <<<EOF
 
   帮助信息:
-  Usage: php master.php [options] -- [args...]
+  Usage: /path/to/php main.php [options] -- [args...]
 
   -h [--help]        显示帮助信息
   -p [--pid]         指定pid文件位置(默认pid文件保存在当前目录)
