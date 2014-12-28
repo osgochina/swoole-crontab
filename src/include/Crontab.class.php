@@ -127,9 +127,13 @@ class Crontab
     /**
      * 根据配置载入需要执行的任务
      */
-    static public function load_config()
+    static public function load_config($reload = false)
     {
         $time = time();
+        if($reload){
+            LoadConfig::reload_config();
+            TurnTable::init();
+        }
         $config = LoadConfig::get_config();
         foreach ($config as $id => $task) {
             $ret = ParseCrontab::parse($task["time"], $time);
@@ -162,6 +166,7 @@ class Crontab
      */
     static public function do_something($interval)
     {
+        //TurnTable::debug();
         $tasks = TurnTable::get_task();
         if (empty($tasks)) return false;
         foreach ($tasks as $task) {
@@ -178,5 +183,9 @@ class Crontab
         swoole_process::signal(SIGTERM, function ($signo) {
             self::exit2p("收到退出信号,退出主进程");
         });
+        swoole_process::signal(SIGUSR1, function ($signo) {
+            Crontab::load_config(true);
+        });
+
     }
 }

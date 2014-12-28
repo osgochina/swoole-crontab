@@ -8,10 +8,10 @@
  */
 class TurnTable
 {
-    static protected $turntable1 = array();  //任务转盘1
-    static protected $turntable2 = array();  //任务转盘2
-    static protected $cur_turntable = 1;     //当前运行的任务转盘
-    static protected $current = 0;           //当前运行的秒数
+    static protected $turntable1;  //任务转盘1
+    static protected $turntable2;  //任务转盘2
+    static protected $cur_turntable;     //当前运行的任务转盘
+    static protected $current;           //当前运行的秒数
 
     /**
      * 初始化当前秒数
@@ -19,6 +19,9 @@ class TurnTable
     static public function init()
     {
         self::$current = intval(date("s"));
+        self::$turntable1 =array();
+        self::$turntable2 =array();
+        self::$cur_turntable =1;
     }
 
     /**

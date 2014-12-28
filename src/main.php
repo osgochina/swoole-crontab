@@ -15,8 +15,8 @@ define('ROOT_PATH', realpath(dirname(__FILE__)) . DS);
 class Main
 {
 
-    static private $options = "hdp:s:l:c:";
-    static private $longopts = array("help", "daemon", "pid:", "log:", "config:");
+    static private $options = "hdrp:s:l:c:";
+    static private $longopts = array("help", "daemon","reload", "pid:", "log:", "config:");
     static private $help = <<<EOF
 
   帮助信息:
@@ -32,6 +32,7 @@ class Main
                      如果是文件,则载入指定文件.如果是文件夹,则载入文件夹
                      下的所有文件.)
   -d [--daemon]      是否后台运行
+  -r [--reload]      重新载入配置文件
 
 EOF;
 
@@ -47,6 +48,7 @@ EOF;
         self::params_p($opt);
         self::params_l($opt);
         self::params_c($opt);
+        self::params_r($opt);
         self::params_s($opt);
     }
 
@@ -80,6 +82,25 @@ EOF;
     {
         if (isset($opt["d"]) || isset($opt["daemon"])) {
             Crontab::$daemon = true;
+        }
+    }
+
+    /**
+     * 重新载入配置文件
+     * @param $opt
+     */
+    static public function params_r($opt)
+    {
+        if (isset($opt["r"]) || isset($opt["reload"])) {
+            $pid = @file_get_contents(Crontab::$pid_file);
+            if ($pid) {
+                if (swoole_process::kill($pid, 0)) {
+                    swoole_process::kill($pid, SIGUSR1);
+                    Main::log_write("对 {$pid} 发送了从新载入配置文件的信号");
+                    exit;
+                }
+            }
+            Main::log_write("进程" . $pid . "不存在");
         }
     }
 
