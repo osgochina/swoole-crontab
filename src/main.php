@@ -35,7 +35,36 @@ class Main
 
 EOF;
 
+    /**
+     * 运行入口
+     */
+    static public function run()
+    {
+        $opt = getopt(self::$options, self::$longopts);
+        self::spl_autoload_register();
+        self::params_h($opt);
+        self::params_d($opt);
+        self::params_p($opt);
+        self::params_l($opt);
+        self::params_c($opt);
+        self::params_s($opt);
+    }
 
+    /**
+     * 注册类库载入路径
+     */
+    static public function spl_autoload_register()
+    {
+        spl_autoload_register(function ($name) {
+            $file_path = ROOT_PATH . "include" . DS . $name . ".class.php";
+            include $file_path;
+        });
+    }
+
+    /**
+     * 解析帮助参数
+     * @param $opt
+     */
     static public function params_h($opt)
     {
         if (empty($opt) || isset($opt["h"]) || isset($opt["help"])) {
@@ -43,6 +72,21 @@ EOF;
         }
     }
 
+    /**
+     * 解析运行模式参数
+     * @param $opt
+     */
+    static public function params_d($opt)
+    {
+        if (isset($opt["d"]) || isset($opt["daemon"])) {
+            Crontab::$daemon = true;
+        }
+    }
+
+    /**
+     * 解析pid参数
+     * @param $opt
+     */
     static public function params_p($opt)
     {
         //记录pid文件位置
@@ -58,6 +102,10 @@ EOF;
         }
     }
 
+    /**
+     * 解析日志路径参数
+     * @param $opt
+     */
     static public function params_l($opt)
     {
         if (isset($opt["l"]) && $opt["l"]) {
@@ -71,6 +119,10 @@ EOF;
         }
     }
 
+    /**
+     * 解析配置文件位置参数
+     * @param $opt
+     */
     static public function params_c($opt)
     {
         if (isset($opt["c"]) && $opt["c"]) {
@@ -79,18 +131,15 @@ EOF;
         if (isset($opt["config"]) && $opt["config"]) {
             Crontab::$config_file = $opt["config"];
         }
-        if (empty( Crontab::$config_file)) {
+        if (empty(Crontab::$config_file)) {
             Crontab::$config_file = ROOT_PATH . "config/" . APP_ENVIRONMENT . "/";
         }
     }
 
-    static public function params_d($opt)
-    {
-        if (isset($opt["d"]) || isset($opt["daemon"])) {
-            Crontab::$daemon = true;
-        }
-    }
-
+    /**
+     * 解析启动模式参数
+     * @param $opt
+     */
     static public function params_s($opt)
     {
         //判断传入了s参数但是值，则提示错误
@@ -113,26 +162,10 @@ EOF;
         }
     }
 
-    static public function spl_autoload_register()
-    {
-        spl_autoload_register(function($name){
-            $file_path= ROOT_PATH."include".DS.$name.".class.php";
-            include $file_path;
-        });
-    }
-
-    static public function run()
-    {
-        $opt = getopt(self::$options, self::$longopts);
-        self::spl_autoload_register();
-        self::params_h($opt);
-        self::params_d($opt);
-        self::params_p($opt);
-        self::params_l($opt);
-        self::params_c($opt);
-        self::params_s($opt);
-    }
-
+    /**
+     * 记录日志
+     * @param $message
+     */
     static public function log_write($message)
     {
         $now = date("H:i:s");
@@ -144,7 +177,6 @@ EOF;
     }
 
 
-
 }
-
+//运行
 Main::run();

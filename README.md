@@ -4,6 +4,7 @@ swoole-crontab
 + 基于swoole的定时器程序，支持秒级处理.
 + 异步多进程处理。
 + 完全兼容crontab语法，仅仅是多了一列'秒'配置
++ 请使用swoole扩展1.7.9以上版本
 
 
 + 配置文件请看src/config/dev/crontab.php

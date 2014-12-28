@@ -9,9 +9,10 @@
 class ParseCrontab
 {
     static public $error;
+
     /**
      *  解析crontab的定时格式，linux只支持到分钟/，这个类支持到秒
-     *  @param string $crontab_string:
+     * @param string $crontab_string :
      *
      *      0     1    2    3    4    5
      *      *     *    *    *    *    *
@@ -23,9 +24,9 @@ class ParseCrontab
      *      |     |    +--------- hour (0 - 23)
      *      |     +----------- min (0 - 59)
      *      +------------- sec (0-59)
-     *  @param int $start_time timestamp [default=current timestamp]
-     *  @return int unix timestamp - 下一分钟内执行是否需要执行任务，如果需要，则把需要在那几秒执行返回
-     *  @throws InvalidArgumentException 错误信息
+     * @param int $start_time timestamp [default=current timestamp]
+     * @return int unix timestamp - 下一分钟内执行是否需要执行任务，如果需要，则把需要在那几秒执行返回
+     * @throws InvalidArgumentException 错误信息
      */
     static public function parse($crontab_string, $start_time = null)
     {
@@ -60,6 +61,13 @@ class ParseCrontab
         return null;
     }
 
+    /**
+     * 解析单个配置的含义
+     * @param $s
+     * @param $min
+     * @param $max
+     * @return array
+     */
     static protected function _parse_cron_number($s, $min, $max)
     {
         $result = array();
