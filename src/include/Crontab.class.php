@@ -183,6 +183,9 @@ class Crontab
         swoole_process::signal(SIGTERM, function ($signo) {
             self::exit2p("收到退出信号,退出主进程");
         });
+        swoole_process::signal(SIGCHLD, function ($signo) {
+            swoole_process::wait();
+        });
         swoole_process::signal(SIGUSR1, function ($signo) {
             Crontab::load_config(true);
         });

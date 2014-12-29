@@ -31,6 +31,12 @@ class Process
         $worker->name("lzm_crontab_" . $class . "_" . $this->task["id"]);
         $this->autoload($class);
         (new $class)->run($this->task["task"]);
+        self::_exit($worker);
+    }
+
+    private function _exit($worker)
+    {
+        $worker->exit(1);
     }
 
     /**
