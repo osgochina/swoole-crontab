@@ -36,7 +36,7 @@ class Process
 
     private function _exit($worker)
     {
-        $worker->exit(1);
+        $worker->exit(0);
     }
 
     /**
