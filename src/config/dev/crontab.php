@@ -6,35 +6,35 @@
  * Time: 上午12:21
  */
 
-return [
-    [
+return array(
+    array(
         "id"   => "taskid1",
         "name" => "php -i",
         "time" => '* * * * * *',
-        "task" => [
+        "task" => array(
             "parse"  => "Cmd",
             "cmd"    => "php -i",
             "output" => "/tmp/test.log"
-        ]
-    ],
-    [
+        )
+    ),
+    array(
         "id"   => "taskid2",
         "name" => "gearman",
         "time" => '* * * * * *',
-        "task" => [
+        "task" => array(
             "parse"    => "Gearman",
             "services" => "127.0.0.1:4730",
             "function" => "tool/sendMail"
-        ],
-    ],
-    [
+        ),
+    ),
+    array(
         "id"   => "taskid3",
         "name" => "gearman",
         "time" => '* * * * * *',
-        "task" => [
+        "task" => array(
             "parse"    => "Gearman",
             "services" => "127.0.0.1:4730",
             "function" => "tool/sendMail"
-        ],
-    ],
-];
+        ),
+    ),
+);
