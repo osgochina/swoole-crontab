@@ -185,7 +185,7 @@ EOF;
     {
         //判断传入了s参数但是值，则提示错误
         if ((isset($opt["s"]) && !$opt["s"]) || (isset($opt["s"]) && !in_array($opt["s"], array("start", "stop", "restart")))) {
-            Crontab::log_write("Please run: path/to/php main.php -s [start|stop|restart]");
+            Main::log_write("Please run: path/to/php main.php -s [start|stop|restart]");
         }
 
         if (isset($opt["s"]) && in_array($opt["s"], array("start", "stop", "restart"))) {
