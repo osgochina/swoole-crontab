@@ -14,11 +14,19 @@ class Process
      * 创建一个子进程
      * @param $task
      */
-    public function create_process($task)
+    public function create_process($id,$task)
     {
         $this->task = $task;
         $process = new swoole_process(array($this, "run"));
-        $process->start();
+        if(!($pid = $process->start())){
+
+        }
+        //记录当前任务
+        Crontab::$task_list[$pid] = array(
+            "start"=>microtime(true),
+            "id"=>$id,
+            "task"=>$task,
+        );
     }
 
     /**

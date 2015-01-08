@@ -14,6 +14,7 @@ class Crontab
     static public $config_file;                 //配置文件位置
     static public $daemon = false;              //运行模式
     static private $pid;                        //pid
+    static public $task_list = array();
 
     /**
      * 重启
@@ -169,8 +170,8 @@ class Crontab
         //TurnTable::debug();
         $tasks = TurnTable::get_task();
         if (empty($tasks)) return false;
-        foreach ($tasks as $task) {
-            (new Process())->create_process($task);
+        foreach ($tasks as $id=>$task) {
+            (new Process())->create_process($id,$task);
         }
         return true;
     }
@@ -184,7 +185,14 @@ class Crontab
             self::exit2p("收到退出信号,退出主进程");
         });
         swoole_process::signal(SIGCHLD, function ($signo) {
-            swoole_process::wait();
+            while($status = swoole_process::wait()){
+                $task = self::$task_list[$status["pid"]];
+                $end = microtime(true);
+                $start = $task["start"];
+                $id = $task["id"];
+                Main::log_write("{$id} [Runtime:".sprintf("%0.6f",$end-$start)."]");
+                unset(self::$task_list[$status["pid"]]);
+            };
         });
         swoole_process::signal(SIGUSR1, function ($signo) {
             Crontab::load_config(true);
