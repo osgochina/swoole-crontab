@@ -8,7 +8,7 @@
 
 class Manager
 {
-    function getcrontab(&$request,&$response)
+    function getcrontab($request,$response)
     {
         $response->end("nihao");
     }

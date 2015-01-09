@@ -19,7 +19,7 @@ class Http
 
     static public function http_server()
     {
-        self::$http = new swoole_http_server(self::$host,self::$port,SWOOLE_BASE|SWOOLE_SOCK_SYNC);
+        self::$http = new swoole_http_server(self::$host,self::$port,SWOOLE_BASE);
     }
 
     static public function start()
@@ -34,7 +34,7 @@ class Http
         self::$http->start();
     }
 
-    static public function route(&$request,&$response)
+    static public function route($request,$response)
     {
         $method = $request->server["REQUEST_METHOD"];
         $path = $request->server["PATH_INFO"];
