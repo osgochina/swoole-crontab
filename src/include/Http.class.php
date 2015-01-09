@@ -5,17 +5,20 @@
  * Date: 15-1-8
  * Time: 下午7:55
  */
-require "Manager.class.php";
+
 class Http
 {
     static public $route = array(
-        array("/abc/","getcrontab",'get'),
+        array("/conf/","getcrontab",'get',true),
+        array("/log/","loglist",'get',false),
     );
     static public $host = "127.0.0.1";
-    static public $port = 8080;
+    static public $port = 9501;
+    static public $name = "lzm_Http";
 
     static public $http;
     static public $manager;
+    static public $worker;
 
     static public function http_server()
     {
@@ -41,17 +44,32 @@ class Http
         foreach(self::$route as $rte){
             $pattern = str_replace("/",'\/',$rte[0]);
             preg_match("/$pattern/",$path,$matches);
-
             if(!empty($matches)){
                 if(strtolower($rte[2]) == strtolower($method)){
-                    call_user_func_array(array(self::$manager,$rte[1]),array("request"=>$request,"response"=>$response));
-                    return true;
+                    if($rte[3]){
+                        $data = array(
+                            "get"=>isset($request->get)?$request->get:"",
+                            "post"=>isset($request->post)?$request->post:""
+                        );
+                        self::$worker->write($rte[1]."#@#".json_encode($data));
+                        $return = self::$worker->read();
+                        $response->end($return);
+                        return true;
+                    }else{
+                        return call_user_func_array(array(new Manager(),$rte[1]."_http"),array("request"=>$request,"response"=>$response));
+                    }
                 }
             }
         }
         return false;
     }
 
+    public function run($worker)
+    {
+        self::$worker = $worker;
+        $worker->name(self::$name);
+        self::http_server();
+        self::start();
+    }
+
 }
-Http::http_server();
-Http::start();

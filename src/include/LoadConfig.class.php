@@ -65,8 +65,9 @@ class LoadConfig
     static protected function parse_config()
     {
         $config = array();
-        foreach (self::$ori_config as $val) {
-            $config[$val["id"]] = array(
+        foreach (self::$ori_config as $key=>$val) {
+            $config[$key] = array(
+                "name" => $val["name"],
                 "time" => $val["time"],
                 "task" => $val["task"]
             );

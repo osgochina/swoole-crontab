@@ -16,7 +16,7 @@ class Main
 {
 
     static private $options = "hdrmp:s:l:c:";
-    static private $longopts = array("help", "daemon","reload","monitor", "pid:", "log:", "config:");
+    static private $longopts = array("help", "daemon","reload","monitor", "pid:", "log:", "config:","host:","port:");
     static private $help = <<<EOF
 
   帮助信息:
@@ -34,6 +34,8 @@ class Main
   -d [--daemon]      是否后台运行
   -r [--reload]      重新载入配置文件
   -m [--monitor]     监控进程是否在运行,如果在运行则不管,未运行则启动进程
+  --host             监听ip,默认是127.0.0.1
+  --port             监听端口.默认是9501
 
 EOF;
 
@@ -50,6 +52,7 @@ EOF;
         self::params_l($opt);
         self::params_c($opt);
         self::params_r($opt);
+        self::params_http($opt);
         $opt = self::params_m($opt);
         self::params_s($opt);
     }
@@ -201,6 +204,30 @@ EOF;
                     break;
             }
         }
+    }
+
+    /**
+     * 开启web api
+     * @param $opt
+     */
+    static public function params_http($opt)
+    {
+        if (isset($opt["host"]) && $opt["host"]) {
+            Http::$host= $opt["host"];
+        }
+        if (isset($opt["port"]) && $opt["port"]) {
+            Http::$port= $opt["port"];
+        }
+        $process = new swoole_process(array(new Http(), "run"));
+        $process->start();
+        swoole_event_add($process->pipe, function ($pipe) use ($process) {
+            $manager = new Manager();
+            $recv = $process->read();
+            Main::log_write("From {$process->pid} :" . $recv);
+            $recv = explode("#@#",$recv);
+            $function = $recv[0]."_cron";
+            $process->write(json_encode($manager->$function(json_decode($recv[1],true))));
+        });
     }
 
     /**

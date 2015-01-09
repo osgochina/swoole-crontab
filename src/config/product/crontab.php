@@ -7,8 +7,7 @@
  */
 
 return array(
-    array(
-        "id"   => "taskid1",
+    "taskid1"=>array(
         "name" => "php -i",
         "time" => '* * * * * *',
         "task" => array(
@@ -17,8 +16,7 @@ return array(
             "output" => "/tmp/test.log"
         )
     ),
-    array(
-        "id"   => "taskid2",
+    "taskid2"=>array(
         "name" => "gearman",
         "time" => '* * * * * *',
         "task" => array(
@@ -27,8 +25,7 @@ return array(
             "function" => "tool/sendMail"
         ),
     ),
-    array(
-        "id"   => "taskid3",
+    "taskid3"=>array(
         "name" => "gearman",
         "time" => '* * * * * *',
         "task" => array(
