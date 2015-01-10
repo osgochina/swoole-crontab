@@ -18,6 +18,23 @@ class Manager
         return LoadConfig::get_config();
     }
 
+    function addcrontab_cron($params)
+    {
+        $tasks = $params["post"]["tasks"];
+        $tasks = json_decode($tasks,true);
+        LoadConfig::send_config($tasks);
+        Crontab::load_config(true);
+        return "ok";
+    }
+
+    function delcrontab_cron($params)
+    {
+        $task = $params["get"]["task"];
+        LoadConfig::del_config($task);
+        Crontab::load_config(true);
+        return "ok";
+    }
+
     /**
      * @param $params
      */

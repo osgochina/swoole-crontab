@@ -9,8 +9,10 @@
 class Http
 {
     static public $route = array(
-        array("/conf/","getcrontab",'get',true),
-        array("/log/","loglist",'get',false),
+        array("/conf","getcrontab",'get',true),
+        array("/conf","addcrontab",'post',true),
+        array("/conf","delcrontab",'delete',true),
+        array("/logs","loglist",'get',false),
     );
     static public $host = "127.0.0.1";
     static public $port = 9501;

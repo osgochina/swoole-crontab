@@ -74,4 +74,32 @@ class LoadConfig
         }
         return $config;
     }
+
+    static public function send_config($tasks)
+    {
+        foreach($tasks as $id=>$task)
+        {
+            self::$config[$id]=$task;
+        }
+        self::save_config();
+    }
+
+    static public function del_config($task)
+    {
+        unset(self::$config[$task]);
+        self::save_config();
+    }
+
+    static protected function save_config()
+    {
+        ob_start();
+        var_export(self::$config);
+        $config = ob_get_clean();
+        if(is_file(self::$config_file)){
+            $path = self::$config_file;
+        }else if(is_dir(self::$config_file)){
+            $path = self::$config_file."crontab.php";
+        }
+        file_put_contents($path,"<?php \n return ".$config.";");
+    }
 }
