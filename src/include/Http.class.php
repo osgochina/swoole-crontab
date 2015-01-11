@@ -5,7 +5,7 @@
  * Date: 15-1-8
  * Time: 下午7:55
  */
-
+require "Manager.class.php";
 class Http
 {
     static public $route = array(
@@ -20,7 +20,7 @@ class Http
 
     static public $http;
     static public $manager;
-    static public $worker;
+    static public $fp;
 
     static public function http_server()
     {
@@ -53,8 +53,8 @@ class Http
                             "get"=>isset($request->get)?$request->get:"",
                             "post"=>isset($request->post)?$request->post:""
                         );
-                        self::$worker->write($rte[1]."#@#".json_encode($data));
-                        $return = self::$worker->read();
+                        fwrite(self::$fp,$rte[1]."#@#".json_encode($data));
+                        $return =fread(self::$fp,4096);
                         $response->end($return);
                         return true;
                     }else{
@@ -66,12 +66,13 @@ class Http
         return false;
     }
 
-    public function run($worker)
+    static public function run($fd)
     {
-        self::$worker = $worker;
-        $worker->name(self::$name);
+        self::$fp = fopen("php://fd/".$fd,"a");
+        swoole_set_process_name(self::$name);
         self::http_server();
         self::start();
     }
-
 }
+
+Http::run($argv[1]);

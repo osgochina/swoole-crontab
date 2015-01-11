@@ -182,16 +182,19 @@ class Crontab
     static private function register_signal()
     {
         swoole_process::signal(SIGTERM, function ($signo) {
+            if(!empty(Main::$http_server)){
+                swoole_process::kill(Main::$http_server->pid,SIGKILL);
+            }
             self::exit2p("收到退出信号,退出主进程");
         });
         swoole_process::signal(SIGCHLD, function ($signo) {
-            while($status = swoole_process::wait()){
-                $task = self::$task_list[$status["pid"]];
+            while(($pid = pcntl_wait($status,WNOHANG)) > 0){
+                $task = self::$task_list[$pid];
                 $end = microtime(true);
                 $start = $task["start"];
                 $id = $task["id"];
                 Main::log_write("{$id} [Runtime:".sprintf("%0.6f",$end-$start)."]");
-                unset(self::$task_list[$status["pid"]]);
+                unset(self::$task_list[$pid]);
             };
         });
         swoole_process::signal(SIGUSR1, function ($signo) {

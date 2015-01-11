@@ -14,9 +14,9 @@ define('ROOT_PATH', realpath(dirname(__FILE__)) . DS);
 
 class Main
 {
-
+    static public  $http_server;
     static private $options = "hdrmp:s:l:c:";
-    static private $longopts = array("help", "daemon","reload","monitor", "pid:", "log:", "config:","host:","port:");
+    static private $longopts = array("help", "http","daemon","reload","monitor", "pid:", "log:", "config:","host:","port:");
     static private $help = <<<EOF
 
   帮助信息:
@@ -34,6 +34,7 @@ class Main
   -d [--daemon]      是否后台运行
   -r [--reload]      重新载入配置文件
   -m [--monitor]     监控进程是否在运行,如果在运行则不管,未运行则启动进程
+  --http             开启http服务
   --host             监听ip,默认是127.0.0.1
   --port             监听端口.默认是9501
 
@@ -207,19 +208,26 @@ EOF;
     }
 
     /**
-     * 开启web api
+     * 开启http服务 web api
      * @param $opt
      */
     static public function params_http($opt)
     {
+
+        if (!isset($opt["http"])) {
+            return false;
+        }
         if (isset($opt["host"]) && $opt["host"]) {
             Http::$host= $opt["host"];
         }
         if (isset($opt["port"]) && $opt["port"]) {
             Http::$port= $opt["port"];
         }
-        $process = new swoole_process(array(new Http(), "run"));
+
+        $process = new swoole_process(array(new Main(),"http_run"));
         $process->start();
+        self::$http_server = $process;
+
         swoole_event_add($process->pipe, function ($pipe) use ($process) {
             $manager = new Manager();
             $recv = $process->read();
@@ -228,6 +236,17 @@ EOF;
             $function = $recv[0]."_cron";
             $process->write(json_encode($manager->$function(json_decode($recv[1],true))));
         });
+        return true;
+    }
+
+    /**
+     * 运行httpserver
+     * @param $worker
+     */
+    public function http_run($worker)
+    {
+        $binpath = $_SERVER["_"];
+        $worker->exec($binpath,array(ROOT_PATH."include/Http.class.php",$worker->pipe));
     }
 
     /**
