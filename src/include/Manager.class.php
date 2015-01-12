@@ -15,24 +15,35 @@ class Manager
      */
     function getcrontab_cron($params)
     {
-        return LoadConfig::get_config();
+        return $this->output(LoadConfig::get_config());
     }
 
     function addcrontab_cron($params)
     {
         $tasks = $params["post"]["tasks"];
         $tasks = json_decode($tasks,true);
+        if(empty($tasks)){
+            return $this->output("参数有误",false);
+        }
+        foreach($tasks as $id=>$task){
+            if(empty($task["name"]) || empty($task["time"]) || empty($task["task"])){
+                return $this->output("参数有误",false);
+            }
+        }
         LoadConfig::send_config($tasks);
         Crontab::load_config(true);
-        return "ok";
+        return $this->output("ok");
     }
 
     function delcrontab_cron($params)
     {
-        $task = $params["get"]["task"];
+        $task = $params["get"]["taskid"];
+        if(!is_string($task)){
+            return $this->output("参数有误",false);
+        }
         LoadConfig::del_config($task);
         Crontab::load_config(true);
-        return "ok";
+        return $this->output("ok");
     }
 
     /**
@@ -44,9 +55,15 @@ class Manager
         if($date){
             $filename = ROOT_PATH."logs/log_".$date.".log";
             $data = file_get_contents($filename);
+            $data = $this->output($data);
         }else{
-            $data = "参数有误";
+            $data = $this->output("参数有误",false);
         }
         $response->end($data);
+    }
+
+    public function output($data,$status=true)
+    {
+        return array("status"=>$status,"data"=>$data);
     }
 }

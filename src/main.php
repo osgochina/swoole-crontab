@@ -244,7 +244,6 @@ EOF;
         swoole_event_add($process->pipe, function ($pipe) use ($process) {
             $manager = new Manager();
             $recv = $process->read();
-            Main::log_write("From {$process->pid} :" . $recv);
             $recv = explode("#@#",$recv);
             $function = $recv[0]."_cron";
             $process->write(json_encode($manager->$function(json_decode($recv[1],true))));
