@@ -18,6 +18,17 @@ class Manager
         return $this->output(LoadConfig::get_config());
     }
 
+    /**
+     * 重新加载配置文件
+     * @param $params
+     * @return array
+     */
+    function reloadconf_cron($params)
+    {
+        Crontab::load_config(true);
+        return $this->output("ok");
+    }
+
     function addcrontab_cron($params)
     {
         $tasks = $params["post"]["tasks"];
@@ -59,7 +70,28 @@ class Manager
         }else{
             $data = $this->output("参数有误",false);
         }
-        $response->end($data);
+        $response->end(json_encode($data));
+    }
+
+    function importconf_http($request,$response)
+    {
+        $tasks = $request->post["tasks"];
+        $tasks = json_decode($tasks,true);
+        if(empty($tasks)){
+            $response->end(json_encode($this->output("参数有误",false)));
+        }
+        foreach($tasks as $id=>$task){
+            if(empty($task["name"]) || empty($task["time"]) || empty($task["task"])){
+                $response->end(json_encode($this->output("参数有误",false)));
+            }
+        }
+        ob_start();
+        var_export($tasks);
+        $config = ob_get_clean();
+        file_put_contents(ROOT_PATH."config/conf.php","<?php \n return ".$config.";");
+        fwrite(Http::$fp,"reloadconf#@#".json_encode(array()));
+
+        $response->end(json_encode($this->output("ok")));
     }
 
     public function output($data,$status=true)

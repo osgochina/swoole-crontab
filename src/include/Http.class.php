@@ -5,6 +5,8 @@
  * Date: 15-1-8
  * Time: 下午7:55
  */
+define('DS', DIRECTORY_SEPARATOR);
+define('ROOT_PATH', realpath(dirname(__FILE__)) . DS."../");
 require "Manager.class.php";
 class Http
 {
@@ -12,7 +14,9 @@ class Http
         array("/conf","getcrontab",'get',true),
         array("/conf","addcrontab",'post',true),
         array("/conf","delcrontab",'delete',true),
+        array("/reload","reloadconf",'get',true),
         array("/logs","loglist",'get',false),
+        array("/import","importconf",'post',false),
     );
     static public $host = "127.0.0.1";
     static public $port = 9501;
