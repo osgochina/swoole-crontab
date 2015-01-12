@@ -23,6 +23,7 @@ Swoole-Crontab(基于Swoole扩展)
 3.帮助信息
 ----------
     * Usage: /path/to/php main.php [options] -- [args...]
+
     * -h [--help]        显示帮助信息
     * -p [--pid]         指定pid文件位置(默认pid文件保存在当前目录)
     * -s start           启动进程
@@ -35,14 +36,17 @@ Swoole-Crontab(基于Swoole扩展)
     * -d [--daemon]      是否后台运行
     * -r [--reload]      重新载入配置文件
     * -m [--monitor]     监控进程是否在运行,如果在运行则不管,未运行则启动进程
+    * --http             开启http服务
+    * --host             监听ip,默认是127.0.0.1
+    * --port             监听端口.默认是9501
+    * --checktime        是否精确对时(如果精确对时,程序则会延时到分钟开始0秒启动)
 
 4.例子
 -----------
 你可以在配置文件中加上以下配置:  
 
     return [
-        [
-            "id"   => "taskid1",
+        "taskid1"=>[
             "name" => "php -i",
             "time" => '* * * * * *',
             "task" => [
