@@ -14,6 +14,7 @@ class Crontab
     static public $config_file;                 //配置文件位置
     static public $daemon = false;              //运行模式
     static private $pid;                        //pid
+    static public $checktime = false;           //精确对时
     static public $task_list = array();
 
     /**
@@ -102,8 +103,21 @@ class Crontab
         LoadConfig::$config_file = self::$config_file;
         TurnTable::init();
         self::load_config();
-        self::register_timer();
         self::register_signal();
+        if (self::$checktime) {
+            $run = true;
+            while ($run) {
+                if (date("s") == 0) {
+                    Crontab::load_config();
+                    self::register_timer();
+                    $run = false;
+                }
+                sleep(1);
+            }
+        } else {
+            self::register_timer();
+        }
+
     }
 
     /**
@@ -131,7 +145,7 @@ class Crontab
     static public function load_config($reload = false)
     {
         $time = time();
-        if($reload){
+        if ($reload) {
             LoadConfig::reload_config();
             TurnTable::init();
         }
@@ -153,7 +167,7 @@ class Crontab
     static protected function register_timer()
     {
         swoole_timer_add(60000, function ($interval) {
-            Crontab::load_config($interval);
+            Crontab::load_config();
         });
         swoole_timer_add(1000, function ($interval) {
             Crontab::do_something($interval);
@@ -170,8 +184,8 @@ class Crontab
         //TurnTable::debug();
         $tasks = TurnTable::get_task();
         if (empty($tasks)) return false;
-        foreach ($tasks as $id=>$task) {
-            (new Process())->create_process($id,$task);
+        foreach ($tasks as $id => $task) {
+            (new Process())->create_process($id, $task);
         }
         return true;
     }
@@ -182,18 +196,18 @@ class Crontab
     static private function register_signal()
     {
         swoole_process::signal(SIGTERM, function ($signo) {
-            if(!empty(Main::$http_server)){
-                swoole_process::kill(Main::$http_server->pid,SIGKILL);
+            if (!empty(Main::$http_server)) {
+                swoole_process::kill(Main::$http_server->pid, SIGKILL);
             }
             self::exit2p("收到退出信号,退出主进程");
         });
         swoole_process::signal(SIGCHLD, function ($signo) {
-            while(($pid = pcntl_wait($status,WNOHANG)) > 0){
+            while (($pid = pcntl_wait($status, WNOHANG)) > 0) {
                 $task = self::$task_list[$pid];
                 $end = microtime(true);
                 $start = $task["start"];
                 $id = $task["id"];
-                Main::log_write("{$id} [Runtime:".sprintf("%0.6f",$end-$start)."]");
+                Main::log_write("{$id} [Runtime:" . sprintf("%0.6f", $end - $start) . "]");
                 unset(self::$task_list[$pid]);
             };
         });

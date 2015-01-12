@@ -16,7 +16,7 @@ class Main
 {
     static public  $http_server;
     static private $options = "hdrmp:s:l:c:";
-    static private $longopts = array("help", "http","daemon","reload","monitor", "pid:", "log:", "config:","host:","port:");
+    static private $longopts = array("help", "http","daemon","checktime","reload","monitor", "pid:", "log:", "config:","host:","port:");
     static private $help = <<<EOF
 
   帮助信息:
@@ -37,6 +37,7 @@ class Main
   --http             开启http服务
   --host             监听ip,默认是127.0.0.1
   --port             监听端口.默认是9501
+  --checktime        是否精确对时(如果精确对时,程序则会延时到分钟开始0秒启动)
 
 EOF;
 
@@ -53,6 +54,7 @@ EOF;
         self::params_l($opt);
         self::params_c($opt);
         self::params_r($opt);
+        self::params_checktime($opt);
         self::params_http($opt);
         $opt = self::params_m($opt);
         self::params_s($opt);
@@ -88,6 +90,17 @@ EOF;
     {
         if (isset($opt["d"]) || isset($opt["daemon"])) {
             Crontab::$daemon = true;
+        }
+    }
+
+    /**
+     * 解析精确对时参数
+     * @param $opt
+     */
+    static public function params_checktime($opt)
+    {
+        if (isset($opt["checktime"])) {
+            Crontab::$checktime = true;
         }
     }
 
