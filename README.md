@@ -41,7 +41,51 @@ Swoole-Crontab(基于Swoole扩展)
     * --port             监听端口.默认是9501
     * --checktime        是否精确对时(如果精确对时,程序则会延时到分钟开始0秒启动)
 
-4.例子
+4.Http 服务
+------------
+你可以在启动的时候加上参数--http 来开启http服务，可以指定端口及ip     
+开启了http服务以后，你可以使用以下API接口    
+1).查看日志 
+
+    http://127.0.0.1:9501/log?date=2015-01-12
+    
+2).查看任务列表
+    
+    http://127.0.0.1:9501/conf
+    
+3).添加修改任务
+    
+    http://127.0.0.1:9501/conf      [post]方式
+    tasks={
+              "taskid1": {
+                  "name": "php -i", 
+                  "time": "1 * * 8 * *", 
+                  "task": {
+                      "parse": "Cmd", 
+                      "cmd": "php -i", 
+                      "output": "/tmp/test.log"
+                  }
+              }, 
+              "taskid2": {
+                  "name": "php -i", 
+                  "time": "* 42-43 * * * *", 
+                  "task": {
+                      "parse": "Cmd", 
+                      "cmd": "php -i", 
+                      "output": "/tmp/test.log"
+                  }
+              }
+          }
+    
+4).删除任务
+
+    http://127.0.0.1:9501/conf?taskid=taskid2      [delete]方式
+    
+ 
+
+
+
+5.例子
 -----------
 你可以在配置文件中加上以下配置:  
 
