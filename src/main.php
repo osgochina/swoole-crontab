@@ -14,6 +14,8 @@ define('ROOT_PATH', realpath(dirname(__FILE__)) . DS);
 class Main
 {
     static public $http_server;
+    static public $host;
+    static public $port;
     static private $options = "hdrmp:s:l:c:";
     static private $longopts = array("help", "http", "daemon", "checktime", "reload", "monitor", "pid:", "log:", "config:", "host:", "port:");
     static private $help = <<<EOF
@@ -230,10 +232,10 @@ EOF;
             return false;
         }
         if (isset($opt["host"]) && $opt["host"]) {
-            Http::$host = $opt["host"];
+            self::$host = $opt["host"];
         }
         if (isset($opt["port"]) && $opt["port"]) {
-            Http::$port = $opt["port"];
+            self::$port = $opt["port"];
         }
 
         $process = new swoole_process(array(new Main(), "http_run"));
@@ -257,7 +259,7 @@ EOF;
     public function http_run($worker)
     {
         $binpath = $_SERVER["_"];
-        $worker->exec($binpath, array(ROOT_PATH . "include/Http.class.php", $worker->pipe, Crontab::$config_file));
+        $worker->exec($binpath, array(ROOT_PATH . "/http.php", $worker->pipe, Crontab::$config_file,self::$host,self::$port));
     }
 
     /**

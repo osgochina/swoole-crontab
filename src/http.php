@@ -5,9 +5,9 @@
  * Date: 15-1-8
  * Time: 下午7:55
  */
-define('DS', DIRECTORY_SEPARATOR);
-define('ROOT_PATH', realpath(dirname(__FILE__)) . DS . "../");
-require "Manager.class.php";
+define('ROOT_PATH', realpath(dirname(__FILE__)) . "/");
+
+require ROOT_PATH."include/Manager.class.php";
 
 class Http
 {
@@ -72,14 +72,19 @@ class Http
         return false;
     }
 
-    static public function run($fd, $conf_file)
+    static public function run($fd)
     {
         self::$fp = fopen("php://fd/" . $fd, "a");
-        self::$conf_file = $conf_file;
         swoole_set_process_name(self::$name);
         self::http_server();
         self::start();
     }
 }
+if(!empty($argv[2]))
+    Http::$conf_file = $argv[2];
+if(!empty($argv[3]))
+    Http::$host = $argv[3];
+if(!empty($argv[4]))
+    Http::$port = $argv[4];
 
-Http::run($argv[1], $argv[2]);
+Http::run($argv[1]);
