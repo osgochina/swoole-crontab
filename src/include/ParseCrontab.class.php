@@ -31,7 +31,7 @@ class ParseCrontab
     static public function parse($crontab_string, $start_time = null)
     {
         if (!preg_match('/^((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)$/i', trim($crontab_string))) {
-            if(!preg_match('/^((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)$/i', trim($crontab_string))) {
+            if (!preg_match('/^((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)$/i', trim($crontab_string))) {
                 self::$error = "Invalid cron string: " . $crontab_string;
                 return false;
             }
@@ -43,7 +43,7 @@ class ParseCrontab
         $cron = preg_split("/[\s]+/i", trim($crontab_string));
         $start = empty($start_time) ? time() : $start_time;
 
-        if(count($cron)==6){
+        if (count($cron) == 6) {
             $date = array(
                 'second'  => self::_parse_cron_number($cron[0], 0, 59),
                 'minutes' => self::_parse_cron_number($cron[1], 0, 59),
@@ -52,9 +52,9 @@ class ParseCrontab
                 'month'   => self::_parse_cron_number($cron[4], 1, 12),
                 'week'    => self::_parse_cron_number($cron[5], 0, 6),
             );
-        }elseif(count($cron) == 5){
+        } elseif (count($cron) == 5) {
             $date = array(
-                'second'  => array(1=>1),
+                'second'  => array(1 => 1),
                 'minutes' => self::_parse_cron_number($cron[0], 0, 59),
                 'hours'   => self::_parse_cron_number($cron[1], 0, 23),
                 'day'     => self::_parse_cron_number($cron[2], 1, 31),

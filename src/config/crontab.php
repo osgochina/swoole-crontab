@@ -1,25 +1,14 @@
-<?php 
- return array (
-  'taskid1' => 
-  array (
-    'name' => 'php -i',
-    'time' => '1 * * 8 * *',
-    'task' => 
-    array (
-      'parse' => 'Cmd',
-      'cmd' => 'php -i',
-      'output' => '/tmp/test.log',
-    ),
-  ),
-  'taskid2' =>
-      array (
-          'name' => 'php -i',
-          'time' => '* * * * * *',
-          'task' =>
-              array (
-                  'parse' => 'Cmd',
-                  'cmd' => 'php -i',
-                  'output' => '/tmp/test.log',
-              ),
-      ),
+<?php
+return array(
+    'taskid2' =>
+        array(
+            'name' => 'php -i',
+            'time' => '* * * * * *',
+            'task' =>
+                array(
+                    'parse'  => 'Cmd',
+                    'cmd'    => 'php -i',
+                    'output' => '/tmp/test.log',
+                ),
+        ),
 );

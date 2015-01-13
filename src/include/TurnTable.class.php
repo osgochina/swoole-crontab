@@ -19,9 +19,9 @@ class TurnTable
     static public function init()
     {
         self::$current = intval(date("s"));
-        self::$turntable1 =array();
-        self::$turntable2 =array();
-        self::$cur_turntable =1;
+        self::$turntable1 = array();
+        self::$turntable2 = array();
+        self::$cur_turntable = 1;
     }
 
     /**

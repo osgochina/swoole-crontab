@@ -18,7 +18,7 @@ class LoadConfig
      */
     static public function get_config()
     {
-        if(empty(self::$config)){
+        if (empty(self::$config)) {
             self::load_config();
             self::$config = self::parse_config();
         }
@@ -46,14 +46,14 @@ class LoadConfig
 
     static protected function load_by_path($path)
     {
-        $config =array();
-        $files = glob($path."*.php");
-        if(empty($files)){
+        $config = array();
+        $files = glob($path . "*.php");
+        if (empty($files)) {
             return array();
         }
-        foreach($files as $filename){
+        foreach ($files as $filename) {
             $conf = include($filename);
-            $config = array_merge($config,$conf);
+            $config = array_merge($config, $conf);
         }
         return $config;
     }
@@ -65,21 +65,22 @@ class LoadConfig
     static protected function parse_config()
     {
         $config = array();
-        foreach (self::$ori_config as $key=>$val) {
-            $config[$key] = array(
-                "name" => $val["name"],
-                "time" => $val["time"],
-                "task" => $val["task"]
-            );
+        if (is_array(self::$ori_config)) {
+            foreach (self::$ori_config as $key => $val) {
+                $config[$key] = array(
+                    "name" => $val["name"],
+                    "time" => $val["time"],
+                    "task" => $val["task"]
+                );
+            }
         }
         return $config;
     }
 
     static public function send_config($tasks)
     {
-        foreach($tasks as $id=>$task)
-        {
-            self::$config[$id]=$task;
+        foreach ($tasks as $id => $task) {
+            self::$config[$id] = $task;
         }
         self::save_config();
     }
@@ -95,11 +96,11 @@ class LoadConfig
         ob_start();
         var_export(self::$config);
         $config = ob_get_clean();
-        if(is_file(self::$config_file)){
+        if (is_file(self::$config_file)) {
             $path = self::$config_file;
-        }else if(is_dir(self::$config_file)){
-            $path = self::$config_file."crontab.php";
+        } else if (is_dir(self::$config_file)) {
+            $path = self::$config_file . "crontab.php";
         }
-        file_put_contents($path,"<?php \n return ".$config.";");
+        file_put_contents($path, "<?php \n return " . $config . ";");
     }
 }

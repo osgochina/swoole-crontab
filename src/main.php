@@ -13,9 +13,9 @@ define('ROOT_PATH', realpath(dirname(__FILE__)) . DS);
 
 class Main
 {
-    static public  $http_server;
+    static public $http_server;
     static private $options = "hdrmp:s:l:c:";
-    static private $longopts = array("help", "http","daemon","checktime","reload","monitor", "pid:", "log:", "config:","host:","port:");
+    static private $longopts = array("help", "http", "daemon", "checktime", "reload", "monitor", "pid:", "log:", "config:", "host:", "port:");
     static private $help = <<<EOF
 
   帮助信息:
@@ -132,9 +132,9 @@ EOF;
         if (isset($opt["m"]) || isset($opt["monitor"])) {
             $pid = @file_get_contents(Crontab::$pid_file);
             if ($pid && swoole_process::kill($pid, 0)) {
-                   exit;
-            }else{
-                $opt=array("s"=>"restart");
+                exit;
+            } else {
+                $opt = array("s" => "restart");
             }
         }
         return $opt;
@@ -230,22 +230,22 @@ EOF;
             return false;
         }
         if (isset($opt["host"]) && $opt["host"]) {
-            Http::$host= $opt["host"];
+            Http::$host = $opt["host"];
         }
         if (isset($opt["port"]) && $opt["port"]) {
-            Http::$port= $opt["port"];
+            Http::$port = $opt["port"];
         }
 
-        $process = new swoole_process(array(new Main(),"http_run"));
+        $process = new swoole_process(array(new Main(), "http_run"));
         $process->start();
         self::$http_server = $process;
 
         swoole_event_add($process->pipe, function ($pipe) use ($process) {
             $manager = new Manager();
             $recv = $process->read();
-            $recv = explode("#@#",$recv);
-            $function = $recv[0]."_cron";
-            $process->write(json_encode($manager->$function(json_decode($recv[1],true))));
+            $recv = explode("#@#", $recv);
+            $function = $recv[0] . "_cron";
+            $process->write(json_encode($manager->$function(json_decode($recv[1], true))));
         });
         return true;
     }
@@ -257,7 +257,7 @@ EOF;
     public function http_run($worker)
     {
         $binpath = $_SERVER["_"];
-        $worker->exec($binpath,array(ROOT_PATH."include/Http.class.php",$worker->pipe,Crontab::$config_file));
+        $worker->exec($binpath, array(ROOT_PATH . "include/Http.class.php", $worker->pipe, Crontab::$config_file));
     }
 
     /**
@@ -276,5 +276,6 @@ EOF;
 
 
 }
+
 //运行
 Main::run();
