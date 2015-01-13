@@ -80,6 +80,31 @@ Swoole-Crontab(基于Swoole扩展)
 4).删除任务
 
     http://127.0.0.1:9501/conf?taskid=taskid2      [delete]方式
+
+5).批量导入(注意，批量导入会清空已存在的任务)
+
+    http://127.0.0.1:9501/import                    [post]方式
+    tasks={
+                  "taskid1": {
+                      "name": "php -i", 
+                      "time": "1 * * 8 * *", 
+                      "task": {
+                          "parse": "Cmd", 
+                          "cmd": "php -i", 
+                          "output": "/tmp/test.log"
+                      }
+                  }, 
+                  "taskid2": {
+                      "name": "php -i", 
+                      "time": "* 42-43 * * * *", 
+                      "task": {
+                          "parse": "Cmd", 
+                          "cmd": "php -i", 
+                          "output": "/tmp/test.log"
+                      }
+                  }
+              }
+    
     
  
 
