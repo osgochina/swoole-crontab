@@ -8,7 +8,6 @@
 
 date_default_timezone_set('Asia/Shanghai');
 define('APP_DEBUG', true);
-define('APP_ENVIRONMENT', 'dev');
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT_PATH', realpath(dirname(__FILE__)) . DS);
 
@@ -190,7 +189,7 @@ EOF;
             Crontab::$config_file = $opt["config"];
         }
         if (empty(Crontab::$config_file)) {
-            Crontab::$config_file = ROOT_PATH . "config/" . APP_ENVIRONMENT . "/";
+            Crontab::$config_file = ROOT_PATH . "config/crontab.php";
         }
     }
 
@@ -258,7 +257,7 @@ EOF;
     public function http_run($worker)
     {
         $binpath = $_SERVER["_"];
-        $worker->exec($binpath,array(ROOT_PATH."include/Http.class.php",$worker->pipe));
+        $worker->exec($binpath,array(ROOT_PATH."include/Http.class.php",$worker->pipe,Crontab::$config_file));
     }
 
     /**

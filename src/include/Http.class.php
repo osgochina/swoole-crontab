@@ -25,6 +25,7 @@ class Http
     static public $http;
     static public $manager;
     static public $fp;
+    static public $conf_file;
 
     static public function http_server()
     {
@@ -70,13 +71,14 @@ class Http
         return false;
     }
 
-    static public function run($fd)
+    static public function run($fd,$conf_file)
     {
         self::$fp = fopen("php://fd/".$fd,"a");
+        self::$conf_file = $conf_file;
         swoole_set_process_name(self::$name);
         self::http_server();
         self::start();
     }
 }
 
-Http::run($argv[1]);
+Http::run($argv[1],$argv[2]);

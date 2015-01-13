@@ -14,7 +14,7 @@
   'taskid2' =>
       array (
           'name' => 'php -i',
-          'time' => '* 42-43 * * * *',
+          'time' => '* * * * * *',
           'task' =>
               array (
                   'parse' => 'Cmd',

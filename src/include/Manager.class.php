@@ -73,6 +73,11 @@ class Manager
         $response->end(json_encode($data));
     }
 
+    /**
+     * 导入任务配置数据，会清空存在的数据
+     * @param $request
+     * @param $response
+     */
     function importconf_http($request,$response)
     {
         $tasks = $request->post["tasks"];
@@ -88,7 +93,7 @@ class Manager
         ob_start();
         var_export($tasks);
         $config = ob_get_clean();
-        file_put_contents(ROOT_PATH."config/conf.php","<?php \n return ".$config.";");
+        file_put_contents(Http::$conf_file,"<?php \n return ".$config.";");
         fwrite(Http::$fp,"reloadconf#@#".json_encode(array()));
 
         $response->end(json_encode($this->output("ok")));
