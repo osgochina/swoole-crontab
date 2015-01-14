@@ -16,6 +16,7 @@ class Crontab
     static private $pid;                        //pid
     static public $checktime = false;           //精确对时
     static public $task_list = array();
+    static public $unique_list = array();
 
     /**
      * 重启
@@ -151,11 +152,19 @@ class Crontab
         }
         $config = LoadConfig::get_config();
         foreach ($config as $id => $task) {
+            //如果任务唯一性，则不执行任务
+            if(isset(self::$unique_list[$id])){
+                continue;
+            }
             $ret = ParseCrontab::parse($task["time"], $time);
             if ($ret === false) {
                 Main::log_write(ParseCrontab::$error);
             } elseif (!empty($ret)) {
+                print_r($task);
                 TurnTable::set_task($ret, array_merge($task, array("id" => $id)));
+                if(isset($task["unique"]) && $task["unique"]){
+                    self::$unique_list[$id] = true;
+                }
             }
         }
         TurnTable::turn();
@@ -209,6 +218,7 @@ class Crontab
                 $id = $task["id"];
                 Main::log_write("{$id} [Runtime:" . sprintf("%0.6f", $end - $start) . "]");
                 unset(self::$task_list[$pid]);
+                unset(self::$unique_list["id"]);
             };
         });
         swoole_process::signal(SIGUSR1, function ($signo) {

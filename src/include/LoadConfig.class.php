@@ -70,6 +70,7 @@ class LoadConfig
                 $config[$key] = array(
                     "name" => $val["name"],
                     "time" => $val["time"],
+                    "unique" => $val["unique"],
                     "task" => $val["task"]
                 );
             }
