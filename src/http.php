@@ -64,7 +64,8 @@ class Http
                         $response->end($return);
                         return true;
                     } else {
-                        return call_user_func_array(array(new Manager(), $rte[1] . "_http"), array("request" => $request, "response" => $response));
+                        $response->end(json_encode(call_user_func_array(array(new Manager(), $rte[1] . "_http"), array("request" => $request))));
+                        return true;
                     }
                 }
             }

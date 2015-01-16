@@ -60,7 +60,7 @@ class Manager
     /**
      * @param $params
      */
-    function loglist_http($request, $response)
+    function loglist_http($request)
     {
         $date = $request->get["date"];
         if ($date) {
@@ -70,7 +70,7 @@ class Manager
         } else {
             $data = $this->output("参数有误", false);
         }
-        $response->end(json_encode($data));
+        return $data;
     }
 
     /**
@@ -78,16 +78,16 @@ class Manager
      * @param $request
      * @param $response
      */
-    function importconf_http($request, $response)
+    function importconf_http($request)
     {
         $tasks = $request->post["tasks"];
         $tasks = json_decode($tasks, true);
         if (empty($tasks)) {
-            $response->end(json_encode($this->output("参数有误", false)));
+            return $this->output("参数有误", false);
         }
         foreach ($tasks as $id => $task) {
             if (empty($task["name"]) || empty($task["time"]) || empty($task["task"])) {
-                $response->end(json_encode($this->output("参数有误", false)));
+                return $this->output("参数有误", false);
             }
         }
         ob_start();
@@ -96,7 +96,7 @@ class Manager
         file_put_contents(Http::$conf_file, "<?php \n return " . $config . ";");
         fwrite(Http::$fp, "reloadconf#@#" . json_encode(array()));
 
-        $response->end(json_encode($this->output("ok")));
+        return $this->output("ok");
     }
 
     public function output($data, $status = true)
