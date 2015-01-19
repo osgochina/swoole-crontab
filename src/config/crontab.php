@@ -9,7 +9,7 @@ return array(
                 array(
                     'parse'  => 'Cmd',//命令处理类
                     'cmd'    => 'php -i',//命令
-                    'output' => '/tmp/test.log',
+                    'ext' => '',//附加属性
                 ),
         ),
 );

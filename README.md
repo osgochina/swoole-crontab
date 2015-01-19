@@ -63,7 +63,7 @@ Swoole-Crontab(基于Swoole扩展)
                   "task": {
                       "parse": "Cmd", 
                       "cmd": "php -i", 
-                      "output": "/tmp/test.log"
+                      "ext": ""
                   }
               }, 
               "taskid2": {
@@ -72,7 +72,7 @@ Swoole-Crontab(基于Swoole扩展)
                   "task": {
                       "parse": "Cmd", 
                       "cmd": "php -i", 
-                      "output": "/tmp/test.log"
+                      "ext": ""
                   }
               }
           }
@@ -91,7 +91,7 @@ Swoole-Crontab(基于Swoole扩展)
                       "task": {
                           "parse": "Cmd", 
                           "cmd": "php -i", 
-                          "output": "/tmp/test.log"
+                          "ext": ""
                       }
                   }, 
                   "taskid2": {
@@ -100,7 +100,7 @@ Swoole-Crontab(基于Swoole扩展)
                       "task": {
                           "parse": "Cmd", 
                           "cmd": "php -i", 
-                          "output": "/tmp/test.log"
+                          "ext": ""
                       }
                   }
               }
@@ -124,7 +124,7 @@ Swoole-Crontab(基于Swoole扩展)
                     array(
                         'parse'  => 'Cmd',//命令处理类
                         'cmd'    => 'php -i',//命令
-                        'output' => '/tmp/test.log',
+                        "ext": ""
                     ),
             ),
     );
