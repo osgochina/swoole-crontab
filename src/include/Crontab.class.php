@@ -152,10 +152,6 @@ class Crontab
         }
         $config = LoadConfig::get_config();
         foreach ($config as $id => $task) {
-            //如果任务唯一性，则不执行任务
-            if(isset(self::$unique_list[$id])){
-                continue;
-            }
             $ret = ParseCrontab::parse($task["time"], $time);
             if ($ret === false) {
                 Main::log_write(ParseCrontab::$error);
