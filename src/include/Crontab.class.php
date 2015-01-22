@@ -106,13 +106,17 @@ class Crontab
         self::register_signal();
         if (self::$checktime) {
             $run = true;
+            Main::log_write("正在启动...");
             while ($run) {
-                if (date("s") == 0) {
+                $s = date("s");
+                if ( $s == 0) {
+
                     TurnTable::init();
                     Crontab::load_config();
                     self::register_timer();
                     $run = false;
                 }else{
+                    Main::log_write("启动倒计时 ".(60-$s)." 秒");
                     sleep(1);
                 }
             }
