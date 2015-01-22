@@ -38,7 +38,7 @@ class Main
   --http             开启http服务
   --host             监听ip,默认是127.0.0.1
   --port             监听端口.默认是9501
-  --checktime        是否精确对时(如果精确对时,程序则会延时到分钟开始0秒启动)
+  --checktime        默认精确对时(如果精确对时,程序则会延时到分钟开始0秒启动) 值为false则不精确对时
 
 EOF;
 
@@ -100,8 +100,8 @@ EOF;
      */
     static public function params_checktime($opt)
     {
-        if (isset($opt["checktime"])) {
-            Crontab::$checktime = true;
+        if (isset($opt["checktime"]) && $opt["checktime"] == "false") {
+            Crontab::$checktime = false;
         }
     }
 

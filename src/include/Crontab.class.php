@@ -14,7 +14,7 @@ class Crontab
     static public $config_file;                 //配置文件位置
     static public $daemon = false;              //运行模式
     static private $pid;                        //pid
-    static public $checktime = false;           //精确对时
+    static public $checktime = true;           //精确对时
     static public $task_list = array();
     static public $unique_list = array();
 
@@ -102,20 +102,22 @@ class Crontab
         self::get_pid();
         self::write_pid();
         LoadConfig::$config_file = self::$config_file;
-        TurnTable::init();
         self::load_config();
         self::register_signal();
         if (self::$checktime) {
             $run = true;
             while ($run) {
                 if (date("s") == 0) {
+                    TurnTable::init();
                     Crontab::load_config();
                     self::register_timer();
                     $run = false;
+                }else{
+                    sleep(1);
                 }
-                sleep(1);
             }
         } else {
+            TurnTable::init();
             self::register_timer();
         }
 
