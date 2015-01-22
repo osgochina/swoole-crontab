@@ -5,7 +5,7 @@ Swoole-Crontab(基于Swoole扩展)
 + 基于swoole的定时器程序，支持秒级处理.  
 + 异步多进程处理。
 + 完全兼容crontab语法，且支持秒的配置
-+ 请使用swoole扩展1.7.9以上版本.[Swoole](https://github.com/swoole/swoole-src)
++ 请使用swoole扩展1.7.9-stable及以上版本.[Swoole](https://github.com/swoole/swoole-src)
 
 2.配置的支持
 --------------
@@ -39,7 +39,7 @@ Swoole-Crontab(基于Swoole扩展)
     * --http             开启http服务
     * --host             监听ip,默认是127.0.0.1
     * --port             监听端口.默认是9501
-    * --checktime        是否精确对时(如果精确对时,程序则会延时到分钟开始0秒启动)
+    * --checktime        默认精确对时(如果精确对时,程序则会延时到分钟开始0秒启动) 值为false则不精确对时
 
 4.Http 服务
 ------------
