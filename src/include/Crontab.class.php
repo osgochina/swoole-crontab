@@ -99,8 +99,6 @@ class Crontab
      */
     static protected function run()
     {
-        self::get_pid();
-        self::write_pid();
         LoadConfig::$config_file = self::$config_file;
         self::load_config();
         self::register_signal();
@@ -124,7 +122,8 @@ class Crontab
             TurnTable::init();
             self::register_timer();
         }
-
+        self::get_pid();
+        self::write_pid();
     }
 
     /**
