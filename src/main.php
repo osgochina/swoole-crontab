@@ -100,7 +100,7 @@ EOF;
      */
     static public function params_checktime($opt)
     {
-        if (isset($opt["checktime"]) && $opt["checktime"] == "false") {
+        if (isset($opt["checktime"]) && $opt["checktime"] == false) {
             Crontab::$checktime = false;
         }
     }

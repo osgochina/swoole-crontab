@@ -47,8 +47,8 @@ class Http
 
     static public function route($request, $response)
     {
-        $method = $request->server["REQUEST_METHOD"];
-        $path = $request->server["PATH_INFO"];
+        $method = $request->server[strtolower("REQUEST_METHOD")];
+        $path = $request->server[strtolower("PATH_INFO")];
         foreach (self::$route as $rte) {
             $pattern = str_replace("/", '\/', $rte[0]);
             preg_match("/$pattern/", $path, $matches);
