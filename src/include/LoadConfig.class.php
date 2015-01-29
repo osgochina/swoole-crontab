@@ -80,22 +80,24 @@ class LoadConfig
 
     static public function send_config($tasks)
     {
+        $config = self::$config;
         foreach ($tasks as $id => $task) {
-            self::$config[$id] = $task;
+            $config[$id] = $task;
         }
-        self::save_config();
+        self::save_config($config);
     }
 
     static public function del_config($task)
     {
-        unset(self::$config[$task]);
-        self::save_config();
+        $config = self::$config;
+        unset($config[$task]);
+        self::save_config($config);
     }
 
-    static protected function save_config()
+    static protected function save_config($conf)
     {
         ob_start();
-        var_export(self::$config);
+        var_export($conf);
         $config = ob_get_clean();
         if (is_file(self::$config_file)) {
             $path = self::$config_file;

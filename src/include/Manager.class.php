@@ -25,7 +25,7 @@ class Manager
      */
     function reloadconf_cron($params)
     {
-        Crontab::load_config(true);
+        LoadConfig::reload_config();
         return $this->output("ok");
     }
 
@@ -42,7 +42,7 @@ class Manager
             }
         }
         LoadConfig::send_config($tasks);
-        Crontab::load_config(true);
+        LoadConfig::reload_config();
         return $this->output("ok");
     }
 
@@ -53,7 +53,7 @@ class Manager
             return $this->output("参数有误", false);
         }
         LoadConfig::del_config($task);
-        Crontab::load_config(true);
+        LoadConfig::reload_config();
         return $this->output("ok");
     }
 

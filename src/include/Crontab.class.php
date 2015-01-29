@@ -148,13 +148,9 @@ class Crontab
     /**
      * 根据配置载入需要执行的任务
      */
-    static public function load_config($reload = false)
+    static public function load_config()
     {
         $time = time();
-        if ($reload) {
-            LoadConfig::reload_config();
-            TurnTable::init();
-        }
         $config = LoadConfig::get_config();
         foreach ($config as $id => $task) {
             $ret = ParseCrontab::parse($task["time"], $time);
@@ -225,7 +221,7 @@ class Crontab
             };
         });
         swoole_process::signal(SIGUSR1, function ($signo) {
-            Crontab::load_config(true);
+            LoadConfig::reload_config();
         });
 
     }
