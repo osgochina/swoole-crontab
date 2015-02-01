@@ -56,9 +56,9 @@ EOF;
         self::params_c($opt);
         self::params_r($opt);
         self::params_checktime($opt);
-        self::params_http($opt);
         $opt = self::params_m($opt);
         self::params_s($opt);
+        self::params_http($opt);
     }
 
     /**
@@ -258,6 +258,7 @@ EOF;
      */
     public function http_run($worker)
     {
+        Main::log_write("HTTP Server 已启动");
         $binpath = $_SERVER["_"];
         $worker->exec($binpath, array(ROOT_PATH . "/http.php", $worker->pipe, Crontab::$config_file,self::$host,self::$port));
     }
