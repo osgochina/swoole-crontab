@@ -187,11 +187,12 @@ class Crontab
         $tasks = TurnTable::get_task();
         if (empty($tasks)) return false;
         foreach ($tasks as $id => $task) {
-            if(isset(self::$unique_list[$id])){
-                continue;
-            }
             if(isset($task["unique"]) && $task["unique"]){
-                self::$unique_list[$id] = true;
+                if(isset(self ::$unique_list[$id]) && (self::$unique_list[$id] >= $task["unique"])){
+                    continue;
+                }
+
+                self::$unique_list[$id] = isset(self::$unique_list[$id]) ? (self::$unique_list[$id] + 1) : 0;
             }
             (new Process())->create_process($id, $task);
         }
@@ -217,7 +218,9 @@ class Crontab
                 $id = $task["id"];
                 Main::log_write("{$id} [Runtime:" . sprintf("%0.6f", $end - $start) . "]");
                 unset(self::$task_list[$pid]);
-                unset(self::$unique_list[$id]);
+                if (isset(self::$unique_list[$id]) && self::$unique_list[$id] > 0) {
+                    self::$unique_list[$id]--;
+                }
             };
         });
         swoole_process::signal(SIGUSR1, function ($signo) {

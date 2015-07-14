@@ -2,15 +2,15 @@ Swoole-Crontab(基于Swoole扩展)
 ==============
 1.概述
 --------------
-+ 基于swoole的定时器程序，支持秒级处理.  
++ 基于swoole的定时器程序，支持秒级处理.
 + 异步多进程处理。
 + 完全兼容crontab语法，且支持秒的配置
 + 请使用swoole扩展1.7.9-stable及以上版本.[Swoole](https://github.com/swoole/swoole-src)
 
 2.配置的支持
 --------------
-具体配置文件请看 [src/config/dev/crontab.php](https://github.com/osgochina/swoole-crontab/blob/master/src/config/dev/crontab.php)   
-介绍一下时间配置  
+具体配置文件请看 [src/config/dev/crontab.php](https://github.com/osgochina/swoole-crontab/blob/master/src/config/dev/crontab.php)
+介绍一下时间配置
 
     0   1   2   3   4   5
     |   |   |   |   |   |
@@ -43,40 +43,40 @@ Swoole-Crontab(基于Swoole扩展)
 
 4.Http 服务
 ------------
-你可以在启动的时候加上参数--http 来开启http服务，可以指定端口及ip     
-开启了http服务以后，你可以使用以下API接口    
-1).查看日志 
+你可以在启动的时候加上参数--http 来开启http服务，可以指定端口及ip
+开启了http服务以后，你可以使用以下API接口
+1).查看日志
 
     http://127.0.0.1:9501/log?date=2015-01-12
-    
+
 2).查看任务列表
-    
+
     http://127.0.0.1:9501/conf
-    
+
 3).添加修改任务
-    
+
     http://127.0.0.1:9501/conf      [post]方式
     tasks={
               "taskid1": {
-                  "name": "php -i", 
-                  "time": "1 * * 8 * *", 
+                  "name": "php -i",
+                  "time": "1 * * 8 * *",
                   "task": {
-                      "parse": "Cmd", 
-                      "cmd": "php -i", 
+                      "parse": "Cmd",
+                      "cmd": "php -i",
                       "ext": ""
                   }
-              }, 
+              },
               "taskid2": {
-                  "name": "php -i", 
-                  "time": "* 42-43 * * * *", 
+                  "name": "php -i",
+                  "time": "* 42-43 * * * *",
                   "task": {
-                      "parse": "Cmd", 
-                      "cmd": "php -i", 
+                      "parse": "Cmd",
+                      "cmd": "php -i",
                       "ext": ""
                   }
               }
           }
-    
+
 4).删除任务
 
     http://127.0.0.1:9501/conf?taskid=taskid2      [delete]方式
@@ -86,40 +86,40 @@ Swoole-Crontab(基于Swoole扩展)
     http://127.0.0.1:9501/import                    [post]方式
     tasks={
                   "taskid1": {
-                      "name": "php -i", 
-                      "time": "1 * * 8 * *", 
+                      "name": "php -i",
+                      "time": "1 * * 8 * *",
                       "task": {
-                          "parse": "Cmd", 
-                          "cmd": "php -i", 
+                          "parse": "Cmd",
+                          "cmd": "php -i",
                           "ext": ""
                       }
-                  }, 
+                  },
                   "taskid2": {
-                      "name": "php -i", 
-                      "time": "* 42-43 * * * *", 
+                      "name": "php -i",
+                      "time": "* 42-43 * * * *",
                       "task": {
-                          "parse": "Cmd", 
-                          "cmd": "php -i", 
+                          "parse": "Cmd",
+                          "cmd": "php -i",
                           "ext": ""
                       }
                   }
               }
-    
-    
- 
+
+
+
 
 
 
 5.例子
 -----------
-你可以在配置文件中加上以下配置:  
+你可以在配置文件中加上以下配置:
 
     return array(
         'taskid1' =>
             array(
                 'name' => 'php -i',  //任务名称
                 'time' => '* * * * * *',//定时规则
-                "unique"=>true,//是否排他，当一个任务在执行的时候，即时到了下一次执行时间，也不执行
+                "unique" => 2, //排他数量，如果已经有这么多任务在执行，即使到了下一次执行时间，也不执行
                 'task' =>
                     array(
                         'parse'  => 'Cmd',//命令处理类
@@ -128,11 +128,11 @@ Swoole-Crontab(基于Swoole扩展)
                     ),
             ),
     );
-然后去到src目录下,执行  
+然后去到src目录下,执行
 
     /path/to/php main.php -s start
-    
+
 执行完成以后你就可以在/tmp/test.log看到输出了，每秒输出一次
 
-如果你需要写自己的代码逻辑，你也可以到plugin目录下，实现一个PluginBase.class.php接口的类.   
+如果你需要写自己的代码逻辑，你也可以到plugin目录下，实现一个PluginBase.class.php接口的类.
 在其中写自己的逻辑代码。
