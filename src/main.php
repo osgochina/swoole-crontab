@@ -68,6 +68,9 @@ EOF;
     {
         spl_autoload_register(function ($name) {
             $file_path = ROOT_PATH . "include" . DS . $name . ".class.php";
+            if(!file_exists($file_path)){
+                $file_path = ROOT_PATH . "include" . DS ."LoadConfig".DS. $name . ".class.php";
+            }
             include $file_path;
         });
     }
