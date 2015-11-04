@@ -58,7 +58,8 @@ class Manager
     }
 
     /**
-     * @param $params
+     * @param $request
+     * @return array|string
      */
     function loglist_http($request)
     {
@@ -76,7 +77,7 @@ class Manager
     /**
      * 导入任务配置数据，会清空存在的数据
      * @param $request
-     * @param $response
+     * @return array
      */
     function importconf_http($request)
     {

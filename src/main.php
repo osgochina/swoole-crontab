@@ -29,9 +29,7 @@ class Main
   -s stop            停止进程
   -s restart         重启进程
   -l [--log]         log文件夹的位置
-  -c [--config]      config文件的位置(可以是文件,也可以是文件夹.
-                     如果是文件,则载入指定文件.如果是文件夹,则载入文件夹
-                     下的所有文件.)
+  -c [--config]      config文件的位置
   -d [--daemon]      是否后台运行
   -r [--reload]      重新载入配置文件
   -m [--monitor]     监控进程是否在运行,如果在运行则不管,未运行则启动进程
@@ -224,6 +222,10 @@ EOF;
         }
     }
 
+    static public function parms_worker($opt){
+
+    }
+
     /**
      * 开启http服务 web api
      * @param $opt
@@ -279,8 +281,6 @@ EOF;
         }
         echo "{$now} : {$message}\r\n";
     }
-
-
 }
 
 //运行

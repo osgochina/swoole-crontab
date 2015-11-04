@@ -10,12 +10,13 @@
 return array(
     "mqtask1"=>array(
         "name"=>"队列1",
-        "classname"=>"",
+        "classname"=>"ReadBook",
         "processNum"=>1,
         "redis"=>array(
             "host"=>"127.0.0.1",
             "port"=>6379,
             "timeout"=>30,
+            "db"=>0,
             "queue"=>"abc"
         )
     )
