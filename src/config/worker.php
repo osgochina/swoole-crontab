@@ -11,7 +11,7 @@ return array(
     "mqtask1"=>array(
         "name"=>"队列1",
         "classname"=>"ReadBook",
-        "processNum"=>1,
+        "processNum"=>5,
         "redis"=>array(
             "host"=>"127.0.0.1",
             "port"=>6379,

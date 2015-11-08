@@ -9,30 +9,33 @@
 abstract class WorkerBase
 {
 
-    private static $Redis;
-    private static $queue;
+    private  $Redis;
+    private  $queue;
+    protected $worker;
 
     public function content($config){
+
         if(!isset($config["host"]) || !isset($config["port"]) || !isset($config["timeout"]) || !isset($config["queue"])){
             Main::log_write(vsprintf(" host=%s,port=%s,timeout=%s,queue=%s",$config));
             exit;
         }
-        self::$Redis = new Redis();
-        if(!self::$Redis->pconnect($config["host"],$config["port"],isset($config["timeout"]))){
+
+       $this->Redis = new Redis();
+        if(!$this->Redis->pconnect($config["host"],$config["port"],isset($config["timeout"]))){
             Main::log_write(vsprintf("redis can't connect.host=%s,port=%s,timeout=%s",$config));
             exit;
         }
         if(isset($config["db"]) && is_numeric($config["db"])){
-            self::$Redis->select($config["db"]);
+            $this->Redis->select($config["db"]);
         }
-        self::$queue = $config["queue"];
+        $this->queue = $config["queue"];
     }
 
     public function getQueue(){
-        return self::$Redis->rpop(self::$queue);
+        return $this->Redis->rpop($this->queue);
     }
-
-    public function tick(){
+    public function tick($worker){
+        $this->worker = $worker;
         swoole_timer_add(500, function() {
             while(true){
                 $task = $this->getQueue();
@@ -41,8 +44,11 @@ abstract class WorkerBase
                 }
                 $this->Run($task);
             }
-
         });
+    }
+    protected function _exit()
+    {
+        $this->worker->exit(1);
     }
 
     /**
@@ -51,5 +57,7 @@ abstract class WorkerBase
      * @return mixed
      */
     abstract public function Run($task);
+
+
 
 }
