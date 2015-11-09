@@ -100,7 +100,6 @@ class Crontab
     static protected function run()
     {
         LoadConfig::$config_file = self::$config_file;
-        self::load_config();
         self::register_signal();
         if (self::$checktime) {
             $run = true;
@@ -119,6 +118,7 @@ class Crontab
                 }
             }
         } else {
+            self::load_config();
             TurnTable::init();
             self::register_timer();
         }
