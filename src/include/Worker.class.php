@@ -10,9 +10,9 @@ class Worker
 {
     public $workers;
     public function loadWorker(){
-        foreach($this->getWorkers() as $id=>$task){
+        foreach($this->getWorkers() as $classname=>$task){
             for($i=1;$i<=$task["processNum"];$i++){
-                $this->create_process($id,$task["classname"],$i,$task["redis"]);
+                $this->create_process($classname,$i,$task["redis"]);
             }
         }
     }
@@ -21,10 +21,7 @@ class Worker
         $path = ROOT_PATH."config/worker.php";
         $config = include $path;
         if(empty($config)){
-            return;
-        }
-        foreach($config as $name=>$task){
-
+            return array();
         }
         return $config;
     }
@@ -33,7 +30,7 @@ class Worker
      * 创建一个子进程
      * @param $task
      */
-    public function create_process($id, $classname,$number,$redis)
+    public function create_process($classname,$number,$redis)
     {
         $this->workers["classname"] = $classname;
         $this->workers["number"] = $number;
@@ -42,11 +39,14 @@ class Worker
         if (!($pid = $process->start())) {
 
         }
-        swoole_process::signal(SIGCHLD, function ($signo) {
-            while ($result = swoole_process::wait(false)) {
-                print_r($result);
-            };
-        });
+        //记录当前任务
+        Crontab::$task_list[$pid] = array(
+            "start" => microtime(true),
+            "classname"    => $classname,
+            "number"    => $number,
+            "redis"  => $redis,
+            "type"  => "worker",
+        );
     }
 
     /**

@@ -226,7 +226,7 @@ EOF;
 
     static public function parms_worker($opt){
         if (isset($opt["worker"])) {
-            (new Worker())->loadWorker();
+            Crontab::$worker = true;
         }
     }
 

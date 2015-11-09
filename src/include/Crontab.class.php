@@ -8,7 +8,7 @@
  */
 class Crontab
 {
-    static public $process_name = "lzm_Crontab";//进程名称
+    static public $process_name = "lzm_Master";//进程名称
     static public $pid_file;                    //pid文件位置
     static public $log_path;                    //日志文件位置
     static public $config_file;                 //配置文件位置
@@ -17,6 +17,8 @@ class Crontab
     static public $checktime = true;           //精确对时
     static public $task_list = array();
     static public $unique_list = array();
+    static public $worker=false;
+    static public $delay = array();
 
     /**
      * 重启
@@ -100,7 +102,6 @@ class Crontab
     static protected function run()
     {
         LoadConfig::$config_file = self::$config_file;
-        self::load_config();
         self::register_signal();
         if (self::$checktime) {
             $run = true;
@@ -120,10 +121,15 @@ class Crontab
             }
         } else {
             TurnTable::init();
+            self::load_config();
             self::register_timer();
         }
         self::get_pid();
         self::write_pid();
+        //开启worker
+        if(self::$worker){
+            (new Worker())->loadWorker();
+        }
     }
 
     /**
@@ -183,6 +189,7 @@ class Crontab
      */
     static public function do_something($interval)
     {
+
         //TurnTable::debug();
         $tasks = TurnTable::get_task();
         if (empty($tasks)) return false;
@@ -194,7 +201,15 @@ class Crontab
 
                 self::$unique_list[$id] = isset(self::$unique_list[$id]) ? (self::$unique_list[$id] + 1) : 0;
             }
+
             (new Process())->create_process($id, $task);
+        }
+        if(!empty(self::$delay)){
+            foreach(self::$delay as $time=>$task){
+                if(time() >= $time){
+                    (new Process())->create_process($task["id"], $task);
+                }
+            }
         }
         return true;
     }
@@ -213,14 +228,24 @@ class Crontab
         swoole_process::signal(SIGCHLD, function ($signo) {
             while (($pid = pcntl_wait($status, WNOHANG)) > 0) {
                 $task = self::$task_list[$pid];
-                $end = microtime(true);
-                $start = $task["start"];
-                $id = $task["id"];
-                Main::log_write("{$id} [Runtime:" . sprintf("%0.6f", $end - $start) . "]");
-                unset(self::$task_list[$pid]);
-                if (isset(self::$unique_list[$id]) && self::$unique_list[$id] > 0) {
-                    self::$unique_list[$id]--;
+                if($task["type"] == "crontab"){
+                    $end = microtime(true);
+                    $start = $task["start"];
+                    $id = $task["id"];
+                    Main::log_write("{$id} [Runtime:" . sprintf("%0.6f", $end - $start) . "]");
+                    unset(self::$task_list[$pid]);
+                    if (isset(self::$unique_list[$id]) && self::$unique_list[$id] > 0) {
+                        self::$unique_list[$id]--;
+                    }
                 }
+                if($task["type"] == "worker"){
+                    $end = microtime(true);
+                    $start = $task["start"];
+                    $classname = $task["classname"];
+                    Main::log_write("{$classname}_{$task["number"]} [Runtime:" . sprintf("%0.6f", $end - $start) . "]");
+                    (new Worker())->create_process($classname,$task["number"],$task["redis"]);
+                }
+
             };
         });
         swoole_process::signal(SIGUSR1, function ($signo) {
