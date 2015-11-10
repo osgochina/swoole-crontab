@@ -30,11 +30,9 @@ class Process
         );
         swoole_event_add($process->pipe, function($pipe)use ($process) {
             $task = $process->read();
-            echo $task."\n";
             list($pid,$sec) = explode(",",$task);
             $tasklist = Crontab::$task_list[$pid];
             Crontab::$delay[time()+$sec] = $tasklist["task"];
-            print_r(Crontab::$delay);
             $process->write($task);
         });
     }
@@ -45,7 +43,7 @@ class Process
      */
     public function run($worker)
     {
-        $class = $this->task["task"]["parse"];
+        $class = $this->task["parse"];
         $worker->name("lzm_crontab_" . $class . "_" . $this->task["id"]);
         $this->autoload($class);
         $c =new $class;

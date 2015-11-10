@@ -12,5 +12,6 @@ class Gather extends PluginBase
     public function run($task)
     {
         // TODO: Implement run() method.
+        print_r($task);
     }
 }

@@ -71,6 +71,7 @@ class LoadConfig
                     "name" => $val["name"],
                     "time" => $val["time"],
                     "unique" => $val["unique"],
+                    "parse" => $val["parse"],
                     "task" => $val["task"]
                 );
             }

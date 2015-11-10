@@ -30,6 +30,9 @@ class ParseCrontab
      */
     static public function parse($crontab_string, $start_time = null)
     {
+        if(is_array($crontab_string)){
+            return self::_parse_array($crontab_string,$start_time);
+        }
         if (!preg_match('/^((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)$/i', trim($crontab_string))) {
             if (!preg_match('/^((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)$/i', trim($crontab_string))) {
                 self::$error = "Invalid cron string: " . $crontab_string;
@@ -94,6 +97,19 @@ class ParseCrontab
             $_max = count($v4) == 2 ? $v4[1] : ($v3[0] == "*" ? $max : $v3[0]);
             for ($i = $_min; $i <= $_max; $i += $step) {
                 $result[$i] = intval($i);
+            }
+        }
+        ksort($result);
+        return $result;
+    }
+
+    static protected function _parse_array($crontab_array,$start_time){
+        $result = array();
+        foreach($crontab_array as $val){
+            $time = strtotime($val);
+            if($time > $start_time && $time <=$start_time+60){
+                $sec = date("s",$time);
+                $result[intval($sec)] = intval($sec);
             }
         }
         ksort($result);
