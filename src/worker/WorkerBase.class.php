@@ -38,8 +38,8 @@ abstract class WorkerBase
     public function tick($worker){
         $this->worker = $worker;
         swoole_timer_add(500, function() {
-            $this->checkExit();
             while(true){
+                $this->checkExit();
                 $task = $this->getQueue();
                 if(empty($task)){
                     break;
