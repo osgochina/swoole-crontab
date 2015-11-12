@@ -31,9 +31,11 @@ class Process
         swoole_event_add($process->pipe, function($pipe)use ($process) {
             $task = $process->read();
             list($pid,$sec) = explode(",",$task);
-            $tasklist = Crontab::$task_list[$pid];
-            Crontab::$delay[time()+$sec] = $tasklist["task"];
-            $process->write($task);
+            if(isset( Crontab::$task_list[$pid])){
+                $tasklist = Crontab::$task_list[$pid];
+                Crontab::$delay[time()+$sec] = $tasklist["task"];
+                $process->write($task);
+            }
         });
     }
 

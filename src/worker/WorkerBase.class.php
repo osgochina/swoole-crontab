@@ -12,6 +12,7 @@ abstract class WorkerBase
     private  $Redis;
     private  $queue;
     protected $worker;
+    private $ppid=0;
 
     public function content($config){
 
@@ -37,6 +38,7 @@ abstract class WorkerBase
     public function tick($worker){
         $this->worker = $worker;
         swoole_timer_add(500, function() {
+            $this->checkExit();
             while(true){
                 $task = $this->getQueue();
                 if(empty($task)){
@@ -49,6 +51,19 @@ abstract class WorkerBase
     protected function _exit()
     {
         $this->worker->exit(1);
+    }
+
+    /**
+     * 判断父进程是否结束
+     */
+    private function checkExit(){
+        $ppid = posix_getppid();
+        if($this->ppid == 0){
+            $this->ppid = $ppid ;
+        }
+        if($this->ppid != $ppid){
+            $this->_exit();
+        }
     }
 
     /**
