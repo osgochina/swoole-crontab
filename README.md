@@ -6,6 +6,7 @@ Swoole-Crontab(基于Swoole扩展)
 + 异步多进程处理。
 + 完全兼容crontab语法，且支持秒的配置,可使用数组规定好精确操作时间
 + 请使用swoole扩展1.7.9-stable及以上版本.[Swoole](https://github.com/swoole/swoole-src)
++ 支持worker处理redis队列任务
 
 2.配置的支持
 --------------
@@ -105,11 +106,29 @@ Swoole-Crontab(基于Swoole扩展)
               }
 
 
+5.worker进程配置
+-----------------
+在src/config/worker.php 中写入配置，并且启动的时候加上 --worker选项就能启动worker工作进程
+配置如下:
+
+    return array(
+        //key是要加载的worker类名
+        "ReadBook"=>array(
+            "name"=>"队列1",            //备注名
+            "processNum"=>1,           //启动的进程数量
+            "redis"=>array(
+                "host"=>"127.0.0.1",    // redis ip
+                "port"=>6379,           // redis端口
+                "timeout"=>30,          // 链接超时时间
+                "db"=>0,                // redis的db号
+                "queue"=>"abc"          // redis队列名
+            )
+        )
+    );
+具体的业务逻辑在src/worker/ 文件夹下。可以自己定义业务逻辑类，只需要继承WorkerBase.class.php中的WorkerBase基类就可以
 
 
-
-
-5.例子
+6.例子
 -----------
 你可以在配置文件中加上以下配置:
 
