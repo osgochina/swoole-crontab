@@ -17,7 +17,7 @@ class Main
     static public $host;
     static public $port;
     static private $options = "hdrmp:s:l:c:";
-    static private $longopts = array("help", "http", "daemon", "checktime", "reload", "monitor", "pid:", "log:", "config:", "host:", "port:");
+    static private $longopts = array("help", "http", "daemon", "checktime","worker" ,"reload", "monitor", "pid:", "log:", "config:", "host:", "port:");
     static private $help = <<<EOF
 
   帮助信息:
@@ -29,12 +29,11 @@ class Main
   -s stop            停止进程
   -s restart         重启进程
   -l [--log]         log文件夹的位置
-  -c [--config]      config文件的位置(可以是文件,也可以是文件夹.
-                     如果是文件,则载入指定文件.如果是文件夹,则载入文件夹
-                     下的所有文件.)
+  -c [--config]      config文件的位置
   -d [--daemon]      是否后台运行
   -r [--reload]      重新载入配置文件
   -m [--monitor]     监控进程是否在运行,如果在运行则不管,未运行则启动进程
+  --worker           开启worker
   --http             开启http服务
   --host             监听ip,默认是127.0.0.1
   --port             监听端口.默认是9501
@@ -55,6 +54,7 @@ EOF;
         self::params_l($opt);
         self::params_c($opt);
         self::params_r($opt);
+        self::parms_worker($opt);
         self::params_checktime($opt);
         $opt = self::params_m($opt);
         self::params_s($opt);
@@ -68,6 +68,9 @@ EOF;
     {
         spl_autoload_register(function ($name) {
             $file_path = ROOT_PATH . "include" . DS . $name . ".class.php";
+            if(!file_exists($file_path)){
+                $file_path = ROOT_PATH . "include" . DS ."LoadConfig".DS. $name . ".class.php";
+            }
             include $file_path;
         });
     }
@@ -221,6 +224,12 @@ EOF;
         }
     }
 
+    static public function parms_worker($opt){
+        if (isset($opt["worker"])) {
+            Crontab::$worker = true;
+        }
+    }
+
     /**
      * 开启http服务 web api
      * @param $opt
@@ -276,8 +285,6 @@ EOF;
         }
         echo "{$now} : {$message}\r\n";
     }
-
-
 }
 
 //运行
