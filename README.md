@@ -10,7 +10,7 @@ Swoole-Crontab(基于Swoole扩展)
 
 2.配置的支持
 --------------
-具体配置文件请看 [src/config/dev/crontab.php](https://github.com/osgochina/swoole-crontab/blob/master/src/config/dev/crontab.php)
+具体配置文件请看 [src/config/crontab.php](https://github.com/osgochina/swoole-crontab/blob/master/src/config/crontab.php)
 介绍一下时间配置
 
     0   1   2   3   4   5
