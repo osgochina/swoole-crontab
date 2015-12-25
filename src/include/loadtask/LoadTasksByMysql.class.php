@@ -32,7 +32,9 @@ class LoadTasksByMysql
     protected function loadTasks()
     {
         echo "reload\n";
-        $data = $this->connectDB()->queryAll("select * from `crontab` where `status`=0");
+        $db =$this->connectDB();
+        $data = $db->queryAll("select * from `crontab` where `status`=0");
+        $db = null;
         $this->oriTasks = $data;
     }
 
