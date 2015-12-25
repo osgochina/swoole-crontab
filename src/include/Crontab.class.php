@@ -11,7 +11,9 @@ class Crontab
     static public $process_name = "lzm_Master";//进程名称
     static public $pid_file;                    //pid文件位置
     static public $log_path;                    //日志文件位置
-    static public $config_file;                 //配置文件位置
+    static public $taskParams;                 //获取task任务参数
+    static public $taskType;                 //获取task任务的类型
+    static public $tasksHandle;                 //获取任务的句柄
     static public $daemon = false;              //运行模式
     static private $pid;                        //pid
     static public $checktime = true;           //精确对时
@@ -101,7 +103,7 @@ class Crontab
      */
     static protected function run()
     {
-        LoadConfig::$config_file = self::$config_file;
+        self::$tasksHandle = new LoadTasks(strtolower(self::$taskType),self::$taskParams);
         self::register_signal();
         if (self::$checktime) {
             $run = true;
@@ -158,7 +160,7 @@ class Crontab
     static public function load_config()
     {
         $time = time();
-        $config = LoadConfig::get_config();
+        $config = self::$tasksHandle->getTasks(self::$taskParams);
         foreach ($config as $id => $task) {
             $ret = ParseCrontab::parse($task["time"], $time);
             if ($ret === false) {
@@ -175,7 +177,8 @@ class Crontab
      */
     static protected function register_timer()
     {
-        swoole_timer_add(60000, function ($interval) {
+        swoole_timer_add(6000, function ($interval) {
+            self::$tasksHandle->reloadTasks();
             Crontab::load_config();
         });
         swoole_timer_add(1000, function ($interval) {
@@ -250,7 +253,7 @@ class Crontab
             };
         });
         swoole_process::signal(SIGUSR1, function ($signo) {
-            LoadConfig::reload_config();
+           self::$tasksHandle->reloadTasks();
         });
 
     }
