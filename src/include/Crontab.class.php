@@ -17,7 +17,7 @@ class Crontab
     static public $checktime = true;           //精确对时
     static public $task_list = array();
     static public $unique_list = array();
-    static public $worker=false;
+    static public $worker = false;
     static public $delay = array();
 
     /**
@@ -108,14 +108,14 @@ class Crontab
             Main::log_write("正在启动...");
             while ($run) {
                 $s = date("s");
-                if ( $s == 0) {
+                if ($s == 0) {
 
                     TurnTable::init();
                     Crontab::load_config();
                     self::register_timer();
                     $run = false;
-                }else{
-                    Main::log_write("启动倒计时 ".(60-$s)." 秒");
+                } else {
+                    Main::log_write("启动倒计时 " . (60 - $s) . " 秒");
                     sleep(1);
                 }
             }
@@ -128,7 +128,7 @@ class Crontab
         self::get_pid();
         self::write_pid();
         //开启worker
-        if(self::$worker){
+        if (self::$worker) {
             (new Worker())->loadWorker();
         }
     }
@@ -195,8 +195,8 @@ class Crontab
         $tasks = TurnTable::get_task();
         if (empty($tasks)) return false;
         foreach ($tasks as $id => $task) {
-            if(isset($task["unique"]) && $task["unique"]){
-                if(isset(self ::$unique_list[$id]) && (self::$unique_list[$id] >= $task["unique"])){
+            if (isset($task["unique"]) && $task["unique"]) {
+                if (isset(self::$unique_list[$id]) && (self::$unique_list[$id] >= $task["unique"])) {
                     continue;
                 }
 
@@ -205,9 +205,9 @@ class Crontab
 
             (new Process())->create_process($id, $task);
         }
-        if(!empty(self::$delay)){
-            foreach(self::$delay as $time=>$task){
-                if(time() >= $time){
+        if (!empty(self::$delay)) {
+            foreach (self::$delay as $time => $task) {
+                if (time() >= $time) {
                     (new Process())->create_process($task["id"], $task);
                 }
             }
@@ -229,7 +229,7 @@ class Crontab
         swoole_process::signal(SIGCHLD, function ($signo) {
             while (($pid = pcntl_wait($status, WNOHANG)) > 0) {
                 $task = self::$task_list[$pid];
-                if($task["type"] == "crontab"){
+                if ($task["type"] == "crontab") {
                     $end = microtime(true);
                     $start = $task["start"];
                     $id = $task["id"];
@@ -239,12 +239,12 @@ class Crontab
                         self::$unique_list[$id]--;
                     }
                 }
-                if($task["type"] == "worker"){
+                if ($task["type"] == "worker") {
                     $end = microtime(true);
                     $start = $task["start"];
                     $classname = $task["classname"];
                     Main::log_write("{$classname}_{$task["number"]} [Runtime:" . sprintf("%0.6f", $end - $start) . "]");
-                    (new Worker())->create_process($classname,$task["number"],$task["redis"]);
+                    (new Worker())->create_process($classname, $task["number"], $task["redis"]);
                 }
 
             };

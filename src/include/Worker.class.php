@@ -9,18 +9,21 @@
 class Worker
 {
     public $workers;
-    public function loadWorker(){
-        foreach($this->getWorkers() as $classname=>$task){
-            for($i=1;$i<=$task["processNum"];$i++){
-                $this->create_process($classname,$i,$task["redis"]);
+
+    public function loadWorker()
+    {
+        foreach ($this->getWorkers() as $classname => $task) {
+            for ($i = 1; $i <= $task["processNum"]; $i++) {
+                $this->create_process($classname, $i, $task["redis"]);
             }
         }
     }
 
-    protected function getWorkers(){
-        $path = ROOT_PATH."config/worker.php";
+    protected function getWorkers()
+    {
+        $path = ROOT_PATH . "config/worker.php";
         $config = include $path;
-        if(empty($config)){
+        if (empty($config)) {
             return array();
         }
         return $config;
@@ -30,7 +33,7 @@ class Worker
      * 创建一个子进程
      * @param $task
      */
-    public function create_process($classname,$number,$redis)
+    public function create_process($classname, $number, $redis)
     {
         $this->workers["classname"] = $classname;
         $this->workers["number"] = $number;
@@ -42,10 +45,10 @@ class Worker
         //记录当前任务
         Crontab::$task_list[$pid] = array(
             "start" => microtime(true),
-            "classname"    => $classname,
-            "number"    => $number,
-            "redis"  => $redis,
-            "type"  => "worker",
+            "classname" => $classname,
+            "number" => $number,
+            "redis" => $redis,
+            "type" => "worker",
         );
     }
 
@@ -59,8 +62,8 @@ class Worker
         $number = $this->workers["number"];
         $worker->name("lzm_worker_" . $class . "_" . $number);
         $this->autoload($class);
-        $class = $class."Worker";
-        $w =  new $class;
+        $class = $class . "Worker";
+        $w = new $class;
         $w->content($this->workers["redis"]);
         $w->tick($worker);
     }
@@ -72,7 +75,7 @@ class Worker
     public function autoload($class)
     {
         include(ROOT_PATH . "worker/WorkerBase.class.php");
-        $file = ROOT_PATH . "worker/". $class."Worker" . ".class.php";
+        $file = ROOT_PATH . "worker/" . $class . "Worker" . ".class.php";
         if (file_exists($file)) {
             include($file);
         } else {

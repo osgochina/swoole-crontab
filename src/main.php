@@ -34,9 +34,6 @@ class Main
   -r [--reload]      重新载入配置文件
   -m [--monitor]     监控进程是否在运行,如果在运行则不管,未运行则启动进程
   --worker           开启worker
-  --http             开启http服务
-  --host             监听ip,默认是127.0.0.1
-  --port             监听端口.默认是9501
   --checktime        默认精确对时(如果精确对时,程序则会延时到分钟开始0秒启动) 值为false则不精确对时
 
 EOF;
@@ -58,7 +55,6 @@ EOF;
         self::params_checktime($opt);
         $opt = self::params_m($opt);
         self::params_s($opt);
-        self::params_http($opt);
     }
 
     /**
@@ -228,37 +224,6 @@ EOF;
         if (isset($opt["worker"])) {
             Crontab::$worker = true;
         }
-    }
-
-    /**
-     * 开启http服务 web api
-     * @param $opt
-     */
-    static public function params_http($opt)
-    {
-
-        if (!isset($opt["http"])) {
-            return false;
-        }
-        if (isset($opt["host"]) && $opt["host"]) {
-            self::$host = $opt["host"];
-        }
-        if (isset($opt["port"]) && $opt["port"]) {
-            self::$port = $opt["port"];
-        }
-
-        $process = new swoole_process(array(new Main(), "http_run"));
-        $process->start();
-        self::$http_server = $process;
-
-        swoole_event_add($process->pipe, function ($pipe) use ($process) {
-            $manager = new Manager();
-            $recv = $process->read();
-            $recv = explode("#@#", $recv);
-            $function = $recv[0] . "_cron";
-            $process->write(json_encode($manager->$function(json_decode($recv[1], true))));
-        });
-        return true;
     }
 
     /**

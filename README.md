@@ -36,77 +36,10 @@ Swoole-Crontab(基于Swoole扩展)
     * -r [--reload]      重新载入配置文件
     * -m [--monitor]     监控进程是否在运行,如果在运行则不管,未运行则启动进程
     * --worker           开启worker 可以针对redis队列读取并编写处理逻辑
-    * --http             开启http服务
-    * --host             监听ip,默认是127.0.0.1
-    * --port             监听端口.默认是9501
     * --checktime        默认精确对时(如果精确对时,程序则会延时到分钟开始0秒启动) 值为false则不精确对时
 
-4.Http 服务
-------------
-你可以在启动的时候加上参数--http 来开启http服务，可以指定端口及ip
-开启了http服务以后，你可以使用以下API接口
-1).查看日志
 
-    http://127.0.0.1:9501/log?date=2015-01-12
-
-2).查看任务列表
-
-    http://127.0.0.1:9501/conf
-
-3).添加修改任务
-
-    http://127.0.0.1:9501/conf      [post]方式
-    tasks={
-              "taskid1": {
-                  "name": "php -i",
-                  "time": "1 * * 8 * *",
-                  "parse": "Cmd",
-                  "task": {
-                      "cmd": "php -i",
-                      "ext": ""
-                  }
-              },
-              "taskid2": {
-                  "name": "php -i",
-                  "time": "* 42-43 * * * *",
-                   "parse": "Cmd",
-                  "task": {
-                      "cmd": "php -i",
-                      "ext": ""
-                  }
-              }
-          }
-
-4).删除任务
-
-    http://127.0.0.1:9501/conf?taskid=taskid2      [delete]方式
-
-5).批量导入(注意，批量导入会清空已存在的任务)
-
-    http://127.0.0.1:9501/import                    [post]方式
-    tasks={
-                  "taskid1": {
-                      "name": "php -i",
-                      "time": "1 * * 8 * *",
-                      "parse": "Cmd",
-                      "task": {
-                          "cmd": "php -i",
-                          "ext": ""
-                      }
-                  },
-                  "taskid2": {
-                      "name": "php -i",
-                      "time": "* 42-43 * * * *",
-                      "parse": "Cmd",
-                      "task": {
-                          "cmd": "php -i",
-                          "ext": ""
-                      }
-                  }
-              }
-
-
-5.worker进程配置
+4.worker进程配置
 -----------------
 在src/config/worker.php 中写入配置，并且启动的时候加上 --worker选项就能启动worker工作进程
 配置如下:
@@ -128,7 +61,7 @@ Swoole-Crontab(基于Swoole扩展)
 具体的业务逻辑在src/worker/ 文件夹下。可以自己定义业务逻辑类，只需要继承WorkerBase.class.php中的WorkerBase基类就可以
 
 
-6.例子
+5.例子
 -----------
 你可以在配置文件中加上以下配置:
 

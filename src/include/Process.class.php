@@ -24,16 +24,16 @@ class Process
         //记录当前任务
         Crontab::$task_list[$pid] = array(
             "start" => microtime(true),
-            "id"    => $id,
-            "task"  => $task,
-            "type"  => "crontab",
+            "id" => $id,
+            "task" => $task,
+            "type" => "crontab",
         );
-        swoole_event_add($process->pipe, function($pipe)use ($process) {
+        swoole_event_add($process->pipe, function ($pipe) use ($process) {
             $task = $process->read();
-            list($pid,$sec) = explode(",",$task);
-            if(isset( Crontab::$task_list[$pid])){
+            list($pid, $sec) = explode(",", $task);
+            if (isset(Crontab::$task_list[$pid])) {
                 $tasklist = Crontab::$task_list[$pid];
-                Crontab::$delay[time()+$sec] = $tasklist["task"];
+                Crontab::$delay[time() + $sec] = $tasklist["task"];
                 $process->write($task);
             }
         });
@@ -48,7 +48,7 @@ class Process
         $class = $this->task["parse"];
         $worker->name("lzm_crontab_" . $class . "_" . $this->task["id"]);
         $this->autoload($class);
-        $c =new $class;
+        $c = new $class;
         $c->worker = $worker;
         $c->run($this->task["task"]);
         self::_exit($worker);
