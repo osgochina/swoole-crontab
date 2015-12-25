@@ -8,7 +8,7 @@
  */
 class LoadTasksByMysql
 {
-    protected  $db;
+    protected   $db;
     protected $oriTasks;
     protected $tasks = array();
     public function __construct($params="")
@@ -42,7 +42,7 @@ class LoadTasksByMysql
      */
     protected function loadTasks()
     {
-        $data = $this->db->where("`status`=0")->select("`crontab`");
+        $data = $this->db->query("`status`=0")->select("`crontab`");
         $this->oriTasks = $data;
     }
 
