@@ -8,12 +8,46 @@
  */
 class LoadTasksByMysql
 {
+    private $createTable = "
+    CREATE TABLE `crontab` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `taskid` varchar(32) NOT NULL COMMENT '任务id',
+  `taskname` varchar(32) NOT NULL,
+  `rule` text NOT NULL COMMENT '规则 可以是crontab规则也可以是json类型的精确时间任务',
+  `unique` tinyint(5) NOT NULL DEFAULT '0' COMMENT '0 唯一任务 大于0表示同时可并行的任务进程个数',
+  `execute` varchar(32) NOT NULL COMMENT '运行这个任务的类',
+  `args` text NOT NULL COMMENT '任务参数',
+  `status` tinyint(5) NOT NULL DEFAULT '0' COMMENT '0 正常  1 暂停  2 删除',
+  `createtime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updatetime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+    ";
+
     protected   $db;
     protected $oriTasks;
     protected $config = array();
     public function __construct($params="")
     {
         $this->config = $this->getDbConfig();
+        $this->init();
+    }
+
+    /**
+     * 初始化任务表
+     */
+    private function init()
+    {
+        $db = $this->connectDB();
+        $data = $db->queryOne("SELECT count(*) as total FROM information_schema.TABLES WHERE table_name = 'crontab' AND TABLE_SCHEMA = '{$this->config['dbname']}'");
+        if(!empty($data) && intval($data["total"]) ==  0){
+            $stmt = $db->executeSql($this->createTable);
+            if($stmt){
+                Main::log_write("执行sql:".$this->createTable."执行成功");
+            }else{
+                Main::log_write("执行sql:".$this->createTable."执行失败");
+            }
+        }
     }
 
     /**
@@ -31,7 +65,6 @@ class LoadTasksByMysql
      */
     protected function loadTasks()
     {
-        echo "reload\n";
         $db =$this->connectDB();
         $data = $db->queryAll("select * from `crontab` where `status`=0");
         $db = null;

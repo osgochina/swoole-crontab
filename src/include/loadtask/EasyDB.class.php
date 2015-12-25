@@ -37,10 +37,6 @@ class EasyDB extends PDO{
         }
     }
 
-    public function connect(){
-
-    }
-
     /*
      * 执行一条SQL语句，适用于比较复杂的SQL语句
      * 如果是增删改查的语句，建议使用下面进一步封装的语句
@@ -51,6 +47,11 @@ class EasyDB extends PDO{
         $stmt = $this->prepare($sql);
         $stmt->execute($data) ? true : $this->error_info = $stmt->errorInfo();
         return $stmt;
+    }
+
+    public function executeSql($sql){
+        $stmt = $this->prepare($sql);
+        return $stmt->execute(array());
     }
 
     //查询语句，返回单条结果

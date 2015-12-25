@@ -122,7 +122,6 @@ class Crontab
                 }
             }
         } else {
-            self::load_config();
             TurnTable::init();
             self::load_config();
             self::register_timer();

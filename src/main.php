@@ -45,7 +45,6 @@ EOF;
     static public function run()
     {
         $opt = getopt(self::$options, self::$longopts);
-        print_r($opt);
         self::spl_autoload_register();
         self::params_h($opt);
         self::params_d($opt);
