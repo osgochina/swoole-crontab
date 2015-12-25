@@ -10,7 +10,6 @@ class LoadTasksByFile
 {
     protected $filePath;
     protected $oriTasks;
-    protected $tasks = array();
 
     public function __construct($file)
     {
@@ -27,12 +26,8 @@ class LoadTasksByFile
      */
     public function getTasks()
     {
-        if (empty($this->tasks)) {
-            $this->loadTasks();
-            $this->tasks = self::parseTasks();
-        }
-
-        return $this->tasks;
+        $this->loadTasks();
+        return self::parseTasks();
     }
 
     public function reloadTasks()

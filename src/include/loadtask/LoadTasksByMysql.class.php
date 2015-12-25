@@ -10,10 +10,10 @@ class LoadTasksByMysql
 {
     protected   $db;
     protected $oriTasks;
-    protected $tasks = array();
+    protected $config = array();
     public function __construct($params="")
     {
-        $this->connectDB();
+        $this->config = $this->getDbConfig();
     }
 
     /**
@@ -22,19 +22,8 @@ class LoadTasksByMysql
      */
     public function getTasks()
     {
-        if (empty($this->tasks)) {
-            $this->loadTasks();
-            $this->tasks = self::parseTasks();
-        }
-
-        return $this->tasks;
-    }
-
-    public function reloadTasks()
-    {
-        $this->tasks = array();
         $this->loadTasks();
-        $this->config = $this->parseTasks();
+        return self::parseTasks();
     }
 
     /**
@@ -42,7 +31,8 @@ class LoadTasksByMysql
      */
     protected function loadTasks()
     {
-        $data = $this->db->query("`status`=0")->select("`crontab`");
+        echo "reload\n";
+        $data = $this->connectDB()->queryAll("select * from `crontab` where `status`=0");
         $this->oriTasks = $data;
     }
 
@@ -73,7 +63,7 @@ class LoadTasksByMysql
 
     protected function connectDB()
     {
-        $this->db = new EasyDB($this->getDbConfig());
+        return new EasyDB($this->config);
     }
 
     protected function getDbConfig(){

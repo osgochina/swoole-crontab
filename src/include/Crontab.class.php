@@ -177,8 +177,7 @@ class Crontab
      */
     static protected function register_timer()
     {
-        swoole_timer_add(6000, function ($interval) {
-            self::$tasksHandle->reloadTasks();
+        swoole_timer_add(60000, function ($interval) {
             Crontab::load_config();
         });
         swoole_timer_add(1000, function ($interval) {
@@ -253,7 +252,7 @@ class Crontab
             };
         });
         swoole_process::signal(SIGUSR1, function ($signo) {
-           self::$tasksHandle->reloadTasks();
+            //TODO something
         });
 
     }

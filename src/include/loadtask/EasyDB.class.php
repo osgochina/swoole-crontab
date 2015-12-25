@@ -26,7 +26,7 @@ class EasyDB extends PDO{
         $this->db_config = array_merge($this->db_config, $config);
         try {
             $dsn = 'mysql:host='.$this->db_config['host'].';port='.$this->db_config['port'].';dbname='.$this->db_config['dbname'];
-            parent::__construct($dsn, $this->db_config['username'], $this->db_config['password'], array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES '.$this->db_config['charset'],PDO::ATTR_PERSISTENT=>true));
+            parent::__construct($dsn, $this->db_config['username'], $this->db_config['password'], array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES '.$this->db_config['charset']));
             $this->exec('set names '.$this->db_config['charset']);
         } catch (PDOException $e) {
             echo '<p style="color:red">db connect has error!</p><br/><b>错误原因:</b>'.$e->getMessage().'<br/><b>错误报告:</b>';
