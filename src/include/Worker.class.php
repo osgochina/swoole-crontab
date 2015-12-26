@@ -31,7 +31,9 @@ class Worker
 
     /**
      * 创建一个子进程
-     * @param $task
+     * @param $classname
+     * @param $number
+     * @param $redis
      */
     public function create_process($classname, $number, $redis)
     {

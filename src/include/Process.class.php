@@ -27,6 +27,7 @@ class Process
             "id" => $id,
             "task" => $task,
             "type" => "crontab",
+            "process" =>$process,
         );
         swoole_event_add($process->pipe, function ($pipe) use ($process) {
             $task = $process->read();

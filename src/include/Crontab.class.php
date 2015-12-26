@@ -206,6 +206,8 @@ class Crontab
 
             (new Process())->create_process($id, $task);
         }
+
+        //是否设置了延时执行
         if (!empty(self::$delay)) {
             foreach (self::$delay as $time => $task) {
                 if (time() >= $time) {
@@ -235,6 +237,7 @@ class Crontab
                     $start = $task["start"];
                     $id = $task["id"];
                     Main::log_write("{$id} [Runtime:" . sprintf("%0.6f", $end - $start) . "]");
+                    $task["process"]->close();//关闭进程
                     unset(self::$task_list[$pid]);
                     if (isset(self::$unique_list[$id]) && self::$unique_list[$id] > 0) {
                         self::$unique_list[$id]--;
