@@ -67,7 +67,6 @@ class LoadTasksByMysql
     {
         $db =$this->connectDB();
         $data = $db->queryAll("select * from `crontab` where `status`=0");
-        print_r($data);
         $db = null;
         $this->oriTasks = $data;
     }

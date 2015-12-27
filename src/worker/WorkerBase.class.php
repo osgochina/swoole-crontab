@@ -37,7 +37,7 @@ abstract class WorkerBase
     }
     public function tick($worker){
         $this->worker = $worker;
-        swoole_timer_add(500, function() {
+        swoole_timer_tick(500, function() {
             while(true){
                 $this->checkExit();
                 $task = $this->getQueue();

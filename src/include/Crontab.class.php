@@ -176,10 +176,10 @@ class Crontab
      */
     static protected function register_timer()
     {
-        swoole_timer_add(60000, function ($interval) {
+        swoole_timer_tick(60000, function () {
             Crontab::load_config();
         });
-        swoole_timer_add(1000, function ($interval) {
+        swoole_timer_tick(1000, function ($interval) {
             Crontab::do_something($interval);
         });
     }
