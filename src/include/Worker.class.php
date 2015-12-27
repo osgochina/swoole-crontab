@@ -51,6 +51,7 @@ class Worker
             "number" => $number,
             "redis" => $redis,
             "type" => "worker",
+            "process"=>$process
         );
     }
 

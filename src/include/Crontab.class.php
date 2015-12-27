@@ -161,7 +161,7 @@ class Crontab
         $time = time();
         $config = self::$tasksHandle->getTasks(self::$taskParams);
         foreach ($config as $id => $task) {
-            $ret = ParseCrontab::parse($task["time"], $time);
+            $ret = ParseCrontab::parse($task["rule"], $time);
             if ($ret === false) {
                 Main::log_write(ParseCrontab::$error);
             } elseif (!empty($ret)) {
@@ -248,6 +248,7 @@ class Crontab
                     $start = $task["start"];
                     $classname = $task["classname"];
                     Main::log_write("{$classname}_{$task["number"]} [Runtime:" . sprintf("%0.6f", $end - $start) . "]");
+                    $task["process"]->close();//关闭进程
                     (new Worker())->create_process($classname, $task["number"], $task["redis"]);
                 }
 

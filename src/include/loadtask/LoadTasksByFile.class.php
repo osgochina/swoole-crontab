@@ -54,11 +54,11 @@ class LoadTasksByFile
         if (is_array($this->oriTasks)) {
             foreach ($this->oriTasks as $key => $val) {
                 $tasks[$key] = array(
-                    "name" => $val["name"],
-                    "time" => $val["time"],
+                    "taskname" => $val["taskname"],
+                    "rule" => $val["rule"],
                     "unique" => $val["unique"],
-                    "parse" => $val["parse"],
-                    "task" => $val["task"]
+                    "execute" => $val["execute"],
+                    "args" => $val["args"]
                 );
             }
         }

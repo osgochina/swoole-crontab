@@ -67,6 +67,7 @@ class LoadTasksByMysql
     {
         $db =$this->connectDB();
         $data = $db->queryAll("select * from `crontab` where `status`=0");
+        print_r($data);
         $db = null;
         $this->oriTasks = $data;
     }
@@ -85,11 +86,11 @@ class LoadTasksByMysql
                     $rule = $val["rule"];
                 }
                 $tasks[$val["taskid"].$val["id"]] = array(
-                    "name" => $val["taskname"],
-                    "time" => $rule,
+                    "taskname" => $val["taskname"],
+                    "rule" => $rule,
                     "unique" => $val["unique"],
-                    "parse" => $val["execute"],
-                    "task" => json_decode($val["args"],true)
+                    "execute" => $val["execute"],
+                    "args" => json_decode($val["args"],true)
                 );
             }
         }

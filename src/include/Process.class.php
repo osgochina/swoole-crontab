@@ -46,12 +46,12 @@ class Process
      */
     public function run($worker)
     {
-        $class = $this->task["parse"];
+        $class = $this->task["execute"];
         $worker->name("lzm_crontab_" . $class . "_" . $this->task["id"]);
         $this->autoload($class);
         $c = new $class;
         $c->worker = $worker;
-        $c->run($this->task["task"]);
+        $c->run($this->task["args"]);
         self::_exit($worker);
     }
 

@@ -36,6 +36,7 @@ Swoole-Crontab(基于Swoole扩展)
     * -r [--reload]      重新载入配置文件
     * -m [--monitor]     监控进程是否在运行,如果在运行则不管,未运行则启动进程
     * --worker           开启worker 可以针对redis队列读取并编写处理逻辑
+    * --tasktype         task任务获取类型,[file|mysql] 默认是file
     * --checktime        默认精确对时(如果精确对时,程序则会延时到分钟开始0秒启动) 值为false则不精确对时
 
 
@@ -68,11 +69,11 @@ Swoole-Crontab(基于Swoole扩展)
     return array(
         'taskid1' =>
             array(
-                'name' => 'php -i',  //任务名称
-                'time' => '* * * * * *',//定时规则,可以使用数组精确设置时间 如：array("22:18","2015-11-11 00:00:00 ","10:20:39")
+                'taskname' => 'php -i',  //任务名称
+                'rule' => '* * * * * *',//定时规则,可以使用数组精确设置时间 如：array("22:18","2015-11-11 00:00:00 ","10:20:39")
                 "unique" => 2, //排他数量，如果已经有这么多任务在执行，即使到了下一次执行时间，也不执行
-                'parse'  => 'Cmd',//命令处理类
-                'task' =>
+                'execute'  => 'Cmd',//命令处理类
+                'args' =>
                     array(
                         'cmd'    => 'php -i',//命令
                         "ext": ""
