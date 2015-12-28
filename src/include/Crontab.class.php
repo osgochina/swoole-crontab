@@ -224,9 +224,6 @@ class Crontab
     static private function register_signal()
     {
         swoole_process::signal(SIGTERM, function ($signo) {
-            if (!empty(Main::$http_server)) {
-                swoole_process::kill(Main::$http_server->pid, SIGKILL);
-            }
             self::exit2p("收到退出信号,退出主进程");
         });
         swoole_process::signal(SIGCHLD, function ($signo) {

@@ -13,7 +13,6 @@ define('ROOT_PATH', realpath(dirname(__FILE__)) . DS);
 
 class Main
 {
-    static public $http_server;
     static public $host;
     static public $port;
     static private $options = "hdrmp:s:l:c:";
