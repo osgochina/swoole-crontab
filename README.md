@@ -88,3 +88,8 @@ Swoole-Crontab(基于Swoole扩展)
 
 如果你需要写自己的代码逻辑，你也可以到plugin目录下，实现一个PluginBase.class.php接口的类.
 在其中写自己的逻辑代码。
+
+6.TODO
+----------
++ 分布式运行
++ restful增删改任务
