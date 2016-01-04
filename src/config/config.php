@@ -14,6 +14,11 @@ return array(
             'password' => 'root',
             'dbname' => 'crontab',
             'charset' => 'utf8'
+    ),
+    "log"=>array(
+        "level"=>"debug",
+        "type"=>"file",
+        "log_path"=> ROOT_PATH."logs/",
     )
 );
 

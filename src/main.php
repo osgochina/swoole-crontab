@@ -13,8 +13,6 @@ define('ROOT_PATH', realpath(dirname(__FILE__)) . DS);
 
 class Main
 {
-    static public $host;
-    static public $port;
     static private $options = "hdrmp:s:l:c:";
     static private $longopts = array("help", "daemon","reload", "monitor", "pid:", "log:", "config:","worker:","tasktype:","checktime:" );
     static private $help = <<<EOF
