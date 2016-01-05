@@ -107,6 +107,9 @@ class ParseCrontab
     {
         $result = array();
         foreach ($crontab_array as $val) {
+            if(count(explode(":",$val)) == 2){
+                $val = $val.":01";
+            }
             $time = strtotime($val);
             if ($time > $start_time && $time <= $start_time + 60) {
                 $sec = date("s", $time);
