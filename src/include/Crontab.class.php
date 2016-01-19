@@ -212,6 +212,7 @@ class Crontab
             foreach (self::$delay as $time => $task) {
                 if (time() >= $time) {
                     (new Process())->create_process($task["id"], $task);
+                    unset(self::$delay[$time]);
                 }
             }
         }
