@@ -34,7 +34,7 @@ class Process
             list($pid, $sec) = explode(",", $task);
             if (isset(Crontab::$task_list[$pid])) {
                 $tasklist = Crontab::$task_list[$pid];
-                Crontab::$delay[time() + $sec] = $tasklist["task"];
+                Crontab::$delay[$pid] = array("start"=>time() + $sec,"task"=>$tasklist["task"]);
                 $process->write($task);
             }
         });

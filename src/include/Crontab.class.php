@@ -192,6 +192,15 @@ class Crontab
     static public function do_something($interval)
     {
 
+        //是否设置了延时执行
+        if (!empty(self::$delay)) {
+            foreach (self::$delay as $pid => $task) {
+                if (time() >= $task["start"]) {
+                    (new Process())->create_process($task["task"]["id"], $task["task"]);
+                    unset(self::$delay[$pid]);
+                }
+            }
+        }
         //TurnTable::debug();
         $tasks = TurnTable::get_task();
         if (empty($tasks)) return false;
@@ -205,16 +214,6 @@ class Crontab
             }
 
             (new Process())->create_process($id, $task);
-        }
-
-        //是否设置了延时执行
-        if (!empty(self::$delay)) {
-            foreach (self::$delay as $time => $task) {
-                if (time() >= $time) {
-                    (new Process())->create_process($task["id"], $task);
-                    unset(self::$delay[$time]);
-                }
-            }
         }
         return true;
     }
