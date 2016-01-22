@@ -227,10 +227,10 @@ class Crontab
             self::exit2p("收到退出信号,退出主进程");
         });
         swoole_process::signal(SIGCHLD, function ($signo) {
-            while (($ret = swoole_process::wait(false)) {
+            while ($ret = swoole_process::wait(false)){
 				$pid = $ret['pid'];
 				if(isset(self::$task_list[$pid])){
-					$task = self::$task_list[$pid];
+					 $task = self::$task_list[$pid];
 					 if ($task["type"] == "crontab") {
 						$end = microtime(true);
 						$start = $task["start"];
