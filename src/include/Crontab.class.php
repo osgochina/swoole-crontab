@@ -112,7 +112,6 @@ class Crontab
                 $s = date("s");
                 if ($s == 0) {
 
-                    TurnTable::init();
                     Crontab::load_config();
                     self::register_timer();
                     $run = false;
@@ -122,7 +121,6 @@ class Crontab
                 }
             }
         } else {
-            TurnTable::init();
             self::load_config();
             self::register_timer();
         }
@@ -165,10 +163,9 @@ class Crontab
             if ($ret === false) {
                 Main::log_write(ParseCrontab::$error);
             } elseif (!empty($ret)) {
-                TurnTable::set_task($ret, array_merge($task, array("id" => $id)));
+                TickTable::set_task($ret, array_merge($task, array("id" => $id)));
             }
         }
-        TurnTable::turn();
     }
 
     /**
@@ -201,8 +198,7 @@ class Crontab
                 }
             }
         }
-        //TurnTable::debug();
-        $tasks = TurnTable::get_task();
+        $tasks = TickTable::get_task();
         if (empty($tasks)) return false;
         foreach ($tasks as $id => $task) {
             if (isset($task["unique"]) && $task["unique"]) {
