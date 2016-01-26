@@ -103,7 +103,7 @@ class Crontab
      */
     static protected function run()
     {
-        self::$tasksHandle = new LoadTasks(strtolower(self::$taskType),self::$taskParams);
+        self::$tasksHandle = new LoadTasks(strtolower(self::$taskType), self::$taskParams);
         self::register_signal();
         if (self::$checktime) {
             $run = true;
