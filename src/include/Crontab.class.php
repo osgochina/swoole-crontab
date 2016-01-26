@@ -8,15 +8,19 @@
  */
 class Crontab
 {
-    static public $process_name = "lzm_Crontab";//进程名称
+    static public $process_name = "lzm_Master";//进程名称
     static public $pid_file;                    //pid文件位置
     static public $log_path;                    //日志文件位置
-    static public $config_file;                 //配置文件位置
+    static public $taskParams;                 //获取task任务参数
+    static public $taskType;                 //获取task任务的类型
+    static public $tasksHandle;                 //获取任务的句柄
     static public $daemon = false;              //运行模式
     static private $pid;                        //pid
     static public $checktime = true;           //精确对时
     static public $task_list = array();
     static public $unique_list = array();
+    static public $worker = false;
+    static public $delay = array();
 
     /**
      * 重启
@@ -99,31 +103,33 @@ class Crontab
      */
     static protected function run()
     {
-        LoadConfig::$config_file = self::$config_file;
-        self::load_config();
+        self::$tasksHandle = new LoadTasks(strtolower(self::$taskType), self::$taskParams);
         self::register_signal();
         if (self::$checktime) {
             $run = true;
             Main::log_write("正在启动...");
             while ($run) {
                 $s = date("s");
-                if ( $s == 0) {
+                if ($s == 0) {
 
-                    TurnTable::init();
                     Crontab::load_config();
                     self::register_timer();
                     $run = false;
-                }else{
-                    Main::log_write("启动倒计时 ".(60-$s)." 秒");
+                } else {
+                    Main::log_write("启动倒计时 " . (60 - $s) . " 秒");
                     sleep(1);
                 }
             }
         } else {
-            TurnTable::init();
+            self::load_config();
             self::register_timer();
         }
         self::get_pid();
         self::write_pid();
+        //开启worker
+        if (self::$worker) {
+            (new Worker())->loadWorker();
+        }
     }
 
     /**
@@ -151,16 +157,15 @@ class Crontab
     static public function load_config()
     {
         $time = time();
-        $config = LoadConfig::get_config();
+        $config = self::$tasksHandle->getTasks(self::$taskParams);
         foreach ($config as $id => $task) {
-            $ret = ParseCrontab::parse($task["time"], $time);
+            $ret = ParseCrontab::parse($task["rule"], $time);
             if ($ret === false) {
                 Main::log_write(ParseCrontab::$error);
             } elseif (!empty($ret)) {
-                TurnTable::set_task($ret, array_merge($task, array("id" => $id)));
+                TickTable::set_task($ret, array_merge($task, array("id" => $id)));
             }
         }
-        TurnTable::turn();
     }
 
     /**
@@ -168,10 +173,10 @@ class Crontab
      */
     static protected function register_timer()
     {
-        swoole_timer_add(60000, function ($interval) {
+        swoole_timer_tick(60000, function () {
             Crontab::load_config();
         });
-        swoole_timer_add(1000, function ($interval) {
+        swoole_timer_tick(1000, function ($interval) {
             Crontab::do_something($interval);
         });
     }
@@ -183,16 +188,27 @@ class Crontab
      */
     static public function do_something($interval)
     {
-        //TurnTable::debug();
-        $tasks = TurnTable::get_task();
+
+        //是否设置了延时执行
+        if (!empty(self::$delay)) {
+            foreach (self::$delay as $pid => $task) {
+                if (time() >= $task["start"]) {
+                    (new Process())->create_process($task["task"]["id"], $task["task"]);
+                    unset(self::$delay[$pid]);
+                }
+            }
+        }
+        $tasks = TickTable::get_task();
         if (empty($tasks)) return false;
         foreach ($tasks as $id => $task) {
-            if(isset(self::$unique_list[$id])){
-                continue;
+            if (isset($task["unique"]) && $task["unique"]) {
+                if (isset(self::$unique_list[$id]) && (self::$unique_list[$id] >= $task["unique"])) {
+                    continue;
+                }
+
+                self::$unique_list[$id] = isset(self::$unique_list[$id]) ? (self::$unique_list[$id] + 1) : 0;
             }
-            if(isset($task["unique"]) && $task["unique"]){
-                self::$unique_list[$id] = true;
-            }
+
             (new Process())->create_process($id, $task);
         }
         return true;
@@ -204,24 +220,37 @@ class Crontab
     static private function register_signal()
     {
         swoole_process::signal(SIGTERM, function ($signo) {
-            if (!empty(Main::$http_server)) {
-                swoole_process::kill(Main::$http_server->pid, SIGKILL);
-            }
             self::exit2p("收到退出信号,退出主进程");
         });
         swoole_process::signal(SIGCHLD, function ($signo) {
-            while (($pid = pcntl_wait($status, WNOHANG)) > 0) {
-                $task = self::$task_list[$pid];
-                $end = microtime(true);
-                $start = $task["start"];
-                $id = $task["id"];
-                Main::log_write("{$id} [Runtime:" . sprintf("%0.6f", $end - $start) . "]");
-                unset(self::$task_list[$pid]);
-                unset(self::$unique_list[$id]);
+            while ($ret = swoole_process::wait(false)) {
+                $pid = $ret['pid'];
+                if (isset(self::$task_list[$pid])) {
+                    $task = self::$task_list[$pid];
+                    if ($task["type"] == "crontab") {
+                        $end = microtime(true);
+                        $start = $task["start"];
+                        $id = $task["id"];
+                        Main::log_write("{$id} [Runtime:" . sprintf("%0.6f", $end - $start) . "]");
+                        $task["process"]->close();//关闭进程
+                        unset(self::$task_list[$pid]);
+                        if (isset(self::$unique_list[$id]) && self::$unique_list[$id] > 0) {
+                            self::$unique_list[$id]--;
+                        }
+                    }
+                    if ($task["type"] == "worker") {
+                        $end = microtime(true);
+                        $start = $task["start"];
+                        $classname = $task["classname"];
+                        Main::log_write("{$classname}_{$task["number"]} [Runtime:" . sprintf("%0.6f", $end - $start) . "]");
+                        $task["process"]->close();//关闭进程
+                        (new Worker())->create_process($classname, $task["number"], $task["redis"]);
+                    }
+                }
             };
         });
         swoole_process::signal(SIGUSR1, function ($signo) {
-            LoadConfig::reload_config();
+            //TODO something
         });
 
     }

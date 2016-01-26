@@ -13,11 +13,8 @@ define('ROOT_PATH', realpath(dirname(__FILE__)) . DS);
 
 class Main
 {
-    static public $http_server;
-    static public $host;
-    static public $port;
     static private $options = "hdrmp:s:l:c:";
-    static private $longopts = array("help", "http", "daemon", "checktime", "reload", "monitor", "pid:", "log:", "config:", "host:", "port:");
+    static private $longopts = array("help", "daemon","reload", "monitor", "pid:", "log:", "config:","worker:","tasktype:","checktime:" );
     static private $help = <<<EOF
 
   帮助信息:
@@ -29,15 +26,12 @@ class Main
   -s stop            停止进程
   -s restart         重启进程
   -l [--log]         log文件夹的位置
-  -c [--config]      config文件的位置(可以是文件,也可以是文件夹.
-                     如果是文件,则载入指定文件.如果是文件夹,则载入文件夹
-                     下的所有文件.)
+  -c [--config]      config文件的位置
   -d [--daemon]      是否后台运行
   -r [--reload]      重新载入配置文件
   -m [--monitor]     监控进程是否在运行,如果在运行则不管,未运行则启动进程
-  --http             开启http服务
-  --host             监听ip,默认是127.0.0.1
-  --port             监听端口.默认是9501
+  --worker           开启worker
+  --tasktype         task任务获取类型,[file|mysql] 默认是file
   --checktime        默认精确对时(如果精确对时,程序则会延时到分钟开始0秒启动) 值为false则不精确对时
 
 EOF;
@@ -55,10 +49,11 @@ EOF;
         self::params_l($opt);
         self::params_c($opt);
         self::params_r($opt);
+        self::params_worker($opt);
+        self::params_tasktype($opt);
         self::params_checktime($opt);
         $opt = self::params_m($opt);
         self::params_s($opt);
-        self::params_http($opt);
     }
 
     /**
@@ -68,6 +63,9 @@ EOF;
     {
         spl_autoload_register(function ($name) {
             $file_path = ROOT_PATH . "include" . DS . $name . ".class.php";
+            if(!file_exists($file_path)){
+                $file_path = ROOT_PATH . "include" . DS ."loadtask".DS. $name . ".class.php";
+            }
             include $file_path;
         });
     }
@@ -100,7 +98,7 @@ EOF;
      */
     static public function params_checktime($opt)
     {
-        if (isset($opt["checktime"]) && $opt["checktime"] == false) {
+        if (isset($opt["checktime"]) && $opt["checktime"] === "false") {
             Crontab::$checktime = false;
         }
     }
@@ -185,13 +183,13 @@ EOF;
     static public function params_c($opt)
     {
         if (isset($opt["c"]) && $opt["c"]) {
-            Crontab::$config_file = $opt["c"];
+            Crontab::$taskParams = $opt["c"];
         }
         if (isset($opt["config"]) && $opt["config"]) {
-            Crontab::$config_file = $opt["config"];
+            Crontab::$taskParams = $opt["config"];
         }
-        if (empty(Crontab::$config_file)) {
-            Crontab::$config_file = ROOT_PATH . "config/crontab.php";
+        if (empty(Crontab::$taskParams)) {
+            Crontab::$taskParams = ROOT_PATH . "config/crontab.php";
         }
     }
 
@@ -221,46 +219,16 @@ EOF;
         }
     }
 
-    /**
-     * 开启http服务 web api
-     * @param $opt
-     */
-    static public function params_http($opt)
-    {
-
-        if (!isset($opt["http"])) {
-            return false;
+    static public function params_worker($opt){
+        if (isset($opt["worker"])) {
+            Crontab::$worker = true;
         }
-        if (isset($opt["host"]) && $opt["host"]) {
-            self::$host = $opt["host"];
-        }
-        if (isset($opt["port"]) && $opt["port"]) {
-            self::$port = $opt["port"];
-        }
-
-        $process = new swoole_process(array(new Main(), "http_run"));
-        $process->start();
-        self::$http_server = $process;
-
-        swoole_event_add($process->pipe, function ($pipe) use ($process) {
-            $manager = new Manager();
-            $recv = $process->read();
-            $recv = explode("#@#", $recv);
-            $function = $recv[0] . "_cron";
-            $process->write(json_encode($manager->$function(json_decode($recv[1], true))));
-        });
-        return true;
     }
 
-    /**
-     * 运行httpserver
-     * @param $worker
-     */
-    public function http_run($worker)
-    {
-        Main::log_write("HTTP Server 已启动");
-        $binpath = $_SERVER["_"];
-        $worker->exec($binpath, array(ROOT_PATH . "/http.php", $worker->pipe, Crontab::$config_file,self::$host,self::$port));
+    static public function params_tasktype($opt){
+        if (isset($opt["tasktype"])) {
+            Crontab::$taskType = $opt["tasktype"];
+        }
     }
 
     /**
@@ -276,8 +244,6 @@ EOF;
         }
         echo "{$now} : {$message}\r\n";
     }
-
-
 }
 
 //运行
