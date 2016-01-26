@@ -223,30 +223,30 @@ class Crontab
             self::exit2p("收到退出信号,退出主进程");
         });
         swoole_process::signal(SIGCHLD, function ($signo) {
-            while ($ret = swoole_process::wait(false)){
-				$pid = $ret['pid'];
-				if(isset(self::$task_list[$pid])){
-					 $task = self::$task_list[$pid];
-					 if ($task["type"] == "crontab") {
-						$end = microtime(true);
-						$start = $task["start"];
-						$id = $task["id"];
-						Main::log_write("{$id} [Runtime:" . sprintf("%0.6f", $end - $start) . "]");
-						$task["process"]->close();//关闭进程
-						unset(self::$task_list[$pid]);
-						if (isset(self::$unique_list[$id]) && self::$unique_list[$id] > 0) {
-							self::$unique_list[$id]--;
-						}
-					}
-					if ($task["type"] == "worker") {
-						$end = microtime(true);
-						$start = $task["start"];
-						$classname = $task["classname"];
-						Main::log_write("{$classname}_{$task["number"]} [Runtime:" . sprintf("%0.6f", $end - $start) . "]");
-						$task["process"]->close();//关闭进程
-						(new Worker())->create_process($classname, $task["number"], $task["redis"]);
-					}
-				}
+            while ($ret = swoole_process::wait(false)) {
+                $pid = $ret['pid'];
+                if (isset(self::$task_list[$pid])) {
+                    $task = self::$task_list[$pid];
+                    if ($task["type"] == "crontab") {
+                        $end = microtime(true);
+                        $start = $task["start"];
+                        $id = $task["id"];
+                        Main::log_write("{$id} [Runtime:" . sprintf("%0.6f", $end - $start) . "]");
+                        $task["process"]->close();//关闭进程
+                        unset(self::$task_list[$pid]);
+                        if (isset(self::$unique_list[$id]) && self::$unique_list[$id] > 0) {
+                            self::$unique_list[$id]--;
+                        }
+                    }
+                    if ($task["type"] == "worker") {
+                        $end = microtime(true);
+                        $start = $task["start"];
+                        $classname = $task["classname"];
+                        Main::log_write("{$classname}_{$task["number"]} [Runtime:" . sprintf("%0.6f", $end - $start) . "]");
+                        $task["process"]->close();//关闭进程
+                        (new Worker())->create_process($classname, $task["number"], $task["redis"]);
+                    }
+                }
             };
         });
         swoole_process::signal(SIGUSR1, function ($signo) {
