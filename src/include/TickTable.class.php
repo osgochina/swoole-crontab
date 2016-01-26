@@ -36,7 +36,7 @@ class TickTable extends SplHeap
                 self::getInstance()->insert($data);
                 break;
             }else{
-                $ticks[] = $data["task"];
+                $ticks[$data["task"]['id']] = $data["task"];
             }
         }
         return $ticks;
