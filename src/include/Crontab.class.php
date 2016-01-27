@@ -200,16 +200,14 @@ class Crontab
         }
         $tasks = TickTable::get_task();
         if (empty($tasks)) return false;
-        foreach ($tasks as $id => $task) {
+        foreach ($tasks as  $task) {
             if (isset($task["unique"]) && $task["unique"]) {
-                if (isset(self::$unique_list[$id]) && (self::$unique_list[$id] >= $task["unique"])) {
+                if (isset(self::$unique_list[$task["id"]]) && (self::$unique_list[$task["id"]] >= $task["unique"])) {
                     continue;
                 }
-
-                self::$unique_list[$id] = isset(self::$unique_list[$id]) ? (self::$unique_list[$id] + 1) : 0;
+                self::$unique_list[$task["id"]] = isset(self::$unique_list[$task["id"]]) ? (self::$unique_list[$task["id"]] + 1) : 0;
             }
-
-            (new Process())->create_process($id, $task);
+            (new Process())->create_process($task["id"], $task);
         }
         return true;
     }
