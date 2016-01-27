@@ -111,12 +111,10 @@ class ParseCrontab
                 $val = $val.":01";
             }
             $time = strtotime($val);
-            if ($time > $start_time && $time <= $start_time + 60) {
-                $sec = date("s", $time);
-                $result[intval($sec)] = intval($sec);
+            if ($time >= $start_time && $time < $start_time + 60) {
+                $result[$time] = $time;
             }
         }
-        ksort($result);
         return $result;
     }
 }

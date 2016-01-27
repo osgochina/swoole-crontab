@@ -23,7 +23,11 @@ class TickTable extends SplHeap
     public static function set_task($sec_list,$task){
         $time = time();
         foreach ($sec_list as $sec) {
-            self::getInstance()->insert(array("tick"=>$time+$sec,"task"=>$task));
+            if($sec > 60){
+                self::getInstance()->insert(array("tick"=>$sec,"task"=>$task));
+            }else{
+                self::getInstance()->insert(array("tick"=>$time+$sec,"task"=>$task));
+            }
         }
     }
 
