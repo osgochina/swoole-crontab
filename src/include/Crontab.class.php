@@ -20,7 +20,7 @@ class Crontab
     static public $task_list = array();
     static public $unique_list = array();
     static public $worker = false;
-    static public $delay = array();
+    //static public $delay = array();
 
     /**
      * 重启
@@ -190,14 +190,14 @@ class Crontab
     {
 
         //是否设置了延时执行
-        if (!empty(self::$delay)) {
-            foreach (self::$delay as $pid => $task) {
-                if (time() >= $task["start"]) {
-                    (new Process())->create_process($task["task"]["id"], $task["task"]);
-                    unset(self::$delay[$pid]);
-                }
-            }
-        }
+//        if (!empty(self::$delay)) {
+//            foreach (self::$delay as $pid => $task) {
+//                if (time() >= $task["start"]) {
+//                    (new Process())->create_process($task["task"]["id"], $task["task"]);
+//                    unset(self::$delay[$pid]);
+//                }
+//            }
+//        }
         $tasks = TickTable::get_task();
         if (empty($tasks)) return false;
         foreach ($tasks as  $task) {

@@ -29,15 +29,15 @@ class Process
             "type" => "crontab",
             "process" =>$process,
         );
-        swoole_event_add($process->pipe, function ($pipe) use ($process) {
-            $task = $process->read();
-            list($pid, $sec) = explode(",", $task);
-            if (isset(Crontab::$task_list[$pid])) {
-                $tasklist = Crontab::$task_list[$pid];
-                Crontab::$delay[$pid] = array("start"=>time() + $sec,"task"=>$tasklist["task"]);
-                $process->write($task);
-            }
-        });
+//        swoole_event_add($process->pipe, function ($pipe) use ($process) {
+//            $task = $process->read();
+//            list($pid, $sec) = explode(",", $task);
+//            if (isset(Crontab::$task_list[$pid])) {
+//                $tasklist = Crontab::$task_list[$pid];
+//                Crontab::$delay[$pid] = array("start"=>time() + $sec,"task"=>$tasklist["task"]);
+//                $process->write($task);
+//            }
+//        });
     }
 
     /**
