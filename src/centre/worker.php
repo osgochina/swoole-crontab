@@ -6,14 +6,13 @@
  * Time: 下午5:50
  */
 require_once __DIR__ . '/_init.php';
-const PORT = 8808;
+const PORT = 8902;
 
 Swoole\Network\Server::setPidFile(__DIR__ . '/logs/worker.pid');
 
 
 Swoole\Network\Server::start(function ()
 {
-    Swoole\Loader::addNameSpace('Lib', __DIR__ . '/Lib');
 
     $logger = new Swoole\Log\FileLog(['file' => __DIR__ . '/logs/worker.log']);
     $AppSvr = new Lib\WorkerServer;
@@ -33,36 +32,9 @@ Swoole\Network\Server::start(function ()
     //重定向PHP错误日志到logs目录
     ini_set('error_log', __DIR__ . '/logs/php_errors.log');
 
-    $listenHost = '127.0.0.1';
-    if (ENV_NAME == 'product')
-    {
-        $iplist = swoole_get_local_ip();
-        //监听局域网IP
-        foreach ($iplist as $k => $v)
-        {
-            if (substr($v, 0, 7) == '192.168')
-            {
-                $listenHost = $v;
-            }
-        }
-    }
-    else if (ENV_NAME == 'test')
-    {
-        $iplist = swoole_get_local_ip();
-        //监听局域网IP
-        foreach ($iplist as $k => $v)
-        {
-            if (substr($v, 0, 6) == '172.16')
-            {
-                $listenHost = $v;
-            }
-        }
-    }
-
-
-    \Lib\LoadTasks::init();//载入任务表
-    \Lib\Donkeyid::init();//初始化donkeyid对象
-    \Lib\Tasks::init();//创建task表
+    $listenHost = \Lib\Util::listenHost();
+    
+    \Lib\Process::init();//载入任务处理表
 
     $server = Swoole\Network\Server::autoCreate($listenHost, PORT);
     $server->setProtocol($AppSvr);

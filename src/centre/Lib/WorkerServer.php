@@ -11,6 +11,22 @@ use Swoole;
 
 class WorkerServer extends Swoole\Protocol\SOAServer
 {
+    
+    
+    public function onMasterStart($serv)
+    {
+//        $listenHost = \Lib\Util::listenHost();
+//        $ret = Service::getInstance()->call("Robot::register",$listenHost,PORT)->getResult();
+//        if (empty($ret) || $ret["code"]){
+//            echo $ret["msg"],"\n";exit;
+//        }
+    }
+
+    public function onWorkerStart($server, $worker_id)
+    {
+        Process::signal();//注册信号
+    }
+
     public function call($request, $header)
     {
         //初始化日志

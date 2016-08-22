@@ -24,5 +24,7 @@ else
     require_once __DIR__ . '/framework/libs/lib_config.php';
 }
 Swoole::$php->config->setPath(__DIR__ . '/configs/' . ENV_NAME);//共有配置
+Swoole\Loader::addNameSpace('App', __DIR__ . '/App');
+Swoole\Loader::addNameSpace('Lib', __DIR__ . '/Lib');
 
 

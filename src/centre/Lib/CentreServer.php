@@ -17,7 +17,6 @@ class CentreServer  extends Swoole\Protocol\SOAServer
             if ($worker_id == 0 ){
                 //echo "开始计时:".date("Y-m-d H:i:s")."\n";
                 $server->after((60-date("s"))*1000,function () use ($server){
-                    $server->task("load");
                     //echo "开始after计时:".date("Y-m-d H:i:s")."\n";
                     $server->tick(60000, function () use ($server) {
                         //echo "开始task:".date("Y-m-d H:i:s")."\n";
@@ -27,7 +26,7 @@ class CentreServer  extends Swoole\Protocol\SOAServer
             }
             if ($worker_id == 1){
                 $server->tick(1000, function () use ($server) {
-                    echo "开始tick计时:".date("Y-m-d H:i:s")."\n";
+                    //echo "开始tick计时:".date("Y-m-d H:i:s")."\n";
                     $tasks = Tasks::getTasks();
                     $server->task($tasks);
                 });
