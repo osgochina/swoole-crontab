@@ -17,7 +17,10 @@ class Process
         "status" => [\swoole_table::TYPE_INT, 1],
         "start" => [\swoole_table::TYPE_INT, 8],
         "end" => [\swoole_table::TYPE_INT, 8],
+        "code"=> [\swoole_table::TYPE_INT, 1],
     ];
+    const PROCESS_START = 0;//程序开始运行
+    const PROCESS_STOP = 1;//程序结束运行
 
     public $task;
 
@@ -39,13 +42,8 @@ class Process
             while($ret =  \swoole_process::wait(false)) {
                 $pid = $ret['pid'];
                 if (self::$table->exist($pid)){
-                    self::$table->set($pid,["status"=>1,"end"=>microtime(true)]);
+                    self::$table->set($pid,["status"=>self::PROCESS_STOP,"end"=>microtime(true),"code"=>$ret["code"]]);
                 }
-            }
-            foreach (self::$table as $pid=>$value){
-                echo $pid,"\n";
-                print_r($value);
-                echo "\n";
             }
         });
     }
@@ -53,13 +51,13 @@ class Process
      * 创建一个子进程
      * @param $task
      */
-    public static function create_process($id, $task)
+    public static function create_process($task)
     {
-        $cls = new Process();
+        $cls = new self();
         $cls->task = $task;
         $process = new \swoole_process(array($cls, "run"));
         if (($pid = $process->start())) {
-            self::$table->set($pid,["taskId"=>$id,"status"=>0,"start"=>microtime(true)]);
+            self::$table->set($pid,["taskId"=>$task["id"],"status"=>self::PROCESS_START,"start"=>microtime(true)]);
         }
     }
 
@@ -70,6 +68,7 @@ class Process
     public function run($worker)
     {
         $exec = $this->task["execute"];
+        $worker->name($exec ."#". $this->task["id"]);
         $exec = explode(" ",$exec);
         $execfile = $exec[0];
         unset($exec[0]);
