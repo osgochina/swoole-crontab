@@ -15,11 +15,11 @@ class WorkerServer extends Swoole\Protocol\SOAServer
     
     public function onMasterStart($serv)
     {
-//        $listenHost = \Lib\Util::listenHost();
-//        $ret = Service::getInstance()->call("Robot::register",$listenHost,PORT)->getResult();
-//        if (empty($ret) || $ret["code"]){
-//            echo $ret["msg"],"\n";exit;
-//        }
+        $listenHost = \Lib\Util::listenHost();
+        $ret = Service::getInstance()->call("Robot::register",$listenHost,PORT)->getResult();
+        if (empty($ret) || $ret["code"]){
+            echo $ret["msg"],"\n";exit;
+        }
     }
 
     public function onWorkerStart($server, $worker_id)

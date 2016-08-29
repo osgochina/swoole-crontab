@@ -15,7 +15,6 @@ class Exec
 {
     public static function run($task)
     {
-        $id = $task["id"];
-        Process::create_process($id,$task);
+        Process::create_process($task);
     }
 }

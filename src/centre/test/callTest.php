@@ -5,23 +5,18 @@
  * Date: 16-8-18
  * Time: 下午3:42
  */
-if (!class_exists('Swoole', false))
-{
-    require_once '/data/www/public/framework/libs/Swoole/Loader.php';
-    Swoole\Loader::addNameSpace('Swoole', '/data/www/public/framework/libs/Swoole');
-    spl_autoload_register('\\Swoole\\Loader::autoload', true, true);
-}
 
-$service = new Swoole\Client\SOA();
-$service->setServers(array('127.0.0.1:8808'));
+include __DIR__."/../_init.php";
 
+$server = new Lib\Service();
+$server->addServers(["127.0.0.1:8901"]);
 $task = [
     "taskname"=>"测试任务1",
     "rule"=>"* * * * * *",
     "unique"=>"0",
-    "execute"=>"php server.php start",
+    "execute"=>"echo 'aa' ",
 ];
-$ret = $service->task("App\\Tasks::add",[$task])->getResult();
+$ret = $server->call("Tasks::add",$task)->getResult();
 var_dump($ret);
 
 //$id = $ret["data"][0];

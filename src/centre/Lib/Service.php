@@ -4,20 +4,22 @@ use Swoole;
 class Service extends Swoole\Client\SOA
 {
     protected $namespace = "App";
-    private static $insance;
+    private static $insance = [];
 
-    public static function getInstance($id = null)
+    public static function getInstance($ip="",$port="")
     {
-        if (!empty(self::$insance)){
-            return self::$insance;
+        if (empty($ip) || empty($port)){
+            $config = Swoole::$php->config["crontab"];
+            $ip = $config["centre_host"];
+            $port = $config["centre_port"];
         }
-        $config = Swoole::$php->config["crontab"];
-        $host = $config["centre_host"];
-        $port = $config["centre_port"];
-        $insance = new self($id);
-        $insance->addServers(array($host.':'.$port));
-        self::$insance = $insance;
-        return self::$insance;
+        if (isset(self::$insance[$ip.":".$port]) && !empty(self::$insance[$ip.":".$port])){
+            return self::$insance[$ip.":".$port];
+        }
+        $insance = new self(null);
+        $insance->addServers(array($ip.':'.$port));
+        self::$insance[$ip.":".$port] = $insance;
+        return $insance;
         
     }
 

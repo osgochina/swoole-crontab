@@ -8,11 +8,12 @@
 
 namespace Lib;
 
-
+use Swoole;
 class Robot
 {
 
     static private $table;
+    
 
     static private $column = [
         "ip" => [\swoole_table::TYPE_STRING, 15],
@@ -40,8 +41,38 @@ class Robot
     {
         $client = new \swoole_client(SWOOLE_SOCK_TCP);
         if($client->connect($ip,$port)){
-            if (self::$table->set($ip.":".$port,["ip"=>$ip,"port"=>$port,"status"=>0])){
+            if (self::$table->set(1,["ip"=>$ip,"port"=>$port,"status"=>0])){
                 return $client->close();
+            }
+        }
+        return false;
+    }
+
+    public static function Run($task)
+    {
+        echo (date("Y-m-d H:i:s")."\n");
+        $num = count(self::$table);
+        echo "num:".$num."\n";
+
+        if ($num){
+            return false;
+        }
+        $rand = rand(1,$num);
+        $n=0;
+        foreach (self::$table as $robot)
+        {
+            var_dump($robot);
+            $n++;
+            if ($rand == $num){
+                print_r($num);
+                $rect = Service::getInstance($robot["ip"],$robot["port"])->call("Exec::run",$task);
+                $ret = $rect->getResult(30);
+                if (empty($ret)){
+                    if($rect->code == Swoole\Client\SOA_Result::ERR_CLOSED){
+                        //TODO 重新选择服务逻辑
+                    }
+                }
+                return $ret;
             }
         }
         return false;
