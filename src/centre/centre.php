@@ -20,7 +20,7 @@ Swoole\Network\Server::start(function ()
 
     $setting = array(
         'worker_num' => 2,
-        'task_worker_num'=>2,
+        'task_worker_num'=>8,
         'max_request' => 1000,
         'dispatch_mode' => 3,
         'log_file' => __DIR__ . '/logs/swoole.log',

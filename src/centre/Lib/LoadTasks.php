@@ -28,7 +28,8 @@ class LoadTasks
 
     static private $column = [
         "runStatus" => [\swoole_table::TYPE_INT, 1],
-        "runTime" => [\swoole_table::TYPE_INT, 4],
+        "runTimeStart" => [\swoole_table::TYPE_INT, 8],
+        "runTimeEnd" => [\swoole_table::TYPE_INT, 8],
         "taskname" => [\swoole_table::TYPE_STRING, 32],
         "rule" => [\swoole_table::TYPE_STRING, 32],
         "unique" => [\swoole_table::TYPE_INT, 1],
@@ -44,6 +45,10 @@ class LoadTasks
 
     const T_START = 0;//正常
     const T_STOP = 1;//暂停
+
+    const RunStatus_normal = 0;//未运行
+    const RunStatus_ing = 1;//运行中
+    const RunStatus_end = 2;//运行结束
 
     /**
      * 初始化任务表

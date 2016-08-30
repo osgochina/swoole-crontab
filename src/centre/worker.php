@@ -19,7 +19,7 @@ Swoole\Network\Server::start(function ()
     $AppSvr->setLogger($logger);
 
     $setting = array(
-        'worker_num' => 4,
+        'worker_num' => 8,
         'max_request' => 1000,
         'dispatch_mode' => 3,
         'log_file' => __DIR__ . '/logs/swoole.log',

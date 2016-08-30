@@ -15,18 +15,16 @@ class CentreServer  extends Swoole\Protocol\SOAServer
     {
         if (!$server->taskworker){
             if ($worker_id == 0 ){
-                $server->task("load");
-//                $server->after((60-date("s"))*1000,function () use ($server){
-//
-//                    $server->task("load");
-//                    $server->tick(60000, function () use ($server) {
-//                        $server->task("load");
-//                    });
-//                });
+                //$server->task("load");
+                $server->after((60-date("s"))*1000,function () use ($server){
+                    $server->task("load");
+                    $server->tick(60000, function () use ($server) {
+                        $server->task("load");
+                    });
+                });
             }
             if ($worker_id == 1){
                 $server->tick(1000, function () use ($server) {
-
                     $tasks = Tasks::getTasks();
                     $server->task($tasks);
                 });
@@ -38,17 +36,27 @@ class CentreServer  extends Swoole\Protocol\SOAServer
         if ($data == "load"){
             Tasks::checkTasks();
         }else{
+            $ret = [];
             foreach ($data as $id)
             {
                 $task = LoadTasks::getTasks()->get($id);
-//                print_r($task);
-                Robot::Run($task);
+                $tmp["id"] = $id;
+                $tmp["execute"] = $task["execute"];
+                $tmp["taskname"] = $task["taskname"];
+                LoadTasks::getTasks()->set($id,["runStatus"=>LoadTasks::RunStatus_ing,"runTimeStart"=>microtime()]);
+                $ret[$id] = Robot::Run($tmp);
             }
+            return $ret;
         }
         return true;
     }
     function onFinish($serv, $task_id, $data)
     {
+        if (is_array($data)){
+            foreach ($data as $id=>$v){
+                LoadTasks::getTasks()->set($id,["runStatus"=>LoadTasks::RunStatus_end,"runTimeEnd"=>microtime()]);
+            }
+        }
         return;
     }
     public function call($request, $header)

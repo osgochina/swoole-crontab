@@ -48,33 +48,35 @@ class Robot
         return false;
     }
 
+    /**
+     * 运行任务
+     * @param $task
+     * @return bool|null
+     */
     public static function Run($task)
     {
-        echo (date("Y-m-d H:i:s")."\n");
         $num = count(self::$table);
-        echo "num:".$num."\n";
-
-        if ($num){
+        if (!$num){
             return false;
         }
         $rand = rand(1,$num);
         $n=0;
         foreach (self::$table as $robot)
         {
-            var_dump($robot);
             $n++;
             if ($rand == $num){
-                print_r($num);
                 $rect = Service::getInstance($robot["ip"],$robot["port"])->call("Exec::run",$task);
                 $ret = $rect->getResult(30);
                 if (empty($ret)){
-                    if($rect->code == Swoole\Client\SOA_Result::ERR_CLOSED){
+                    if($rect->code == Swoole\Client\SOA_Result::ERR_CLOSED || $rect->code == Swoole\Client\SOA_Result::ERR_CONNECT){
                         //TODO 重新选择服务逻辑
+                        Flog::log($robot["ip"].":".$robot["port"]."已停止服务");
+                        return false;
                     }
                 }
                 return $ret;
             }
         }
-        return false;
+        return true;
     }
 }
