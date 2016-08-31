@@ -35,6 +35,9 @@ class Process
         self::$table->create();
     }
 
+    /**
+     * 注册信号
+     */
     public static function signal()
     {
         \swoole_process::signal(SIGCHLD, function($sig) {
@@ -47,6 +50,36 @@ class Process
             }
         });
     }
+
+    /**
+     * 通知中心任务执行结果
+     * @return bool
+     */
+    public static function notify()
+    {
+        if (count(self::$table) >0){
+            $procs= [];
+            foreach (self::$table as $pid=>$process){
+                if ($process["status"] == self::PROCESS_STOP){
+                    $procs[$pid] = [
+                        "taskId"=>$process["taskId"],
+                        "start"=>$process["start"],
+                        "end"=>$process["end"],
+                        "code"=>$process["code"],
+                    ];
+                }
+            }
+            $ret = Service::getInstance()->call("Exec::notify",$procs)->getResult(1);
+            if (empty($ret)){
+                return false;
+            }
+            foreach ($procs as $pid=>$v){
+                self::$table->del($pid);
+            }
+        }
+        return true;
+    }
+
     /**
      * 创建一个子进程
      * @param $task

@@ -43,7 +43,7 @@ class CentreServer  extends Swoole\Protocol\SOAServer
                 $tmp["id"] = $id;
                 $tmp["execute"] = $task["execute"];
                 $tmp["taskname"] = $task["taskname"];
-                LoadTasks::getTasks()->set($id,["runStatus"=>LoadTasks::RunStatus_ing,"runTimeStart"=>microtime()]);
+                LoadTasks::getTasks()->set($id,["runStatus"=>LoadTasks::RunStatusStart,"runTimeStart"=>microtime()]);
                 $ret[$id] = Robot::Run($tmp);
             }
             return $ret;
@@ -54,7 +54,13 @@ class CentreServer  extends Swoole\Protocol\SOAServer
     {
         if (is_array($data)){
             foreach ($data as $id=>$v){
-                LoadTasks::getTasks()->set($id,["runStatus"=>LoadTasks::RunStatus_end,"runTimeEnd"=>microtime()]);
+                if ($v){
+                    $runStatus = LoadTasks::RunStatusToTaskSuccess;//运行成功
+                }else{
+                    $runStatus = LoadTasks::RunStatusToTaskFailed;//运行失败
+                }
+                LoadTasks::getTasks()->set($id,["runStatus"=>$runStatus,"runUpdateTime"=>microtime()]);
+
             }
         }
         return;

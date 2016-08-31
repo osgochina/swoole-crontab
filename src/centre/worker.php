@@ -20,6 +20,7 @@ Swoole\Network\Server::start(function ()
 
     $setting = array(
         'worker_num' => 8,
+        'task_worker_num'=>2,
         'max_request' => 1000,
         'dispatch_mode' => 3,
         'log_file' => __DIR__ . '/logs/swoole.log',
@@ -38,6 +39,6 @@ Swoole\Network\Server::start(function ()
 
     $server = Swoole\Network\Server::autoCreate($listenHost, PORT);
     $server->setProtocol($AppSvr);
-    $server->setProcessName("CentreServer");
+    $server->setProcessName("WorkerServer");
     $server->run($setting);
 });

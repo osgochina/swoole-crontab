@@ -18,7 +18,6 @@ class Robot
     static private $column = [
         "ip" => [\swoole_table::TYPE_STRING, 15],
         "port" => [\swoole_table::TYPE_INT, 4],
-        "status" => [\swoole_table::TYPE_INT, 1],
     ];
     public static function init()
     {
@@ -41,7 +40,7 @@ class Robot
     {
         $client = new \swoole_client(SWOOLE_SOCK_TCP);
         if($client->connect($ip,$port)){
-            if (self::$table->set(1,["ip"=>$ip,"port"=>$port,"status"=>0])){
+            if (self::$table->set($ip.$port,["ip"=>$ip,"port"=>$port])){
                 return $client->close();
             }
         }
@@ -55,28 +54,49 @@ class Robot
      */
     public static function Run($task)
     {
+        if (($robot = self::selectWorker()) == false){
+            return false;
+        }
+        if (!self::sendTask($robot,$task)){
+            Flog::log("业务运行失败,task:".json_encode($task));
+            return false;
+        }
+        return true;
+    }
+
+    private static function sendTask($robot,$task)
+    {
+        $rect = Service::getInstance($robot["ip"],$robot["port"])->call("Exec::run",$task);
+        $rect->getResult();
+        if($rect->code == Swoole\Client\SOA_Result::ERR_CLOSED || $rect->code == Swoole\Client\SOA_Result::ERR_CONNECT){
+            Flog::log($robot["ip"].":".$robot["port"]."已停止服务");
+            self::$table->del($robot["ip"].$robot["port"]);
+            if (($robot = self::selectWorker()) == false){
+                return false;
+            }
+            return self::sendTask($robot,$task);
+        }
+        return true;
+    }
+
+    private static function selectWorker()
+    {
         $num = count(self::$table);
         if (!$num){
+            Flog::log("No workers available");
             return false;
         }
         $rand = rand(1,$num);
         $n=0;
-        foreach (self::$table as $robot)
+        foreach (self::$table as $k=>$robot)
         {
             $n++;
             if ($rand == $num){
-                $rect = Service::getInstance($robot["ip"],$robot["port"])->call("Exec::run",$task);
-                $ret = $rect->getResult(30);
-                if (empty($ret)){
-                    if($rect->code == Swoole\Client\SOA_Result::ERR_CLOSED || $rect->code == Swoole\Client\SOA_Result::ERR_CONNECT){
-                        //TODO 重新选择服务逻辑
-                        Flog::log($robot["ip"].":".$robot["port"]."已停止服务");
-                        return false;
-                    }
-                }
-                return $ret;
+                return $robot;
             }
         }
-        return true;
+        return false;
     }
+
+
 }

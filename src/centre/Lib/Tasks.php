@@ -14,7 +14,7 @@ class Tasks
     static private $table;
 
     static private $column = [
-        "min" => [\swoole_table::TYPE_INT, 8],
+        "minute" => [\swoole_table::TYPE_INT, 8],
         "sec" => [\swoole_table::TYPE_INT, 8],
         "id" => [\swoole_table::TYPE_INT, 8],
     ];
@@ -49,7 +49,7 @@ class Tasks
                     $time = strtotime(date("Y-m-d H:i"));
                     foreach ($ret as $sec){
                         $k =Donkeyid::getInstance()->dk_get_next_id();
-                        self::$table->set($k,["min"=>$min,"sec"=>$time+$sec,"id"=>$id]);
+                        self::$table->set($k,["minute"=>$min,"sec"=>$time+$sec,"id"=>$id]);
                     }
                 }
             }
@@ -62,13 +62,18 @@ class Tasks
      */
     private static function clean()
     {
+        $ids = [];
         if (count(self::$table) > 0){
-            $min = date("YmdHi");
+            $minute = date("YmdHi");
             foreach (self::$table as $id=>$task){
-                if ($min > $task["min"]){
-                    self::$table->del($id);
+                if (intval($minute) > intval($task["minute"])){
+                    $ids[] = $id;
                 }
             }
+        }
+        //删除
+        foreach ($ids as $id){
+            self::$table->del($id);
         }
     }
 
@@ -85,7 +90,7 @@ class Tasks
         $min = date("YmdHi");
         $time = time();
         foreach (self::$table as $task){
-            if ($min == $task["min"] ){
+            if ($min == $task["minute"] ){
                 if ($time == $task["sec"]){
                     $data[] = $task["id"];
                 }
