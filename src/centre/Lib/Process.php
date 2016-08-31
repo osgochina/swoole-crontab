@@ -46,6 +46,8 @@ class Process
                 $pid = $ret['pid'];
                 if (self::$table->exist($pid)){
                     self::$table->set($pid,["status"=>self::PROCESS_STOP,"end"=>microtime(true),"code"=>$ret["code"]]);
+                    $task = self::$table->get($pid);
+                    TermLog::log("task执行完成:".json_encode($task),$task["taskId"]);
                 }
             }
         });
@@ -69,10 +71,16 @@ class Process
                     ];
                 }
             }
-            $ret = Service::getInstance()->call("Exec::notify",$procs)->getResult(1);
+            TermLog::log("tasks通知中心服:".json_encode($procs));
+            $service = new Service();
+            $rect = $service->call("Exec::notify",$procs);
+            $ret = $rect->getResult(1);
+            unset($service);
             if (empty($ret)){
+                TermLog::log("tasks通知中心服失败,code".$rect->code.",msg".$rect->msg);
                 return false;
             }
+
             foreach ($procs as $pid=>$v){
                 self::$table->del($pid);
             }
@@ -90,6 +98,7 @@ class Process
         $cls->task = $task;
         $process = new \swoole_process(array($cls, "run"));
         if (($pid = $process->start())) {
+            TermLog::log("task开始执行:".json_encode($task),$task["id"]);
             self::$table->set($pid,["taskId"=>$task["id"],"status"=>self::PROCESS_START,"start"=>microtime(true)]);
         }
     }

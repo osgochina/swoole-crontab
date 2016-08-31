@@ -13,11 +13,13 @@ class Robot
 {
 
     static private $table;
+    static private $ips;
     
 
     static private $column = [
         "ip" => [\swoole_table::TYPE_STRING, 15],
         "port" => [\swoole_table::TYPE_INT, 4],
+        "lasttime"=>[\swoole_table::TYPE_INT, 8],
     ];
     public static function init()
     {
@@ -38,13 +40,36 @@ class Robot
      */
     public static function register($ip,$port)
     {
-        $client = new \swoole_client(SWOOLE_SOCK_TCP);
-        if($client->connect($ip,$port)){
-            if (self::$table->set($ip.$port,["ip"=>$ip,"port"=>$port])){
-                return $client->close();
-            }
+        if (self::$table->set($ip.$port,["ip"=>$ip,"port"=>$port,"lasttime"=>time()])){
+            return true;
         }
         return false;
+    }
+
+    /**
+     * 清除过期的worker
+     */
+    public static function clean()
+    {
+        if (count(self::$table)>0){
+            $keys = [];
+            foreach (self::$table as $k=>$v){
+                if ($v["lasttime"] < time()-10){
+                    $keys[] = $k;
+                }
+            }
+
+            foreach ($keys as $k){
+                self::$table->del($k);
+            }
+        }
+    }
+
+    private static function loadIps()
+    {
+        foreach (self::$table as $k=>$v){
+            self::$ips[$k] = $v;
+        }
     }
 
     /**
@@ -54,11 +79,13 @@ class Robot
      */
     public static function Run($task)
     {
+        self::loadIps();//载入配置到本地变量
+
         if (($robot = self::selectWorker()) == false){
             return false;
         }
         if (!self::sendTask($robot,$task)){
-            Flog::log("业务运行失败,task:".json_encode($task));
+            TermLog::log("task业务运行失败:".json_encode($task),$task["id"]);
             return false;
         }
         return true;
@@ -66,29 +93,33 @@ class Robot
 
     private static function sendTask($robot,$task)
     {
-        $rect = Service::getInstance($robot["ip"],$robot["port"])->call("Exec::run",$task);
+        TermLog::log("task发送给:".$robot["ip"].":".$robot["port"],$task["id"]);
+        $server = new Service($robot["ip"],$robot["port"]);
+        $rect = $server->call("Exec::run",$task);
         $rect->getResult();
         if($rect->code == Swoole\Client\SOA_Result::ERR_CLOSED || $rect->code == Swoole\Client\SOA_Result::ERR_CONNECT){
-            Flog::log($robot["ip"].":".$robot["port"]."已停止服务");
-            self::$table->del($robot["ip"].$robot["port"]);
+            TermLog::log($robot["ip"].":".$robot["port"]."已停止服务,code:".$rect->code,$task["id"]);
+            unset(self::$ips[$robot["ip"].$robot["port"]]);
+            unset($server);
             if (($robot = self::selectWorker()) == false){
                 return false;
             }
             return self::sendTask($robot,$task);
         }
+        unset($server);
         return true;
     }
 
     private static function selectWorker()
     {
-        $num = count(self::$table);
+        $num = count(self::$ips);
         if (!$num){
             Flog::log("No workers available");
             return false;
         }
         $rand = rand(1,$num);
         $n=0;
-        foreach (self::$table as $k=>$robot)
+        foreach (self::$ips as $k=>$robot)
         {
             $n++;
             if ($rand == $num){

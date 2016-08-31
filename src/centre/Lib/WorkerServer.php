@@ -15,7 +15,7 @@ class WorkerServer extends Swoole\Protocol\SOAServer
     
     public function onMasterStart($serv)
     {
-
+        $this->register();
     }
 
     public function onWorkerStart($server, $worker_id)
@@ -36,7 +36,7 @@ class WorkerServer extends Swoole\Protocol\SOAServer
             }
         }
     }
-    
+
     function onTask($serv, $task_id, $from_id, $data)
     {
         if ($data == "notify"){
@@ -53,10 +53,12 @@ class WorkerServer extends Swoole\Protocol\SOAServer
     public function register()
     {
         $listenHost = \Lib\Util::listenHost();
-        $ret = Service::getInstance()->call("Robot::register",$listenHost,PORT)->getResult();
+        $service = new Service();
+        $ret = $service->call("Robot::register",$listenHost,PORT)->getResult();
         if (empty($ret) || $ret["code"]){
             Flog::log($ret["msg"]);
         }
+        unset($service);
     }
 
     public function call($request, $header)

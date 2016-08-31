@@ -16,14 +16,20 @@ class CentreServer  extends Swoole\Protocol\SOAServer
         if (!$server->taskworker){
             if ($worker_id == 0 ){
                 //$server->task("load");
+                //准点载入任务
                 $server->after((60-date("s"))*1000,function () use ($server){
                     $server->task("load");
                     $server->tick(60000, function () use ($server) {
                         $server->task("load");
                     });
                 });
+                //清理过期的服务器
+                $server->tick(1000, function () use ($server) {
+                   Robot::clean();
+                });
             }
             if ($worker_id == 1){
+                //定时执行任务
                 $server->tick(1000, function () use ($server) {
                     $tasks = Tasks::getTasks();
                     $server->task($tasks);
@@ -44,6 +50,7 @@ class CentreServer  extends Swoole\Protocol\SOAServer
                 $tmp["execute"] = $task["execute"];
                 $tmp["taskname"] = $task["taskname"];
                 LoadTasks::getTasks()->set($id,["runStatus"=>LoadTasks::RunStatusStart,"runTimeStart"=>microtime()]);
+                TermLog::log("task任务开始:".json_encode($tmp),$id);
                 $ret[$id] = Robot::Run($tmp);
             }
             return $ret;
@@ -55,13 +62,15 @@ class CentreServer  extends Swoole\Protocol\SOAServer
         if (is_array($data)){
             foreach ($data as $id=>$v){
                 if ($v){
-                    $runStatus = LoadTasks::RunStatusToTaskSuccess;//运行成功
+                    $runStatus = LoadTasks::RunStatusToTaskSuccess;//发送成功
+                    TermLog::log("task任务发送成功",$id);
                 }else{
-                    $runStatus = LoadTasks::RunStatusToTaskFailed;//运行失败
+                    $runStatus = LoadTasks::RunStatusToTaskFailed;//发送失败
+                    TermLog::log("task任务发送失败",$id);
                 }
                 LoadTasks::getTasks()->set($id,["runStatus"=>$runStatus,"runUpdateTime"=>microtime()]);
-
             }
+            TermLog::flush();
         }
         return;
     }

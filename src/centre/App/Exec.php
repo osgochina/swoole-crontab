@@ -11,6 +11,7 @@ namespace App;
 
 use Lib\LoadTasks;
 use Lib\Process;
+use Lib\TermLog;
 
 class Exec
 {
@@ -32,6 +33,7 @@ class Exec
                 $runStatus = LoadTasks::RunStatusFailed;
             }
             $header->set($task["taskId"],["runStatus"=>$runStatus,"runUpdateTime"=>microtime()]);
+            TermLog::log("task已经执行完成,返回值:".json_encode($task),$task["taskId"]);
         }
         return ["code"=>0];
     }
