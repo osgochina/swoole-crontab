@@ -8,14 +8,11 @@
 require_once __DIR__ . '/_init.php';
 const PORT = 8902;
 
-Swoole\Network\Server::setPidFile(__DIR__ . '/logs/worker'.PORT.'.pid');
-
-
+Swoole\Network\Server::setPidFile(__DIR__ . '/logs/robot'.PORT.'.pid');
 Swoole\Network\Server::start(function ()
 {
-
-    $logger = new Swoole\Log\FileLog(['file' => __DIR__ . '/logs/worker'.PORT.'.log']);
-    $AppSvr = new Lib\WorkerServer;
+    $logger = new Swoole\Log\FileLog(['file' => __DIR__ . '/logs/robot'.PORT.'.log']);
+    $AppSvr = new Lib\RobotServer;
     $AppSvr->setLogger($logger);
 
     $setting = array(
@@ -39,6 +36,6 @@ Swoole\Network\Server::start(function ()
 
     $server = Swoole\Network\Server::autoCreate($listenHost, PORT);
     $server->setProtocol($AppSvr);
-    $server->setProcessName("WorkerServer");
+    $server->setProcessName("RobotServer");
     $server->run($setting);
 });

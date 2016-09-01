@@ -40,6 +40,7 @@ class LoadTasks
 
 
     const tablename = "crontab";
+
     static private $table;
     static private $db;
 
@@ -83,8 +84,7 @@ class LoadTasks
      */
     private static function createConfigTable()
     {
-        $conf = Swoole::$php->config["crontab"];
-        $load_size = (isset($conf["load_size"]) && $conf["load_size"] > 0) ? $conf["load_size"] : 1024;
+        $load_size = defined("LOAD_SIZE") ? LOAD_SIZE : 1024;
         self::$table = new \swoole_table($load_size);
         foreach (self::$column as $key => $v) {
             self::$table->column($key, $v[0], $v[1]);

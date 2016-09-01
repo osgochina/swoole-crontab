@@ -24,8 +24,7 @@ class Tasks
      */
     public static function init()
     {
-        $conf = Swoole::$php->config["crontab"];
-        $tasks_size = (isset($conf["tasks_size"]) && $conf["tasks_size"] > 0) ? $conf["tasks_size"] : 1024;
+        $tasks_size = defined("TASKS_SIZE") ? TASKS_SIZE : 1024;
         self::$table = new \swoole_table($tasks_size);
         foreach (self::$column as $key => $v) {
             self::$table->column($key, $v[0], $v[1]);

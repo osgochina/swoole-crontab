@@ -27,8 +27,7 @@ class Process
 
     public static function init()
     {
-        $conf = \Swoole::$php->config["crontab"];
-        $robot_process_max = (isset($conf["robot_process_max"]) && $conf["robot_process_max"] > 0) ? $conf["robot_process_max"] : 128;
+        $robot_process_max = defined("ROBOT_MAX_PROCESS") ? ROBOT_MAX_PROCESS : 128;
         self::$table = new \swoole_table($robot_process_max);
         foreach (self::$column as $key => $v) {
             self::$table->column($key, $v[0], $v[1]);

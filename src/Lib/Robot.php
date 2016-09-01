@@ -24,8 +24,7 @@ class Robot
     ];
     public static function init()
     {
-        $conf = \Swoole::$php->config["crontab"];
-        $robot_num_max = (isset($conf["robot_num_max"]) && $conf["robot_num_max"] > 0) ? $conf["robot_num_max"] : 2;
+        $robot_num_max = defined("ROBOT_MAX") ? ROBOT_MAX : 2;
         self::$table = new \swoole_table($robot_num_max);
         foreach (self::$column as $key => $v) {
             self::$table->column($key, $v[0], $v[1]);
@@ -134,10 +133,11 @@ class Robot
         foreach (self::$ips as $k=>$robot)
         {
             $n++;
-            if ($rand == $num){
+            if ($rand == $n){
                 return $robot;
             }
         }
+        Flog::log("没有选中任何服务器,服务器数量:".$num.",随机数:".$rand);
         return false;
     }
 

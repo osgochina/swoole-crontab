@@ -15,9 +15,8 @@ class Service extends Swoole\Client\SOA
     {
         parent::__construct();
         if (empty($ip) || empty($port)){
-            $config = Swoole::$php->config["crontab"];
-            $ip = $config["centre_host"];
-            $port = $config["centre_port"];
+            $ip = CENTRE_HOST;
+            $port = CENTRE_PORT;
         }
         $this->addServers(array($ip.':'.$port));
     }

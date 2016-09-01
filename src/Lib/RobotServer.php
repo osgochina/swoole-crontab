@@ -10,7 +10,7 @@
 namespace Lib;
 use Swoole;
 
-class WorkerServer extends Swoole\Protocol\SOAServer
+class RobotServer extends Swoole\Protocol\SOAServer
 {
 
     public function onMasterStart($serv)
