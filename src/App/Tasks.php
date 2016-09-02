@@ -17,15 +17,28 @@ class Tasks
      * 获取任务列表
      * @return array
      */
-    public static function getList()
+    public static function getList($where=[],$page=1,$size=10)
     {
+
+        $start = ($page-1)*$size;
+        $end = $start+$size;
         $data = [];
         $tasks = LoadTasks::getTasks();
+        $n=0;
         foreach ($tasks as $id=>$task)
         {
+            if ($n < $start) continue;
+            if ($n > $end) break;
+            $n++;
+            $info = LoadTasks::$db->get($id);
+            if (!empty($info)){
+                $task["createtime"]=$info["createtime"];
+                $task["updatetime"]=$info["updatetime"];
+            }
+            $task["id"] = $id;
             $data[$id] = $task;
         }
-        return  array('data' => $data);
+        return  ["total"=>count($tasks),"rows"=>$data];
     }
 
     /**

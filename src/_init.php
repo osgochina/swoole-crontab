@@ -31,7 +31,7 @@ else
 {
     require_once __DIR__ . '/framework/libs/lib_config.php';
 }
-if (is_dir('/data/www/wwwroot/swoole-crontab/configs/'.ENV_NAME)){
+if (is_dir('/data/www/wwwroot/crontab/configs/'.ENV_NAME)){
     $config_dir = '/data/www/wwwroot/swoole-crontab/configs/'.ENV_NAME;
 }else{
     $config_dir = __DIR__ . '/configs/';

@@ -42,7 +42,7 @@ class LoadTasks
     const tablename = "crontab";
 
     static private $table;
-    static private $db;
+    static public $db;
 
 
     const T_START = 0;//正常
@@ -99,23 +99,26 @@ class LoadTasks
      */
     private static function loadTasks()
     {
-        $count = self::$db->count([]);
-        if (empty($count)) {
-            Flog::log("未加载到表" . self::tablename . "中的数据");
-            return false;
-        }
-        $where["limit"] = "0," . $count;
-        $tasks = self::$db->gets($where);
-        foreach ($tasks as $task) {
-            self::$table->set($task["id"],
-                [
-                    "taskname" => $task["taskname"],
-                    "rule" => $task["rule"],
-                    "unique" => $task["unique"],
-                    "status" => $task["status"],
-                    "execute" => $task["execute"],
-                ]
-            );
+        $start = 0;
+        while (true){
+            $where["limit"] = $start.",1000";
+            $tasks = self::$db->gets($where);
+            if (empty($tasks)) break;
+            foreach ($tasks as $task) {
+                if (count(self::$table) > LOAD_SIZE){
+                    return true;
+                }
+                self::$table->set($task["id"],
+                    [
+                        "taskname" => $task["taskname"],
+                        "rule" => $task["rule"],
+                        "unique" => $task["unique"],
+                        "status" => $task["status"],
+                        "execute" => $task["execute"],
+                    ]
+                );
+            }
+            $start+=1000;
         }
         return true;
     }
