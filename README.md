@@ -31,7 +31,7 @@ Swoole-Crontab(基于Swoole扩展)
     进入mysql数据库执行/path/to/doc/crontab.sql 的sql文件
     
     
-2.下载swoole framework框架到本地/data/www/public/ [swoole_framework](https://github.com/swoole/framework.git)
+2.下载swoole framework框架到本地/data/www/public/ [framework](https://github.com/swoole/framework.git)
 
 3.配置nginx,列子如下：
 
