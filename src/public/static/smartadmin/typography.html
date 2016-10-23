@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
+
+		<title> SmartAdmin </title>
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<!-- Use the correct meta names below for your web application
+			 Ref: http://davidbcalhoun.com/2010/viewport-metatag 
+			 
+		<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">-->
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<!-- Basic Styles -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+
+		<!-- SmartAdmin Styles : Please note (smartadmin-production.css) was created using LESS variables -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.css">
+
+		<!-- SmartAdmin RTL Support is under construction
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-rtl.css"> -->
+
+		<!-- We recommend you use "your_style.css" to override SmartAdmin
+		     specific styles this will also ensure you retrain your customization with each SmartAdmin update.
+		<link rel="stylesheet" type="text/css" media="screen" href="css/your_style.css"> -->
+
+		<!-- Demo purpose only: goes with demo.js, you can delete this css when designing your own WebApp -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/demo.css">
+
+		<!-- FAVICONS -->
+		<link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="img/favicon/favicon.ico" type="image/x-icon">
+
+		<!-- GOOGLE FONT -->
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+
+		<style>
+			/*
+			 * Examples
+			 *
+			 * Isolated sections of example content for each component or feature. Usually
+			 * followed by a code snippet.
+			 */
+		
+			.bs-example {
+				position: relative;
+				padding: 15px 15px 15px;
+				margin: 0 0px 15px;
+				background-color: #fafafa;
+				border-color: #e5e5e5 #eee #eee;
+				border-style: solid;
+				border-width: 1px;
+			}
+			/* Echo out a label for the example */
+			.bs-example:after {
+				content: "";
+				position: absolute;
+				top: 15px;
+				left: 15px;
+				font-size: 12px;
+				font-weight: bold;
+				color: #bbb;
+				text-transform: uppercase;
+				letter-spacing: 1px;
+			}
+		
+			/* Tweak display of the code snippets when following an example */
+			.bs-example + .highlight {
+				margin: -15px 0px 15px;
+				border-radius: 0;
+				border-width: 0 0 1px;
+			}
+		
+			/* Make the examples and snippets not full-width */
+			@media (min-width: 768px) {
+				.bs-example {
+					margin-left: 0;
+					margin-right: 0;
+					background-color: #fff;
+					border-width: 1px;
+					border-color: #ddd;
+					border-radius: 4px 4px 0 0;
+					box-shadow: none;
+				}
+				.bs-example + .highlight {
+					margin-top: -16px;
+					margin-left: 0;
+					margin-right: 0;
+					border-width: 1px;
+					border-bottom-left-radius: 4px;
+					border-bottom-right-radius: 4px;
+				}
+			}
+		
+			/* Undo width of container */
+			.bs-example .container {
+				width: auto;
+			}
+		
+			/* Tweak content of examples for optimum awesome */
+			.bs-example > p:last-child, .bs-example > ul:last-child, .bs-example > ol:last-child, .bs-example > blockquote:last-child, .bs-example > .form-control:last-child, .bs-example > .table:last-child, .bs-example > .navbar:last-child, .bs-example > .jumbotron:last-child, .bs-example > .alert:last-child, .bs-example > .panel:last-child, .bs-example > .list-group:last-child, .bs-example > .well:last-child, .bs-example > .progress:last-child, .bs-example > .table-responsive:last-child > .table {
+				margin-bottom: 0;
+			}
+			.bs-example > p > .close {
+				float: none;
+			}
+		
+			/* Typography */
+			.bs-example-type .table .info {
+				color: #999;
+				vertical-align: middle;
+				background:none;
+			}
+			.bs-example-type .table td {
+				padding: 15px 0;
+				border-color: #eee;
+				vertical-align: top !important;
+			}
+			.bs-example-type .table tr:first-child td {
+				border-top: 0;
+				vertical-align: top;
+			}
+			.bs-example-type h1, .bs-example-type h2, .bs-example-type h3, .bs-example-type h4, .bs-example-type h5, .bs-example-type h6 {
+				margin-top: 0;
+			}
+		
+			/* Images */
+			.bs-example > .img-circle, .bs-example > .img-rounded, .bs-example > .img-thumbnail {
+				margin: 5px;
+			}
+		
+			/* Tables */
+			.bs-example > .table-responsive > .table {
+				background-color: #fff;
+			}
+		
+			/* Buttons */
+			.bs-example > .btn, .bs-example > .btn-group {
+				margin-top: 5px;
+				margin-bottom: 5px;
+			}
+			.bs-example > .btn-toolbar + .btn-toolbar {
+				margin-top: 10px;
+			}
+		
+			/* Forms */
+			.bs-example-control-sizing select, .bs-example-control-sizing input[type="text"] + input[type="text"] {
+				margin-top: 10px;
+			}
+			.bs-example-form .input-group {
+				margin-bottom: 10px;
+			}
+			.bs-example > textarea.form-control {
+				resize: vertical;
+			}
+		
+			/* List groups */
+			.bs-example > .list-group {
+				max-width: 400px;
+			}
+		
+			/* Navbars */
+			.bs-example .navbar:last-child {
+				margin-bottom: 0;
+			}
+			.bs-navbar-top-example, .bs-navbar-bottom-example {
+				z-index: 1;
+				padding: 0;
+				overflow: hidden; /* cut the drop shadows off */
+			}
+			.bs-navbar-top-example .navbar-header, .bs-navbar-bottom-example .navbar-header {
+				margin-left: 0;
+			}
+			.bs-navbar-top-example .navbar-fixed-top, .bs-navbar-bottom-example .navbar-fixed-bottom {
+				position: relative;
+				margin-left: 0;
+				margin-right: 0;
+			}
+			.bs-navbar-top-example {
+				padding-bottom: 45px;
+			}
+			.bs-navbar-top-example:after {
+				top: auto;
+				bottom: 15px;
+			}
+			.bs-navbar-top-example .navbar-fixed-top {
+				top: -1px;
+			}
+			.bs-navbar-bottom-example {
+				padding-top: 45px;
+			}
+			.bs-navbar-bottom-example .navbar-fixed-bottom {
+				bottom: -1px;
+			}
+			.bs-navbar-bottom-example .navbar {
+				margin-bottom: 0;
+			}
+			@media (min-width: 768px) {
+				.bs-navbar-top-example .navbar-fixed-top, .bs-navbar-bottom-example .navbar-fixed-bottom {
+					position: absolute;
+				}
+				.bs-navbar-top-example {
+					border-radius: 0 0 4px 4px;
+				}
+				.bs-navbar-bottom-example {
+					border-radius: 4px 4px 0 0;
+				}
+			}
+		
+			/* Pagination */
+			.bs-example .pagination {
+				margin-top: 10px;
+				margin-bottom: 10px;
+			}
+		
+			/* Pager */
+			.bs-example > .pager {
+				margin-top: 0;
+			}
+		
+			/* Example modals */
+			.bs-example-modal {
+				background-color: #f5f5f5;
+			}
+			.bs-example-modal .modal {
+				position: relative;
+				top: auto;
+				right: auto;
+				left: auto;
+				bottom: auto;
+				z-index: 1;
+				display: block;
+			}
+			.bs-example-modal .modal-dialog {
+				left: auto;
+				margin-left: auto;
+				margin-right: auto;
+			}
+		
+			/* Example dropdowns */
+			.bs-example > .dropdown > .dropdown-menu {
+				position: static;
+				display: block;
+				margin-bottom: 5px;
+			}
+		
+			/* Example tabbable tabs */
+			.bs-example-tabs .nav-tabs {
+				margin-bottom: 15px;
+			}
+		
+			/* Tooltips */
+			.bs-example-tooltips {
+				text-align: center;
+			}
+			.bs-example-tooltips > .btn {
+				margin-top: 5px;
+				margin-bottom: 5px;
+			}
+		
+			/* Popovers */
+			.bs-example-popover {
+				padding-bottom: 24px;
+				background-color: #f9f9f9;
+			}
+			.bs-example-popover .popover {
+				position: relative;
+				display: block;
+				float: left;
+				width: 260px;
+				margin: 20px;
+			}
+		
+			/* Scrollspy demo on fixed height div */
+			.scrollspy-example {
+				position: relative;
+				height: 200px;
+				margin-top: 10px;
+				overflow: auto;
+			}
+		
+			/*
+			 * Code snippets
+			 *
+			 * Generated via Pygments and Jekyll, these are snippets of HTML, CSS, and JS.
+			 */
+		
+			.highlight {
+				display: none; /* hidden by default, until >480px */
+				padding: 9px 14px;
+				margin-bottom: 14px;
+				background-color: #f7f7f9;
+				border: 1px solid #e1e1e8;
+				border-radius: 4px;
+			}
+			.highlight pre {
+				padding: 0;
+				margin-top: 0;
+				margin-bottom: 0;
+				background-color: transparent;
+				border: 0;
+				white-space: nowrap;
+			}
+			.highlight pre code {
+				font-size: inherit;
+				color: #333; /* Effectively the base text color */
+			}
+			.highlight pre .lineno {
+				display: inline-block;
+				width: 22px;
+				padding-right: 5px;
+				margin-right: 10px;
+				text-align: right;
+				color: #bebec5;
+			}
+		
+			/* Show code snippets when we have the space */
+			@media (min-width: 481px) {
+				.highlight {
+					display: block;
+				}
+			}
+		
+			.hll {
+				background-color: #ffffcc
+			}
+			/*{ background: #f0f3f3; }*/
+			.c {
+				color: #999;
+			}/* Comment */
+			.err {
+				color: #AA0000;
+				background-color: #FFAAAA
+			}/* Error */
+			.k {
+				color: #006699;
+			}/* Keyword */
+			.o {
+				color: #555555
+			}/* Operator */
+			.cm {
+				color: #0099FF;
+				font-style: italic
+			}/* Comment.Multiline */
+			.cp {
+				color: #009999
+			}/* Comment.Preproc */
+			.c1 {
+				color: #999;
+			}/* Comment.Single */
+			.cs {
+				color: #999;
+			}/* Comment.Special */
+			.gd {
+				background-color: #FFCCCC;
+				border: 1px solid #CC0000
+			}/* Generic.Deleted */
+			.ge {
+				font-style: italic
+			}/* Generic.Emph */
+			.gr {
+				color: #FF0000
+			}/* Generic.Error */
+			.gh {
+				color: #003300;
+			}/* Generic.Heading */
+			.gi {
+				background-color: #CCFFCC;
+				border: 1px solid #00CC00
+			}/* Generic.Inserted */
+			.go {
+				color: #AAAAAA
+			}/* Generic.Output */
+			.gp {
+				color: #000099;
+			}/* Generic.Prompt */
+			.gs {
+			}/* Generic.Strong */
+			.gu {
+				color: #003300;
+			}/* Generic.Subheading */
+			.gt {
+				color: #99CC66
+			}/* Generic.Traceback */
+			.kc {
+				color: #006699;
+			}/* Keyword.Constant */
+			.kd {
+				color: #006699;
+			}/* Keyword.Declaration */
+			.kn {
+				color: #006699;
+			}/* Keyword.Namespace */
+			.kp {
+				color: #006699
+			}/* Keyword.Pseudo */
+			.kr {
+				color: #006699;
+			}/* Keyword.Reserved */
+			.kt {
+				color: #007788;
+			}/* Keyword.Type */
+			.m {
+				color: #FF6600
+			}/* Literal.Number */
+			.s {
+				color: #d44950
+			}/* Literal.String */
+			.na {
+				color: #4f9fcf
+			}/* Name.Attribute */
+			.nb {
+				color: #336666
+			}/* Name.Builtin */
+			.nc {
+				color: #00AA88;
+			}/* Name.Class */
+			.no {
+				color: #336600
+			}/* Name.Constant */
+			.nd {
+				color: #9999FF
+			}/* Name.Decorator */
+			.ni {
+				color: #999999;
+			}/* Name.Entity */
+			.ne {
+				color: #CC0000;
+			}/* Name.Exception */
+			.nf {
+				color: #CC00FF
+			}/* Name.Function */
+			.nl {
+				color: #9999FF
+			}/* Name.Label */
+			.nn {
+				color: #00CCFF;
+			}/* Name.Namespace */
+			.nt {
+				color: #2f6f9f;
+			}/* Name.Tag */
+			.nv {
+				color: #003333
+			}/* Name.Variable */
+			.ow {
+				color: #000000;
+			}/* Operator.Word */
+			.w {
+				color: #bbbbbb
+			}/* Text.Whitespace */
+			.mf {
+				color: #FF6600
+			}/* Literal.Number.Float */
+			.mh {
+				color: #FF6600
+			}/* Literal.Number.Hex */
+			.mi {
+				color: #FF6600
+			}/* Literal.Number.Integer */
+			.mo {
+				color: #FF6600
+			}/* Literal.Number.Oct */
+			.sb {
+				color: #CC3300
+			}/* Literal.String.Backtick */
+			.sc {
+				color: #CC3300
+			}/* Literal.String.Char */
+			.sd {
+				color: #CC3300;
+				font-style: italic
+			}/* Literal.String.Doc */
+			.s2 {
+				color: #CC3300
+			}/* Literal.String.Double */
+			.se {
+				color: #CC3300;
+			}/* Literal.String.Escape */
+			.sh {
+				color: #CC3300
+			}/* Literal.String.Heredoc */
+			.si {
+				color: #AA0000
+			}/* Literal.String.Interpol */
+			.sx {
+				color: #CC3300
+			}/* Literal.String.Other */
+			.sr {
+				color: #33AAAA
+			}/* Literal.String.Regex */
+			.s1 {
+				color: #CC3300
+			}/* Literal.String.Single */
+			.ss {
+				color: #FFCC33
+			}/* Literal.String.Symbol */
+			.bp {
+				color: #336666
+			}/* Name.Builtin.Pseudo */
+			.vc {
+				color: #003333
+			}/* Name.Variable.Class */
+			.vg {
+				color: #003333
+			}/* Name.Variable.Global */
+			.vi {
+				color: #003333
+			}/* Name.Variable.Instance */
+			.il {
+				color: #FF6600
+			}/* Literal.Number.Integer.Long */
+		
+			.css .o, .css .o + .nt, .css .nt + .nt {
+				color: #999;
+			}
+			
+			/*
+			 * DEMO
+			 */
+			
+			.eg-1 td:first-child {
+				width: 70%;
+				text-align:left;
+			}
+			
+			.eg-1 td:last-child {
+				width: 30%;
+				text-align:right;
+			}
+		
+		</style>
+
+	</head>
+	<body class="">
+		<!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
+
+		<!-- HEADER -->
+		<header id="header">
+			<div id="logo-group">
+
+				<!-- PLACE YOUR LOGO HERE -->
+				<span id="logo"> <img src="img/logo.png" alt="SmartAdmin"> </span>
+				<!-- END LOGO PLACEHOLDER -->
+
+				<!-- Note: The activity badge color changes when clicked and resets the number to 0
+				Suggestion: You may want to set a flag when this happens to tick off all checked messages / notifications -->
+				<span id="activity" class="activity-dropdown"> <i class="fa fa-user"></i> <b class="badge"> 21 </b> </span>
+
+				<!-- AJAX-DROPDOWN : control this dropdown height, look and feel from the LESS variable file -->
+				<div class="ajax-dropdown">
+
+					<!-- the ID links are fetched via AJAX to the ajax container "ajax-notifications" -->
+					<div class="btn-group btn-group-justified" data-toggle="buttons">
+						<label class="btn btn-default">
+							<input type="radio" name="activity" id="ajax/notify/mail.html">
+							Msgs (14) </label>
+						<label class="btn btn-default">
+							<input type="radio" name="activity" id="ajax/notify/notifications.html">
+							notify (3) </label>
+						<label class="btn btn-default">
+							<input type="radio" name="activity" id="ajax/notify/tasks.html">
+							Tasks (4) </label>
+					</div>
+
+					<!-- notification content -->
+					<div class="ajax-notifications custom-scroll">
+
+						<div class="alert alert-transparent">
+							<h4>Click a button to show messages here</h4>
+							This blank page message helps protect your privacy, or you can show the first message here automatically.
+						</div>
+
+						<i class="fa fa-lock fa-4x fa-border"></i>
+
+					</div>
+					<!-- end notification content -->
+
+					<!-- footer: refresh area -->
+					<span> Last updated on: 12/12/2013 9:43AM
+						<button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Loading..." class="btn btn-xs btn-default pull-right">
+							<i class="fa fa-refresh"></i>
+						</button> </span>
+					<!-- end footer -->
+
+				</div>
+				<!-- END AJAX-DROPDOWN -->
+			</div>
+
+			<!-- projects dropdown -->
+			<div id="project-context">
+
+				<span class="label">Projects:</span>
+				<span id="project-selector" class="popover-trigger-element dropdown-toggle" data-toggle="dropdown">Recent projects <i class="fa fa-angle-down"></i></span>
+
+				<!-- Suggestion: populate this list with fetch and push technique -->
+				<ul class="dropdown-menu">
+					<li>
+						<a href="javascript:void(0);">Online e-merchant management system - attaching integration with the iOS</a>
+					</li>
+					<li>
+						<a href="javascript:void(0);">Notes on pipeline upgradee</a>
+					</li>
+					<li>
+						<a href="javascript:void(0);">Assesment Report for merchant account</a>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<a href="javascript:void(0);"><i class="fa fa-power-off"></i> Clear</a>
+					</li>
+				</ul>
+				<!-- end dropdown-menu-->
+
+			</div>
+			<!-- end projects dropdown -->
+
+			<!-- pulled right: nav area -->
+			<div class="pull-right">
+
+				<!-- collapse menu button -->
+				<div id="hide-menu" class="btn-header pull-right">
+					<span> <a href="javascript:void(0);" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
+				</div>
+				<!-- end collapse menu -->
+
+				<!-- logout button -->
+				<div id="logout" class="btn-header transparent pull-right">
+					<span> <a href="login.html" title="Sign Out"><i class="fa fa-sign-out"></i></a> </span>
+				</div>
+				<!-- end logout button -->
+
+				<!-- search mobile button (this is hidden till mobile view port) -->
+				<div id="search-mobile" class="btn-header transparent pull-right">
+					<span> <a href="javascript:void(0)" title="Search"><i class="fa fa-search"></i></a> </span>
+				</div>
+				<!-- end search mobile button -->
+
+				<!-- input: search field -->
+				<form action="#search.html" class="header-search pull-right">
+					<input type="text" placeholder="Find reports and more" id="search-fld">
+					<button type="submit">
+						<i class="fa fa-search"></i>
+					</button>
+					<a href="javascript:void(0);" id="cancel-search-js" title="Cancel Search"><i class="fa fa-times"></i></a>
+				</form>
+				<!-- end input: search field -->
+
+				<!-- multiple lang dropdown : find all flags in the image folder -->
+				<ul class="header-dropdown-list hidden-xs">
+					<li>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img alt="" src="img/flags/us.png"> <span> US </span> <i class="fa fa-angle-down"></i> </a>
+						<ul class="dropdown-menu pull-right">
+							<li class="active">
+								<a href="javascript:void(0);"><img alt="" src="img/flags/us.png"> US</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);"><img alt="" src="img/flags/es.png"> Spanish</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);"><img alt="" src="img/flags/de.png"> German</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<!-- end multiple lang -->
+
+			</div>
+			<!-- end pulled right: nav area -->
+
+		</header>
+		<!-- END HEADER -->
+
+		<!-- Left panel : Navigation area -->
+		<!-- Note: This width of the aside area can be adjusted through LESS variables -->
+		<aside id="left-panel">
+
+			<!-- User info -->
+			<div class="login-info">
+				<span> <!-- User image size is adjusted inside CSS, it should stay as it --> 
+					
+					<a href="javascript:void(0);" id="show-shortcut">
+						<img src="img/avatars/sunny.png" alt="me" class="online" /> 
+						<span>
+							john.doe 
+						</span>
+						<i class="fa fa-angle-down"></i>
+					</a> 
+					
+				</span>
+			</div>
+			<!-- end user info -->
+
+			<!-- NAVIGATION : This navigation is also responsive
+
+			To make this navigation dynamic please make sure to link the node
+			(the reference to the nav > ul) after page load. Or the navigation
+			will not initialize.
+			-->
+			<nav>
+				<!-- NOTE: Notice the gaps after each icon usage <i></i>..
+				Please note that these links work a bit different than
+				traditional hre="" links. See documentation for details.
+				-->
+
+				<ul>
+					<li>
+						<a href="index.html" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
+					</li>
+					<li>
+						<a href="inbox.html"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Inbox</span><span class="badge pull-right inbox-badge">14</span></a>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i> <span class="menu-item-parent">Graphs</span></a>
+						<ul>
+							<li>
+								<a href="flot.html">Flot Chart</a>
+							</li>
+							<li>
+								<a href="morris.html">Morris Charts</a>
+							</li>
+							<li>
+								<a href="inline-charts.html">Inline Charts</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent">Tables</span></a>
+						<ul>
+							<li>
+								<a href="table.html">Normal Tables</a>
+							</li>
+							<li>
+								<a href="datatables.html">Data Tables</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-lg fa-fw fa-pencil-square-o"></i> <span class="menu-item-parent">Forms</span></a>
+						<ul>
+							<li>
+								<a href="form-elements.html">Smart Form Elements</a>
+							</li>
+							<li>
+								<a href="form-templates.html">Smart Form Layouts</a>
+							</li>
+							<li>
+								<a href="validation.html">Smart Form Validation</a>
+							</li>
+							<li>
+								<a href="bootstrap-forms.html">Bootstrap Form Elements</a>
+							</li>
+							<li>
+								<a href="plugins.html">Form Plugins</a>
+							</li>
+							<li>
+								<a href="wizard.html">Wizards</a>
+							</li>
+							<li>
+								<a href="other-editors.html">Bootstrap Editors</a>
+							</li>
+							<li>
+								<a href="dropzone.html">Dropzone <span class="badge pull-right inbox-badge bg-color-yellow">new</span></a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">UI Elements</span></a>
+						<ul>
+							<li>
+								<a href="general-elements.html">General Elements</a>
+							</li>
+							<li>
+								<a href="buttons.html">Buttons</a>
+							</li>
+							<li>
+								<a href="#">Icons</a>
+								<ul>
+									<li>
+										<a href="fa.html"><i class="fa fa-plane"></i> Font Awesome</a>
+									</li>	
+									<li>
+										<a href="glyph.html"><i class="glyphicon glyphicon-plane"></i> Glyph Icons </a>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<a href="grid.html">Grid</a>
+							</li>
+							<li>
+								<a href="treeview.html">Tree View</a>
+							</li>
+							<li>
+								<a href="nestable-list.html">Nestable Lists</a>
+							</li>
+							<li>
+								<a href="jqui.html">JQuery UI</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-lg fa-fw fa-folder-open"></i> <span class="menu-item-parent">6 Level Navigation</span></a>
+						<ul>
+							<li>
+								<a href="#"><i class="fa fa-fw fa-folder-open"></i> 2nd Level</a>
+								<ul>
+									<li>
+										<a href="#"><i class="fa fa-fw fa-folder-open"></i> 3ed Level </a>
+										<ul>
+											<li>
+												<a href="#"><i class="fa fa-fw fa-file-text"></i> File</a>
+											</li>
+											<li>
+												<a href="#"><i class="fa fa-fw fa-folder-open"></i> 4th Level</a>
+												<ul>
+													<li>
+														<a href="#"><i class="fa fa-fw fa-file-text"></i> File</a>
+													</li>
+													<li>
+														<a href="#"><i class="fa fa-fw fa-folder-open"></i> 5th Level</a>
+														<ul>
+															<li>
+																<a href="#"><i class="fa fa-fw fa-file-text"></i> File</a>
+															</li>
+															<li>
+																<a href="#"><i class="fa fa-fw fa-file-text"></i> File</a>
+															</li>
+														</ul>
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<a href="#"><i class="fa fa-fw fa-folder-open"></i> Folder</a>
+
+								<ul>
+									<li>
+										<a href="#"><i class="fa fa-fw fa-folder-open"></i> 3ed Level </a>
+										<ul>
+											<li>
+												<a href="#"><i class="fa fa-fw fa-file-text"></i> File</a>
+											</li>
+											<li>
+												<a href="#"><i class="fa fa-fw fa-file-text"></i> File</a>
+											</li>
+										</ul>
+									</li>
+								</ul>
+
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="calendar.html"><i class="fa fa-lg fa-fw fa-calendar"><em>3</em></i> <span class="menu-item-parent">Calendar</span></a>
+					</li>
+					<li>
+						<a href="widgets.html"><i class="fa fa-lg fa-fw fa-list-alt"></i> <span class="menu-item-parent">Widgets</span></a>
+					</li>
+					<li>
+						<a href="gallery.html"><i class="fa fa-lg fa-fw fa-picture-o"></i> <span class="menu-item-parent">Gallery</span></a>
+					</li>
+					<li>
+						<a href="gmap-xml.html"><i class="fa fa-lg fa-fw fa-map-marker"></i> <span class="menu-item-parent">Google Map Skins</span><span class="badge bg-color-greenLight pull-right inbox-badge">9</span></a>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-lg fa-fw fa-windows"></i> <span class="menu-item-parent">Miscellaneous</span></a>
+						<ul>
+							<li class="active">
+								<a href="typography.html">Typography</a>
+							</li>
+							<li>
+								<a href="pricing-table.html">Pricing Tables</a>
+							</li>
+							<li>
+								<a href="invoice.html">Invoice</a>
+							</li>
+							<li>
+								<a href="login.html" target="_top">Login</a>
+							</li>
+							<li>
+								<a href="register.html" target="_top">Register</a>
+							</li>
+							<li>
+								<a href="lock.html" target="_top">Locked Screen</a>
+							</li>
+							<li>
+								<a href="error404.html">Error 404</a>
+							</li>
+							<li>
+								<a href="error500.html">Error 500</a>
+							</li>
+							<li>
+								<a href="blank_.html">Blank Page</a>
+							</li>
+							<li>
+								<a href="email-template.html">Email Template</a>
+							</li>
+							<li>
+								<a href="search.html">Search Page</a>
+							</li>
+							<li>
+								<a href="ckeditor.html">CK Editor</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-lg fa-fw fa-file"></i> <span class="menu-item-parent">Other Pages</span></a>
+						<ul>
+							<li>
+								<a href="forum.html">Forum Layout</a>
+							</li>
+							<li>
+								<a href="profile.html">Profile</a>
+							</li>
+							<li>
+								<a href="timeline.html">Timeline</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			<span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span>
+
+		</aside>
+		<!-- END NAVIGATION -->
+
+		<!-- MAIN PANEL -->
+		<div id="main" role="main">
+
+			<!-- RIBBON -->
+			<div id="ribbon">
+
+				<span class="ribbon-button-alignment"> <span id="refresh" class="btn btn-ribbon" data-title="refresh"  rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Warning! This will reset all your widget settings." data-html="true"><i class="fa fa-refresh"></i></span> </span>
+
+				<!-- breadcrumb -->
+				<ol class="breadcrumb">
+					<li>
+						Miscellaneous
+					</li>
+					<li>
+						Typography
+					</li>
+				</ol>
+				<!-- end breadcrumb -->
+
+				<!-- You can also add more buttons to the
+				ribbon for further usability
+
+				Example below:
+
+				<span class="ribbon-button-alignment pull-right">
+				<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+				</span> -->
+
+			</div>
+			<!-- END RIBBON -->
+
+			<!-- MAIN CONTENT -->
+			<div id="content">
+
+	<!-- row -->
+	<div class="row">
+		
+		<!-- NEW WIDGET START -->
+		<div class="col-sm-6">
+			
+					<!-- widget content -->
+					
+						
+					<div class="bs-example bs-example-type">
+						<h3 class="text-primary" style="margin: 20px 0;">Headers and leads</h3>
+						<table class="table eg-1">
+							<tbody>
+								<tr>
+									<td>
+										<h1>h1. SmartAdmin heading</h1>
+										<p class="lead">Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus.</p>
+									</td>
+									<td class="info">'Open Sans' 26px Light</td>
+								</tr>
+								<tr>
+									<td>
+										<h2>h2. SmartAdmin heading</h2>
+										<p>SmartAdmins's global default <code>font-size</code> is <strong>13px</strong>, with a <code>line-height</code> of <strong>1.428</strong>. This is applied to the <code>&lt;body&gt;</code> and all paragraphs. In addition, <code>&lt;p&gt;</code> (paragraphs) receive a bottom margin of half their computed line-height (10px by default).</p>
+									</td>
+									<td class="info">'Open Sans' 22px Light</td>
+								</tr>
+								<tr>
+									<td>
+										<h3>h3. SmartAdmin heading</h3>
+										<p>An abbreviation of the word attribute is <abbr title="attribute">attr</abbr>.</p>
+										<pre><code class="html"><span class="nt">&lt;abbr</span> <span class="na">title=</span><span class="s">"attribute"</span><span class="nt">&gt;</span>attr<span class="nt">&lt;/abbr&gt;</span>
+</code></pre>
+									</td>
+									<td class="info">'Open Sans' 18px Light</td>
+								</tr>
+								<tr>
+									<td><h4>h4. SmartAdmin heading</h4></td>
+									<td class="info">'Open Sans' 17px Light</td>
+								</tr>
+								<tr>
+									<td><h5>h5. SmartAdmin heading</h5></td>
+									<td class="info">'Open Sans' 16px Light</td>
+								</tr>
+								<tr>
+									<td><h6>h6. SmartAdmin heading</h6></td>
+									<td class="info">'Open Sans' 14px Bold</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="highlight">
+			<pre><code class="html"><span class="nt">&lt;h1&gt;</span>h1. SmartAdmin heading<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;h2&gt;</span>h2. SmartAdmin heading<span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;h3&gt;</span>h3. SmartAdmin heading<span class="nt">&lt;/h3&gt;</span>
+<span class="nt">&lt;h4&gt;</span>h4. SmartAdmin heading<span class="nt">&lt;/h4&gt;</span>
+<span class="nt">&lt;h5&gt;</span>h5. SmartAdmin heading<span class="nt">&lt;/h5&gt;</span>
+<span class="nt">&lt;h6&gt;</span>h6. SmartAdmin heading<span class="nt">&lt;/h6&gt;</span>
+</code></pre>
+					</div>
+
+					<div class="bs-example bs-example-type">
+						<table class="table">
+							<tbody>
+								<tr>
+									<td><h1>h1. SmartAdmin heading <small>Secondary text</small></h1></td>
+								</tr>
+								<tr>
+									<td><h2>h2. SmartAdmin heading <small>Secondary text</small></h2></td>
+								</tr>
+								<tr>
+									<td><h3>h3. SmartAdmin heading <small>Secondary text</small></h3></td>
+								</tr>
+								<tr>
+									<td><h4>h4. SmartAdmin heading <small>Secondary text</small></h4></td>
+								</tr>
+								<tr>
+									<td><h5>h5. SmartAdmin heading <small>Secondary text</small></h5></td>
+								</tr>
+								<tr>
+									<td><h6>h6. SmartAdmin heading <small>Secondary text</small></h6></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="highlight">
+			<pre><code class="html"><span class="nt">&lt;h1&gt;</span>h1. SmartAdmin heading <span class="nt">&lt;small&gt;</span>Secondary text<span class="nt">&lt;/small&gt;&lt;/h1&gt;</span>
+<span class="nt">&lt;h2&gt;</span>h2. SmartAdmin heading <span class="nt">&lt;small&gt;</span>Secondary text<span class="nt">&lt;/small&gt;&lt;/h2&gt;</span>
+<span class="nt">&lt;h3&gt;</span>h3. SmartAdmin heading <span class="nt">&lt;small&gt;</span>Secondary text<span class="nt">&lt;/small&gt;&lt;/h3&gt;</span>
+<span class="nt">&lt;h4&gt;</span>h4. SmartAdmin heading <span class="nt">&lt;small&gt;</span>Secondary text<span class="nt">&lt;/small&gt;&lt;/h4&gt;</span>
+<span class="nt">&lt;h5&gt;</span>h5. SmartAdmin heading <span class="nt">&lt;small&gt;</span>Secondary text<span class="nt">&lt;/small&gt;&lt;/h5&gt;</span>
+<span class="nt">&lt;h6&gt;</span>h6. SmartAdmin heading <span class="nt">&lt;small&gt;</span>Secondary text<span class="nt">&lt;/small&gt;&lt;/h6&gt;</span>
+</code></pre>
+					</div>
+										
+						
+					
+					<!-- end widget content -->
+			
+			<!-- Widget ID (each widget will need unique ID)-->
+
+			<div class="well well-sm">
+			<h3 class="text-primary">Text and BG color options</h3>
+			<table class="table table-bordered">
+
+				<tbody>
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="txt-color-green">
+							Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh. <span class="label bg-color-green pull-right">.bg-color-green</span>
+						</p></td>
+
+						<td><code class="pull-right">
+							.txt-color-green</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="txt-color-greenDark">
+							Nullam id dolor id nibh ultricies vehicula ut id elit. <span class="label bg-color-greenDark pull-right">.bg-color-greenDark</span>
+						</p></td>
+
+						<td><code class="pull-right">
+							.txt-color-greenDark</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="txt-color-greenLight">
+							Duis mollis, est non commodo luctus, nisi erat porttitor ligula. <span class="label bg-color-greenLight pull-right">.bg-color-greenLight</span>
+						</p></td>
+
+						<td><code class="pull-right">
+							.txt-color-greenLight</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="txt-color-purple">
+							Maecenas sed diam eget risus varius blandit sit amet non magna. <span class="label bg-color-purple pull-right">.bg-color-purple</span>
+						</p></td>
+
+						<td><code class="pull-right">
+							.txt-color-purple</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="txt-color-magenta">
+							Etiam porta sem malesuada magna mollis euismod. <span class="label bg-color-magenta pull-right">.bg-color-magenta</span>
+						</p></td>
+
+						<td><code class="pull-right">
+							.txt-color-magenta</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="txt-color-pink">
+							Donec ullamcorper nulla non metus auctor fringilla. <span class="label bg-color-pink pull-right">.bg-color-pink</span>
+						</p></td>
+
+						<td><code class="pull-right">
+							.txt-color-pink</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="txt-color-pinkDark">
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. <span class="label bg-color-pinkDark pull-right">.bg-color-pinkDark</span>
+						</p></td>
+
+						<td><code class="pull-right">
+							.txt-color-pinkDark</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="txt-color-blue">
+							Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. <span class="label bg-color-blue pull-right">.bg-color-blue</span>
+						</p></td>
+
+						<td><code class="pull-right">
+							.txt-color-blue</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="txt-color-blueLight">
+							Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien. <span class="label bg-color-blueLight pull-right">bg-color-blueLight</span>
+						</p></td>
+
+						<td><code class="pull-right">
+							.txt-color-blueLight</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="txt-color-blueDark">
+							Libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros. <span class="label bg-color-blueDark pull-right">.bg-color-blueDark</span>
+						</p></td>
+
+						<td><code class="pull-right">
+							.txt-color-blueDark</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="txt-color-teal">
+							Donec sodales sagittis magna. Sed consequat. <span class="label bg-color-teal pull-right">.bg-color-teal</span>
+						</p></td>
+
+						<td><code class="pull-right">
+							.txt-color-teal</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="txt-color-yellow">
+							Leo eget bibendum sodales, augue velit cursus nunc. <span class="label bg-color-yellow pull-right">.bg-color-yellow</span>
+						</p></td>
+
+						<td><code class="pull-right">
+							.txt-color-yellow</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="txt-color-orange">
+							Sed ut perspiciatis unde omnis iste natus error. <span class="label bg-color-orange pull-right">.bg-color-orange</span>
+						</p></td>
+
+						<td><code class="pull-right">
+							.txt-color-orange</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="txt-color-orangeDark">
+							Nemo enim ipsam voluptatem quia voluptas sit aspernatur. <span class="label bg-color-orangeDark pull-right">.bg-color-orangeDark</span>
+						</p></td>
+
+						<td><code class="pull-right">
+							.txt-color-orangeDark</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="txt-color-red">
+							Qui dolorem ipsum quia dolor sit amet, consectetur. <span class="label bg-color-red pull-right">.bg-color-red</span>
+						</p></td>
+
+						<td><code class="pull-right">
+							.txt-color-red</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="txt-color-redLight">
+							Nam libero tempore, cum soluta nobis est eligendi optio. <span class="label bg-color-redLight pull-right">.bg-color-redLight</span>
+						</p></td>
+
+						<td><code class="pull-right">
+							.txt-color-redLight</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="text-muted">
+							Cumque nihil impedit quo minus id quod maxime placeat facere.
+						</p></td>
+
+						<td><code class="pull-right">
+							.text-muted</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="text-primary">
+							Qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.
+						</p></td>
+
+						<td><code class="pull-right">
+							.text-primary</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="text-success">
+							Ducimus qui blanditiis praesentium voluptatum deleniti.
+						</p></td>
+
+						<td><code class="pull-right">
+							.text-success</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="text-danger">
+							Aolorem eum fugiat quo voluptas nulla pariatur?
+						</p></td>
+
+						<td><code class="pull-right">
+							.text-danger</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="text-warning">
+							Ut enim ad minima veniam, quis nostrum exercitationem.
+						</p></td>
+
+						<td><code class="pull-right">
+							.text-warning</code></td>
+					</tr>
+
+					<!-- new tr -->
+					<tr>
+						<td>
+						<p class="text-info">
+							Tempora incidunt ut labore et dolore magnam aliquam quaerat.
+						</p></td>
+
+						<td><code class="pull-right">
+							.text-info</code></td>
+					</tr>
+
+				</tbody>
+
+			</table>
+
+		</div>
+
+			<!-- end widget -->
+
+		</div>
+		<!-- WIDGET END -->
+
+
+		<!-- NEW WIDGET START -->
+		<div class="col-sm-6">
+
+					<!-- widget content -->
+					<div class="well well-sm"> 
+						<h3 class="text-primary">All Lists</h3>
+						<div class="row">
+							
+							<div class="col-sm-6">
+								
+<div class="bs-example">
+	
+      <ul>
+        <li>Unordered List Item </li>
+        <li><strong>I am inside a strong tag</strong></li>
+
+        <li><i>I am Italic!</i>
+          <ul>
+            <li class="text-danger">We can also be red</li>
+            <li class="text-success">Or green</li>
+            <li class="txt-color-purple">Even purple!</li>
+
+          </ul>
+        </li>
+
+        <li><strong><i>I am inside a strong and Italic tag, I may also break into a new line if <u>squized</u></i></strong></li>
+        <li><small>I am inside a small tag</small></li>
+      </ul>
+    </div>
+    <div class="highlight"><pre><code class="html"><span class="nt">&lt;ul&gt;</span>
+  <span class="nt">&lt;li&gt;</span>...<span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+</code></pre></div>
+							</div>
+							
+														
+							<div class="col-sm-6">
+								
+<div class="bs-example">
+
+      <ol>
+        <li>Ordered List Item </li>
+        <li><u>Ordered List Item</u></li>
+
+        <li><strong>Ordered List Item</strong>
+          <ul class="list-unstyled">
+            <li><i class="fa fa-bell text-danger"></i> Unstyled list with custom icon</li>
+            <li class="text-success"><i class="fa fa-check"></i> <strong><u>Unstyled list</u> with custom icon</strong></li>
+            <li><i class="fa fa-warning text-warning"></i> <i>Unstyled list with custom icon</i></li>
+
+          </ul>
+        </li>
+
+        <li class="text-info"><strong><i>I am inside a strong and Italic tag, I may also break into a new line if squized</i></strong></li>
+        <li><span class="label label-danger">I am a label</span></li>
+      </ol>
+    </div>
+    <div class="highlight"><pre><code class="html"><span class="nt">&lt;ol&gt;</span>
+  <span class="nt">&lt;li&gt;</span>...<span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ol&gt;</span>
+</code></pre></div>
+								
+							</div>
+							
+
+						</div>
+						
+						<div class="row">
+							
+							<div class="col-sm-12">
+								
+															
+								
+								<div class="bs-example">
+									<ul class="list-inline">
+										<li class="text-success">
+											<strong>Inline List Item #1</strong>
+										</li>
+										<li class="text-danger">
+											<strong><u>Inline List Item #2</u></strong>
+										</li>
+										<li class="text-primary">
+											<strong><i>Inline List Item #3</i></strong>
+										</li>
+									</ul>
+								</div>
+    <div class="highlight"><pre><code class="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"list-inline"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;li&gt;</span>...<span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+</code></pre></div>
+							
+							
+								
+							</div>
+							
+						</div>
+						
+					</div>
+					<!-- end widget content -->
+			
+					<div class="well well-sm"> 
+						<h3 class="text-primary">Quotes</h3>
+						
+					<div class="bs-example">
+						<blockquote>
+							<p>
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+							</p>
+							<small>Someone famous in <cite title="Source Title">Source Title</cite></small>
+						</blockquote>
+					</div>
+					<div class="highlight">
+						<pre><code class="html"><span class="nt">&lt;blockquote&gt;</span>
+  <span class="nt">&lt;p&gt;</span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;small&gt;</span>Someone famous in <span class="nt">&lt;cite</span> <span class="na">title=</span><span class="s">"Source Title"</span><span class="nt">&gt;</span>Source Title<span class="nt">&lt;/cite&gt;&lt;/small&gt;</span>
+<span class="nt">&lt;/blockquote&gt;</span>
+</code></pre>
+</div>
+							
+
+					<div class="bs-example" style="overflow: hidden;">
+						<blockquote class="pull-right">
+							<p>
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+							</p>
+							<small>Someone famous in <cite title="Source Title">Source Title</cite></small>
+						</blockquote>
+					</div>
+					<div class="highlight">
+						<pre><code class="html"><span class="nt">&lt;blockquote</span> <span class="na">class=</span><span class="s">"pull-right"</span><span class="nt">&gt;</span>
+  ...
+<span class="nt">&lt;/blockquote&gt;</span>
+</code></pre>
+</div>
+
+					</div>				
+
+			
+					<!-- widget content -->
+					
+
+					<div class="well well-sm">
+					<h3 class="text-primary">Discription Lists</h3>
+					
+<div class="bs-example">
+      <dl>
+        <dt>Description lists</dt>
+        <dd>A description list is perfect for defining terms.</dd>
+        <dt>Euismod</dt>
+        <dd>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.</dd>
+        <dd>Donec id elit non mi porta gravida at eget metus.</dd>
+        <dt>Malesuada porta</dt>
+        <dd>Etiam porta sem malesuada magna mollis euismod.</dd>
+      </dl>
+    </div>			
+<div class="highlight"><pre><code class="html"><span class="nt">&lt;dl&gt;</span>
+  <span class="nt">&lt;dt&gt;</span>...<span class="nt">&lt;/dt&gt;</span>
+  <span class="nt">&lt;dd&gt;</span>...<span class="nt">&lt;/dd&gt;</span>
+<span class="nt">&lt;/dl&gt;</span>
+</code></pre></div>
+
+
+<div class="bs-example">
+      <dl class="dl-horizontal">
+        <dt>Description lists</dt>
+        <dd>A description list is perfect for defining terms.</dd>
+        <dt>Euismod</dt>
+        <dd>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.</dd>
+        <dd>Donec id elit non mi porta gravida at eget metus.</dd>
+        <dt>Malesuada porta</dt>
+        <dd>Etiam porta sem malesuada magna mollis euismod.</dd>
+        <dt>Felis euismod semper eget lacinia</dt>
+        <dd>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</dd>
+      </dl>
+    </div>
+    <div class="highlight"><pre><code class="html"><span class="nt">&lt;dl</span> <span class="na">class=</span><span class="s">"dl-horizontal"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;dt&gt;</span>...<span class="nt">&lt;/dt&gt;</span>
+  <span class="nt">&lt;dd&gt;</span>...<span class="nt">&lt;/dd&gt;</span>
+<span class="nt">&lt;/dl&gt;</span>
+</code></pre></div>
+
+					</div>						
+					
+					<!-- end widget content -->
+
+					<!-- widget content -->
+				
+
+						
+<div class="bs-example">
+	<h3 class="text-primary">Address</h3>
+      <address>
+        <strong>Twitter, Inc.</strong><br>
+        795 Folsom Ave, Suite 600<br>
+        San Francisco, CA 94107<br>
+        <abbr title="Phone">P:</abbr> (123) 456-7890
+      </address>
+      <address>
+        <strong>Full Name</strong><br>
+        <a href="mailto:#">first.last@example.com</a>
+      </address>
+    </div>			
+	<div class="highlight"><pre><code class="html"><span class="nt">&lt;address&gt;</span>
+  <span class="nt">&lt;strong&gt;</span>Twitter, Inc.<span class="nt">&lt;/strong&gt;&lt;br&gt;</span>
+  795 Folsom Ave, Suite 600<span class="nt">&lt;br&gt;</span>
+  San Francisco, CA 94107<span class="nt">&lt;br&gt;</span>
+  <span class="nt">&lt;abbr</span> <span class="na">title=</span><span class="s">"Phone"</span><span class="nt">&gt;</span>P:<span class="nt">&lt;/abbr&gt;</span> (123) 456-7890
+<span class="nt">&lt;/address&gt;</span>
+
+<span class="nt">&lt;address&gt;</span>
+  <span class="nt">&lt;strong&gt;</span>Full Name<span class="nt">&lt;/strong&gt;&lt;br&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"mailto:#"</span><span class="nt">&gt;</span>first.last@example.com<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/address&gt;</span>
+</code></pre></div>
+
+<hr>
+
+
+
+<div class="bs-example">
+	<h3 class="text-primary">Alignment</h3>
+      <p class="text-left">Left aligned text.</p>
+      <p class="text-center">Center aligned text.</p>
+      <p class="text-right">Right aligned text.</p>
+    </div>
+    <div class="highlight"><pre><code class="html"><span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"text-left"</span><span class="nt">&gt;</span>Left aligned text.<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"text-center"</span><span class="nt">&gt;</span>Center aligned text.<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"text-right"</span><span class="nt">&gt;</span>Right aligned text.<span class="nt">&lt;/p&gt;</span>
+</code></pre></div>
+						
+					
+					<!-- end widget content -->
+
+					<!-- widget content -->
+					<div class="well well-sm">
+						<h3 class="text-primary">Text sizes</h3>
+						<p class="alert alert-info">Take full control over the font by controling the size with the following CSS</p>
+						<ul class="list-inline">
+							<li>
+								<span class="font-xl">.font-xl</span>
+							</li>
+							<li>
+								<span class="font-lg">.font-lg</span>
+							</li>
+							<li>
+								<span class="font-md">.font-md</span>
+							</li>
+							<li>
+								<span class="font-sm">.font-sm</span>
+							</li>
+							<li>
+								<span class="font-xs">.font-xs</span>
+							</li>														
+						</ul>	
+						
+					</div>
+
+
+					<!-- end widget content -->
+
+		</div>
+		<!-- WIDGET END -->
+		
+	</div>
+
+	<!-- end row -->
+
+			</div>
+			<!-- END MAIN CONTENT -->
+
+		</div>
+		<!-- END MAIN PANEL -->
+
+		<!-- SHORTCUT AREA : With large tiles (activated via clicking user name tag)
+		Note: These tiles are completely responsive,
+		you can add as many as you like
+		-->
+		<div id="shortcut">
+			<ul>
+				<li>
+					<a href="#inbox.html" class="jarvismetro-tile big-cubes bg-color-blue"> <span class="iconbox"> <i class="fa fa-envelope fa-4x"></i> <span>Mail <span class="label pull-right bg-color-darken">14</span></span> </span> </a>
+				</li>
+				<li>
+					<a href="#calendar.html" class="jarvismetro-tile big-cubes bg-color-orangeDark"> <span class="iconbox"> <i class="fa fa-calendar fa-4x"></i> <span>Calendar</span> </span> </a>
+				</li>
+				<li>
+					<a href="#gmap-xml.html" class="jarvismetro-tile big-cubes bg-color-purple"> <span class="iconbox"> <i class="fa fa-map-marker fa-4x"></i> <span>Maps</span> </span> </a>
+				</li>
+				<li>
+					<a href="#invoice.html" class="jarvismetro-tile big-cubes bg-color-blueDark"> <span class="iconbox"> <i class="fa fa-book fa-4x"></i> <span>Invoice <span class="label pull-right bg-color-darken">99</span></span> </span> </a>
+				</li>
+				<li>
+					<a href="#gallery.html" class="jarvismetro-tile big-cubes bg-color-greenLight"> <span class="iconbox"> <i class="fa fa-picture-o fa-4x"></i> <span>Gallery </span> </span> </a>
+				</li>
+				<li>
+					<a href="javascript:void(0);" class="jarvismetro-tile big-cubes selected bg-color-pinkDark"> <span class="iconbox"> <i class="fa fa-user fa-4x"></i> <span>My Profile </span> </span> </a>
+				</li>
+			</ul>
+		</div>
+		<!-- END SHORTCUT AREA -->
+
+		<!--================================================== -->
+
+		<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+		<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>
+
+		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+
+		<script>
+			if (!window.jQuery) {
+				document.write('<script src="js/libs/jquery-2.0.2.min.js"><\/script>');
+			}
+		</script>
+
+
+		<script>
+			if (!window.jQuery.ui) {
+				document.write('<script src="js/libs/jquery-ui-1.10.3.min.js"><\/script>');
+			}
+		</script>
+
+		<!-- JS TOUCH : include this plugin for mobile drag / drop touch events
+		<script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> -->
+
+		<!-- BOOTSTRAP JS -->
+		<script src="js/bootstrap/bootstrap.min.js"></script>
+
+		<!-- CUSTOM NOTIFICATION -->
+		<script src="js/notification/SmartNotification.min.js"></script>
+
+		<!-- JARVIS WIDGETS -->
+		<script src="js/smartwidgets/jarvis.widget.min.js"></script>
+
+		<!-- EASY PIE CHARTS -->
+		<script src="js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+
+		<!-- SPARKLINES -->
+		<script src="js/plugin/sparkline/jquery.sparkline.min.js"></script>
+
+		<!-- JQUERY VALIDATE -->
+		<script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>
+
+		<!-- JQUERY MASKED INPUT -->
+		<script src="js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+
+		<!-- JQUERY SELECT2 INPUT -->
+		<script src="js/plugin/select2/select2.min.js"></script>
+
+		<!-- JQUERY UI + Bootstrap Slider -->
+		<script src="js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+
+		<!-- browser msie issue fix -->
+		<script src="js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+
+		<!-- FastClick: For mobile devices -->
+		<script src="js/plugin/fastclick/fastclick.js"></script>
+
+		<!--[if IE 7]>
+
+		<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+
+		<![endif]-->
+
+		<!-- Demo purpose only -->
+		<script src="js/demo.js"></script>
+
+		<!-- MAIN APP JS FILE -->
+		<script src="js/app.js"></script>
+
+		<!-- PAGE RELATED PLUGIN(S) 
+		<script src="..."></script>-->
+
+		
+
+		<script type="text/javascript">
+		
+		// DO NOT REMOVE : GLOBAL FUNCTIONS!
+		
+		$(document).ready(function() {
+			
+			pageSetUp();
+			
+			
+	
+			
+		
+		
+		})
+
+		</script>
+
+
+		    </body>
+
+</html>
