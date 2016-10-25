@@ -4,7 +4,7 @@ use Swoole;
 use App;
 class CommonController extends LoginController
 {
-    
+    const RunStatusError = -1;//不符合条件，不运行
     const RunStatusNormal = 0;//未运行
     const RunStatusStart = 1;//准备运行
     const RunStatusToTaskSuccess = 2;//发送任务成功
@@ -13,6 +13,7 @@ class CommonController extends LoginController
     const RunStatusFailed = 5;//运行失败
 
     static $runStatus = [
+        self::RunStatusError => "并发数目受限",
         self::RunStatusNormal => "未运行",
         self::RunStatusStart => "准备运行",
         self::RunStatusToTaskSuccess => "发送任务成功",

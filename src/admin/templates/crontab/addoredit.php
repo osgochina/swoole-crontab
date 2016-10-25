@@ -95,7 +95,7 @@
                                     <section>
                                         <label class="label">进程运行时用户</label>
                                         <label class="input">
-                                            <input type="text" value="<?php echo isset($runuser)?$runuser:"" ?>"    name="runuser" id="runuser" maxlength="32" class="input-sm" placeholder="进程运行时用户">
+                                            <input type="text" value="<?php echo isset($runuser)?$runuser:"nobody" ?>"    name="runuser" id="runuser" maxlength="32" class="input-sm" placeholder="进程运行时用户">
                                         </label>
                                     </section>
                                     <section>

@@ -14,6 +14,7 @@ use Swoole;
 class LoadTasks
 {
     static private $column = [
+        "execNum" => [\swoole_table::TYPE_INT, 1],
         "runStatus" => [\swoole_table::TYPE_INT, 1],
         "runTimeStart" => [\swoole_table::TYPE_INT, 8],
         "runUpdateTime" => [\swoole_table::TYPE_INT, 8],
@@ -36,6 +37,7 @@ class LoadTasks
     const T_START = 0;//正常
     const T_STOP = 1;//暂停
 
+    const RunStatusError = -1;//不符合条件，不运行
     const RunStatusNormal = 0;//未运行
     const RunStatusStart = 1;//准备运行
     const RunStatusToTaskSuccess = 2;//发送任务成功

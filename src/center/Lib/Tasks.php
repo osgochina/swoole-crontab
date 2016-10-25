@@ -66,6 +66,7 @@ class Tasks
     private static function clean()
     {
         $ids = [];
+        $ids2 = [];
         if (count(self::$table) > 0){
             $minute = date("YmdHi");
             foreach (self::$table as $id=>$task){
@@ -73,8 +74,11 @@ class Tasks
                     $ids[] = $id;
                     continue;
                 }else{
-                    if (intval($minute) > intval($task["minute"])+2){
+                    if (intval($minute) > intval($task["minute"])+5){
                         $ids[] = $id;
+                        if ($task["runStatus"] == LoadTasks::RunStatusStart || $task["runStatus"] == LoadTasks::RunStatusToTaskSuccess){
+                            $ids2[] = $task["id"];
+                        }
                     }
                 }
 
@@ -83,6 +87,12 @@ class Tasks
         //删除
         foreach ($ids as $id){
             self::$table->del($id);
+        }
+        //超时则把运行中的数量-1
+        $loadtasks = LoadTasks::getTasks();
+        foreach ($ids2 as $tid)
+        {
+            $loadtasks->decr($tid,"execNum");
         }
     }
 
@@ -97,10 +107,10 @@ class Tasks
             return [];
         }
         $min = date("YmdHi");
-        $time = time();
+
         foreach (self::$table as $k=>$task){
             if ($min == $task["minute"] ){
-                if ($time == $task["sec"] && $task["runStatus"] == LoadTasks::RunStatusNormal){
+                if (time() == $task["sec"] && $task["runStatus"] == LoadTasks::RunStatusNormal){
                     $data[$k] = $task["id"];
                 }
             }

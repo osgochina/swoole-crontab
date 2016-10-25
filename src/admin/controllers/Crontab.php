@@ -34,8 +34,6 @@ class Crontab extends App\CommonController
         $pager = new Swoole\Pager(array('total'=> $ret["total"], 'perpage'  => $pagesize, 'nowindex' => $page));
         $this->assign('pager', array('total' => $ret["total"], 'pagesize' => $pagesize, 'render' => $pager->render()));
         $this->assign("list",$this->formatData($ret["rows"]));
-//        $group = App\Service::getInstance()->call("Tasks::getGroups",$_SESSION["user_id"])->getResult(10);
-//        $this->assign("group",$group);
         $this->display();
     }
 
@@ -45,6 +43,8 @@ class Crontab extends App\CommonController
     {
         foreach ($data as &$value)
         {
+            $value["runTimeStart"] = !empty($value["runTimeStart"])?date("Y-m-d H:i:s",$value["runTimeStart"]):"";
+            $value["runUpdateTime"] = !empty($value["runUpdateTime"])?date("Y-m-d H:i:s",$value["runUpdateTime"]):"";
             $value["status_f"] = $value["status"] == 1?"暂停":"正常";
             $value["runStatus_f"] = isset(self::$runStatus[$value["runStatus"]])?self::$runStatus[$value["runStatus"]]:"未知";
         }

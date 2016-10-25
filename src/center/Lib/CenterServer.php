@@ -52,12 +52,20 @@ class CenterServer  extends Swoole\Protocol\SOAServer
 
     public function onPipeMessage($serv, $src_worker_id, $data)
     {
-        $data = json_decode($data);
+        $data = json_decode($data,true);
+        $loadtasks = LoadTasks::getTasks();
         if ($src_worker_id == WORKER_NUM+self::GET_TASKS){
             $ret = [];
             foreach ($data as $k=>$id)
             {
-                $task = LoadTasks::getTasks()->get($id);
+                $task = $loadtasks->get($id);
+                //限制任务多次执行，保证同时只有符合数量的任务运行。如果限制条件为0，则不限制数量
+                if ($task["runnumber"] > 0 && $task["execNum"] >= $task["runnumber"]){
+                    $loadtasks->set($id,["runStatus"=>LoadTasks::RunStatusError]);
+                    if ( Tasks::$table->exist($k)) Tasks::$table->set($k,["runStatus"=>LoadTasks::RunStatusError,"runid"=>$k]);
+                    TermLog::log($k,$id,"并发任务超限",$task);
+                    continue;
+                }
                 $tmp["id"] = $id;
                 $tmp["execute"] = $task["execute"];
                 $tmp["agents"] = $task["agents"];
@@ -65,7 +73,7 @@ class CenterServer  extends Swoole\Protocol\SOAServer
                 $tmp["runuser"] = $task["runuser"];
                 $tmp["runid"] = $k;
                 //任务标示
-                LoadTasks::getTasks()->set($id,["runStatus"=>LoadTasks::RunStatusStart,"runTimeStart"=>microtime()]);
+                $loadtasks->set($id,["runStatus"=>LoadTasks::RunStatusStart,"runTimeStart"=>time()]);
                 //正在运行标示
                 if ( Tasks::$table->exist($k)) Tasks::$table->set($k,["runStatus"=>LoadTasks::RunStatusStart,"runid"=>$k]);
                 TermLog::log($tmp["runid"],$id,"任务开始",$tmp);
@@ -75,9 +83,10 @@ class CenterServer  extends Swoole\Protocol\SOAServer
                 ];
             }
             $serv->sendMessage(json_encode($ret),WORKER_NUM+self::MANAGER_TASKS);
-        }else if ($src_worker_id == WORKER_NUM+self::MANAGER_TASKS){
+        }else if ($src_worker_id == WORKER_NUM+self::EXEC_TASKS){
             foreach ($data as $k=>$v){
                 if ($v["ret"]){
+                    $loadtasks->incr($v["id"],'execNum');//增加当前执行数量
                     $runStatus = LoadTasks::RunStatusToTaskSuccess;//发送成功
                     TermLog::log($k,$v["id"],"任务发送成功");
                 }else{
@@ -85,7 +94,7 @@ class CenterServer  extends Swoole\Protocol\SOAServer
                     TermLog::log($k,$v["id"],"任务发送失败");
                     Report::taskSendFailed($v["id"],$k);//报警
                 }
-                LoadTasks::getTasks()->set($v["id"],["runStatus"=>$runStatus,"runUpdateTime"=>microtime()]);
+                $loadtasks->set($v["id"],["runStatus"=>$runStatus,"runUpdateTime"=>time()]);
                 if ( Tasks::$table->exist($k)) Tasks::$table->set($k,["runStatus"=>$runStatus]);
             }
         }
