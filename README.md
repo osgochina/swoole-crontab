@@ -8,6 +8,7 @@ Swoole-Crontab(基于Swoole扩展)
 + 单中心-多客户端模式,能够横向扩展
 + web界面管理,增删改查任务,完整的权限控制.
 + 请使用swoole扩展1.8.0+
++ [v0.8版本入口](https://github.com/osgochina/swoole-crontab/tree/v0.8)
 
 2.Crontab配置
 --------------
