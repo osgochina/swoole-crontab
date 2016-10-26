@@ -8,7 +8,7 @@
         <div class="row">
 
             <!-- NEW COL START -->
-            <article class="col-sm-12 col-md-12 col-lg-6">
+            <article class="col-sm-12 col-md-12 col-lg-12">
 
                 <!-- Widget ID (each widget will need unique ID)-->
                 <div class="jarviswidget"
@@ -46,15 +46,6 @@
                                         </label>
                                     </section>
                                     <section>
-<!--                                    <label class="control-label" for="taskgroup">分组:</label>-->
-<!--                                    <div class="form-group" style="width: 200px;">-->
-<!--                                        <select class="select2" id="taskgroup" name="gid">-->
-<!--                                            --><?php //foreach ($group as $k=>$gname): ?>
-<!--                                                <option value="--><?//= $k ?><!--"-->
-<!--                                                    --><?php //if ( isset($gid) &&$gid == $k) echo 'selected="selected"'; ?><!-- >--><?//= $gname ?><!--</option>-->
-<!--                                            --><?php //endforeach; ?>
-<!--                                        </select>-->
-<!--                                    </div>-->
                                         <section>
                                             <label class="label">分组</label>
                                             <label class="input">
@@ -62,10 +53,298 @@
                                             </label>
                                         </section>
                                     </section>
+
+                                    <div id="tabs">
+                                        <ul>
+                                            <li>
+                                                <a href="#tabs-a">秒</a>
+                                            </li>
+                                            <li>
+                                                <a href="#tabs-b">分钟</a>
+                                            </li>
+                                            <li>
+                                                <a href="#tabs-c">小时</a>
+                                            </li>
+                                            <li>
+                                                <a href="#tabs-d">日</a>
+                                            </li>
+                                            <li>
+                                                <a href="#tabs-e">月</a>
+                                            </li>
+                                            <li>
+                                                <a href="#tabs-f">周</a>
+                                            </li>
+                                        </ul>
+                                        <div id="tabs-a">
+                                                <div class="row">
+                                                    <div class="col col-6">
+                                                        <label class="radio state-success"><input type="radio" name="v_second" value="1" ><i></i>每秒 允许的通配符[, - * /]</label>
+                                                        <label class="radio state-success">
+                                                            <input type="radio" name="v_second" value="2"><i></i>周期,从第<span id="v_secondX_0">X</span>秒到第<span id="v_secondY_0">Y</span>秒
+                                                        </label>
+                                                        <div class="row" style="padding-left: 50px">
+                                                            <div class="col-md-2">
+                                                                <input class="form-control spinner-left spinner" id="v_secondStart_0" value="0"  type="text">
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <input class="form-control spinner-left spinner" id="v_secondEnd_0" value="1"  type="text">
+                                                            </div>
+                                                        </div>
+                                                        <label class="radio state-success"><input type="radio" name="v_second" value="3"><i></i>从<span id="v_secondX_1">X</span>秒开始,每<span id="v_secondY_1">Y</span>秒执行一次</label>
+                                                        <div class="row" style="padding-left: 50px">
+                                                            <div class="col-md-2">
+                                                                <input class="form-control spinner-left spinner" id="v_secondStart_1" value="0" type="text">
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <input class="form-control spinner-left spinner" id="v_secondEnd_1" value="1"   type="text">
+                                                            </div>
+                                                        </div>
+                                                        <label class="radio state-success"><input type="radio" name="v_second" value="4"><i></i>勾选具体值</label>
+                                                        <?php $n=0; for($i=0;$i<6;$i++){?>
+                                                        <div class="row" style="padding-left: 40px">
+                                                            <div class="col-md-12">
+                                                                <?php for($j=0;$j<10;$j++){?>
+                                                                <label class="checkbox-inline v_secondList">
+                                                                    <input name="v_secondCheckbox" type="checkbox" for="v_second" class="checkbox style-0" value="<?=$n?>">
+                                                                    <span style="margin-left:0px"> <?=$n?> </span>
+                                                                </label>
+                                                                <?php $n++; }?>
+                                                            </div>
+                                                        </div>
+                                                        <?php } ?>
+
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        <div id="tabs-b">
+                                            <div class="row">
+                                                <div class="col col-6">
+                                                    <label class="radio state-success"><input type="radio" name="v_min" value="1"><i></i>每分钟 允许的通配符[, - * /]</label>
+                                                    <label class="radio state-success">
+                                                        <input type="radio" name="v_min" value="2"><i></i>周期,从第<span id="v_minX_0">X</span>分钟到第<span id="v_minY_0">Y</span>分钟
+                                                    </label>
+                                                    <div class="row" style="padding-left: 50px">
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_minStart_0" type="text" value="0">
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_minEnd_0"  type="text" value="1">
+                                                        </div>
+                                                    </div>
+                                                    <label class="radio state-success"><input type="radio" name="v_min" value="3"><i></i>
+                                                        从<span id="v_minX_1">X</span>分钟开始,每<span id="v_minY_1">Y</span>分钟执行一次
+                                                    </label>
+                                                    <div class="row" style="padding-left: 50px">
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_minStart_1"  type="text" value="0">
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_minEnd_1" type="text" value="1">
+                                                        </div>
+                                                    </div>
+                                                    <label class="radio state-success"><input type="radio" name="v_min" value="4"><i></i>勾选具体值</label>
+                                                    <?php $n=0; for($i=0;$i<6;$i++){?>
+                                                        <div class="row" style="padding-left: 40px">
+                                                            <div class="col-md-12">
+                                                                <?php for($j=0;$j<10;$j++){?>
+                                                                    <label class="checkbox-inline v_minList">
+                                                                        <input name="v_minCheckbox" type="checkbox" for="v_min" class="checkbox style-0" value="<?=$n?>">
+                                                                        <span style="margin-left:0px"> <?=$n?> </span>
+                                                                    </label>
+                                                                    <?php $n++; }?>
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="tabs-c">
+                                            <div class="row">
+                                                <div class="col col-6">
+                                                    <label class="radio state-success"><input type="radio" name="v_hour" value="1" ><i></i>每小时 允许的通配符[, - * /]</label>
+                                                    <label class="radio state-success">
+                                                        <input type="radio" name="v_hour" value="2"><i></i>周期,从第<span id="v_hourX_0">X</span>小时到第<span id="v_hourY_0">Y</span>小时
+                                                    </label>
+                                                    <div class="row" style="padding-left: 50px">
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_hourStart_0"  type="text" value="1">
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_hourEnd_0"  type="text" value="2">
+                                                        </div>
+                                                    </div>
+                                                    <label class="radio state-success"><input type="radio" name="v_hour" value="3"><i></i>
+                                                        从<span id="v_hourX_1">X</span>小时开始,每<span id="v_hourY_1">Y</span>小时执行一次
+                                                    </label>
+                                                    <div class="row" style="padding-left: 50px">
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_hourStart_1"  type="text" value="1">
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_hourEnd_1"  type="text" value="1">
+                                                        </div>
+                                                    </div>
+                                                    <label class="radio state-success"><input type="radio" name="v_hour" value="4"><i></i>勾选具体值</label>
+                                                    <?php $n=0; for($i=0;$i<2;$i++){?>
+                                                        <div class="row" style="padding-left: 40px">
+                                                            <div class="col-md-12">
+                                                                <?php for($j=0;$j<12;$j++){?>
+                                                                    <label class="checkbox-inline v_hourList">
+                                                                        <input name="v_hourCheckbox" type="checkbox" for="v_hour"  class="checkbox style-0" value="<?=$n?>">
+                                                                        <span style="margin-left:0px"> <?=$n?> </span>
+                                                                    </label>
+                                                                    <?php $n++; }?>
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="tabs-d">
+                                            <div class="row">
+                                                <div class="col col-6">
+                                                    <label class="radio state-success"><input type="radio" name="v_day" value="1" ><i></i>日 允许的通配符[, - * /]</label>
+                                                    <label class="radio state-success">
+                                                        <input type="radio" name="v_day" value="2"><i></i>周期,从第<span id="v_dayX_0">X</span>天到第<span id="v_dayY_0">Y</span>天
+                                                    </label>
+                                                    <div class="row" style="padding-left: 50px">
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_dayStart_0"  type="text" value="1">
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_dayEnd_0"  type="text" value="2">
+                                                        </div>
+                                                    </div>
+                                                    <label class="radio state-success"><input type="radio" name="v_day" value="3"><i></i>
+                                                        从<span id="v_dayX_1">X</span>天开始,每<span id="v_dayY_1">Y</span>天执行一次
+                                                    </label>
+                                                    <div class="row" style="padding-left: 50px">
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_dayStart_1"  type="text" value="1">
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner"  id="v_dayEnd_1"  type="text" value="1">
+                                                        </div>
+                                                    </div>
+                                                    <label class="radio state-success"><input type="radio" name="v_day" value="4"><i></i>勾选具体值</label>
+                                                    <?php $n=1; for($i=0;$i<3;$i++){?>
+                                                        <div class="row" style="padding-left: 40px">
+                                                            <div class="col-md-12">
+                                                                <?php for($j=0;$j<11;$j++){ if ($n >31){break;}?>
+                                                                    <label class="checkbox-inline v_dayList">
+                                                                        <input name="v_dayCheckbox" type="checkbox" for="v_day" class="checkbox style-0" value="<?=$n?>">
+                                                                        <span style="margin-left:0px"> <?=$n?> </span>
+                                                                    </label>
+                                                                    <?php $n++; }?>
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="tabs-e">
+                                            <div class="row">
+                                                <div class="col col-6">
+                                                    <label class="radio state-success"><input type="radio" name="v_mon" value="1" ><i></i>月 允许的通配符[, - * /]</label>
+                                                    <label class="radio state-success">
+                                                        <input type="radio" name="v_mon" value="2"><i></i>周期,从第<span id="v_monX_0">X</span>月到第<span id="v_monY_0">Y</span>月
+                                                    </label>
+                                                    <div class="row" style="padding-left: 50px">
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_monStart_0"  type="text" value="1">
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_monEnd_0"  type="text" value="2">
+                                                        </div>
+                                                    </div>
+                                                    <label class="radio state-success"><input type="radio" name="v_mon" value="3"><i></i>
+                                                        从<span id="v_monX_1">X</span>月开始,每<span id="v_monY_1">Y</span>月执行一次
+                                                    </label>
+                                                    <div class="row" style="padding-left: 50px">
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_monStart_1"  type="text" value="1">
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_monEnd_1"  type="text" value="1">
+                                                        </div>
+                                                    </div>
+                                                    <label class="radio state-success"><input type="radio" name="v_mon" value="4"><i></i>勾选具体值</label>
+                                                    <?php $n=1; for($i=0;$i<1;$i++){?>
+                                                        <div class="row" style="padding-left: 40px">
+                                                            <div class="col-md-12">
+                                                                <?php for($j=0;$j<12;$j++){?>
+                                                                    <label class="checkbox-inline v_monList">
+                                                                        <input name="v_monCheckbox" type="checkbox" for="v_mon" class="checkbox style-0" value="<?=$n?>">
+                                                                        <span style="margin-left:0px"> <?=$n?> </span>
+                                                                    </label>
+                                                                    <?php $n++; }?>
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="tabs-f">
+                                            <div class="row">
+                                                <div class="col col-6">
+                                                    <label class="radio state-success"><input type="radio" name="v_week" value="1" ><i></i>周 允许的通配符[, - * /]</label>
+                                                    <label class="radio state-success">
+                                                        <input type="radio" name="v_week" value="2"><i></i>周期,从星期<span id="v_weekX_0">X</span>到星期<span id="v_weekY_0">Y</span>
+                                                    </label>
+                                                    <div class="row" style="padding-left: 50px">
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_weekStart_0"  type="text" value="1">
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_weekEnd_0"  type="text" value="2">
+                                                        </div>
+                                                    </div>
+                                                    <label class="radio state-success"><input type="radio" name="v_week" value="4"><i></i>勾选具体值</label>
+                                                    <?php $n=1; for($i=0;$i<1;$i++){?>
+                                                        <div class="row" style="padding-left: 40px">
+                                                            <div class="col-md-12">
+                                                                <?php for($j=0;$j<7;$j++){?>
+                                                                    <label class="checkbox-inline v_weekList">
+                                                                        <input name="v_weekCheckbox" type="checkbox" for="v_week"  class="checkbox style-0" value="<?=$n?>">
+                                                                        <span style="margin-left:0px"> <?=$n?> </span>
+                                                                    </label>
+                                                                    <?php $n++; }?>
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <section>
-                                        <label class="label">规则</label>
+                                        <label class="label">表达式</label>
                                         <label class="input">
-                                            <input type="text" value="<?php echo isset($rule)?$rule:"" ?>"   name="rule" id="rule" maxlength="128" class="input-sm" placeholder="规则">
+                                            <input type="text" value="<?php echo isset($rule)?$rule:"* * * * * *" ?>"   name="rule" id="rule" onblur="Crontab.init($(this));" maxlength="128" class="input-sm" placeholder="规则">
                                         </label>
                                     </section>
                                     <section>
@@ -141,10 +420,12 @@
 </div>
 <!-- end main -->
 <?php include dirname(__DIR__) . '/include/javascript.php'; ?>
+<script src="/static/js/crontab.js" type="text/javascript"></script>
 <script type="text/javascript">
 
     $(document).ready(function() {
         pageSetUp();
+        $('#tabs').tabs();
         jQuery.validator.addMethod("runuser", function(value, element) {
             console.log(value);
             return "root" != value ;
@@ -205,7 +486,8 @@
                 error.insertAfter(element.parent());
             }
         });
-        //$("#user_uids").select2();
+        Crontab.bind();
+        Crontab.init($("#rule"));
     });
 </script>
 </body>
