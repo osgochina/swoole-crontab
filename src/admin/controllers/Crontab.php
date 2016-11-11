@@ -28,12 +28,18 @@ class Crontab extends App\CommonController
         } else {
             $pagesize = 10;
         }
+        if (isset($_GET["agentid"]) && !empty($_GET["agentid"]))
+        {
+            $gets["agentid"] = trim($_GET["agentid"]);
+        }
         $gets["gid"] = $_SESSION["_gid"];
         $page = !empty($_GET['page']) ? $_GET['page'] : 1;
         $ret = App\Service::getInstance()->call("Tasks::getList",$gets,$page,$pagesize)->getResult(10);
         $pager = new Swoole\Pager(array('total'=> $ret["total"], 'perpage'  => $pagesize, 'nowindex' => $page));
         $this->assign('pager', array('total' => $ret["total"], 'pagesize' => $pagesize, 'render' => $pager->render()));
         $this->assign("list",$this->formatData($ret["rows"]));
+        $agents = App\Service::getInstance()->call("Agent::getAgentByGid",$_SESSION["_gid"])->getResult(10);
+        $this->assign("agents",$agents);
         $this->display();
     }
 

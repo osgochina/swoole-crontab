@@ -162,6 +162,10 @@ class Tasks
         {
             $gets['pagesize'] = 20;
         }
+        if (isset($gets["agentid"]) && !empty($gets["agentid"])){
+            $gets["where"] = "agents REGEXP '(^{$gets["agentid"]}$)|(,{$gets["agentid"]})|({$gets["agentid"]},)'";
+            unset($gets["agentid"]);
+        }
         $gets['page'] = !empty($page) ? $page : 1;
         $pager="";
         $list =   table("crontab")->gets($gets, $pager);

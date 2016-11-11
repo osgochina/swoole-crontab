@@ -46,19 +46,19 @@
                                 <div class="dt-top-row">
                                     <div class="dataTables_filter" style="top:-56px">
                                         <form id="checkout-form" class="smart-form" novalidate="novalidate">
-<!--                                            <label class="control-label" for="taskgroup">分组:</label>-->
-<!--                                            <div class="form-group" style="width: 200px;">-->
-<!--                                                <select class="select2" id="taskgroup">-->
-<!--                                                    <option value="">全部</option>-->
-<!--                                                    --><?php //foreach ($group as $gid=>$gname): ?>
-<!--                                                        <option value="--><?//= $gid ?><!--"-->
-<!--                                                            --><?php //if ( isset($_GET["gid"]) && $gid == $_GET["gid"]) echo 'selected="selected"'; ?><!-- >--><?//= $gname ?><!--</option>-->
-<!--                                                    --><?php //endforeach; ?>
-<!--                                                </select>-->
-<!--                                            </div>-->
-<!--                                            <div class='form-group'>-->
-<!--                                                <a id='submit' class='btn btn-success' style='padding:6px 12px' href='javascript:void(0)'>查询</a>-->
-<!--                                            </div>-->
+                                            <label class="control-label" for="taskgroup">服务列表:</label>
+                                            <div class="form-group" style="width: 300px;">
+                                                <select class="select2" id="agentid">
+                                                    <option value="">全部</option>
+                                                    <?php foreach ($agents as $agent): ?>
+                                                        <option value="<?= $agent["id"] ?>"
+                                                            <?php if ( isset($_GET["agentid"]) && $agent["id"] == $_GET["agentid"]) echo 'selected="selected"'; ?> ><?php echo  $agent["alias"]."(".$agent["ip"].")"; ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                            <div class='form-group'>
+                                                <a id='submit' class='btn btn-success' style='padding:6px 12px' href='javascript:void(0)'>查询</a>
+                                            </div>
                                             <div class='form-group'>
                                                 <a id='submit' class='btn btn-primary' style='padding:6px 12px' href='/crontab/addOrEdit'>添加定时任务</a>
                                             </div>
@@ -136,9 +136,6 @@
 <script  type="text/javascript" >
     $(document).ready(function() {
         pageSetUp();
-
-
-
         $(".zanting").click(function () {
             var tid = $(this).attr("tid");
             var status = $(this).attr("status");
@@ -191,8 +188,10 @@
         var OPG = {};
         OPG.filter = <?php echo json_encode($_GET);?>;
         $("#submit").click(function(){
-            var val = $("#taskgroup").val();
-            OPG.filter.gid = val;
+            var val = $("#agentid").val();
+            if (val){
+                OPG.filter.agentid = val;
+            }
             OPG.go();
         });
         OPG.go = function() {
