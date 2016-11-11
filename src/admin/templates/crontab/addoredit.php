@@ -104,10 +104,10 @@
                                                             </div>
                                                         </div>
                                                         <label class="radio state-success"><input type="radio" name="v_second" value="4"><i></i>勾选具体值</label>
-                                                        <?php $n=0; for($i=0;$i<6;$i++){?>
+                                                        <?php $n=1; for($i=0;$i<6;$i++){?>
                                                         <div class="row" style="padding-left: 40px">
                                                             <div class="col-md-12">
-                                                                <?php for($j=0;$j<10;$j++){?>
+                                                                <?php for($j=0;$j<10,$n<60;$j++){?>
                                                                 <label class="checkbox-inline v_secondList">
                                                                     <input name="v_secondCheckbox" type="checkbox" for="v_second" class="checkbox style-0" value="<?=$n?>">
                                                                     <span style="margin-left:0px"> <?=$n?> </span>
