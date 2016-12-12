@@ -26,7 +26,7 @@ class Process
     public $task;
     static public $process_list = [];
     private  static $process_stdout = [];
-    private static $max_stdout = 1024*10;
+    private static $max_stdout = 10240;
 
     public static function init()
     {
