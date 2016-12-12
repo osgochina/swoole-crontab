@@ -76,49 +76,54 @@
                                             </li>
                                         </ul>
                                         <div id="tabs-a">
-                                                <div class="row">
-                                                    <div class="col col-6">
-                                                        <label class="radio state-success"><input type="radio" name="v_second" value="1" ><i></i>每秒 允许的通配符[, - * /]</label>
-                                                        <label class="radio state-success">
-                                                            <input type="radio" name="v_second" value="2"><i></i>周期,从第<span id="v_secondX_0">X</span>秒到第<span id="v_secondY_0">Y</span>秒
-                                                        </label>
-                                                        <div class="row" style="padding-left: 50px">
-                                                            <div class="col-md-2">
-                                                                <input class="form-control spinner-left spinner" id="v_secondStart_0" value="0"  type="text">
-                                                            </div>
-                                                            <div class="col-md-1">
-                                                            </div>
-                                                            <div class="col-md-2">
-                                                                <input class="form-control spinner-left spinner" id="v_secondEnd_0" value="1"  type="text">
-                                                            </div>
+                                            <div class="row">
+                                                <div class="col col-6">
+                                                    <label class="radio state-success"><input type="radio" name="v_second" value="1" ><i></i>每秒 允许的通配符[, - * /]</label>
+                                                    <label class="radio state-success">
+                                                        <input type="radio" name="v_second" value="2"><i></i>周期,从第<span id="v_secondX_0">X</span>秒到第<span id="v_secondY_0">Y</span>秒
+                                                    </label>
+                                                    <div class="row" style="padding-left: 50px">
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_secondStart_0" value="0"  type="text">
                                                         </div>
-                                                        <label class="radio state-success"><input type="radio" name="v_second" value="3"><i></i>从<span id="v_secondX_1">X</span>秒开始,每<span id="v_secondY_1">Y</span>秒执行一次</label>
-                                                        <div class="row" style="padding-left: 50px">
-                                                            <div class="col-md-2">
-                                                                <input class="form-control spinner-left spinner" id="v_secondStart_1" value="0" type="text">
-                                                            </div>
-                                                            <div class="col-md-1">
-                                                            </div>
-                                                            <div class="col-md-2">
-                                                                <input class="form-control spinner-left spinner" id="v_secondEnd_1" value="1"   type="text">
-                                                            </div>
+                                                        <div class="col-md-1">
                                                         </div>
-                                                        <label class="radio state-success"><input type="radio" name="v_second" value="4"><i></i>勾选具体值</label>
-                                                        <?php $n=1; for($i=0;$i<6;$i++){?>
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_secondEnd_0" value="1"  type="text">
+                                                        </div>
+                                                    </div>
+                                                    <label class="radio state-success"><input type="radio" name="v_second" value="3"><i></i>从<span id="v_secondX_1">X</span>秒开始,到<span id="v_secondY_1">Y</span>,每<span id="v_secondZ_1">Z</span>秒执行一次</label>
+                                                    <div class="row" style="padding-left: 50px">
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_secondStart_1" value="0" type="text">
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_secondEnd_1" value="59" type="text">
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_secondLoop_1" value="1"   type="text">
+                                                        </div>
+                                                    </div>
+                                                    <label class="radio state-success"><input type="radio" name="v_second" value="4"><i></i>勾选具体值</label>
+                                                    <?php $n=1; for($i=0;$i<6;$i++){?>
                                                         <div class="row" style="padding-left: 40px">
                                                             <div class="col-md-12">
                                                                 <?php for($j=0;$j<10,$n<60;$j++){?>
-                                                                <label class="checkbox-inline v_secondList">
-                                                                    <input name="v_secondCheckbox" type="checkbox" for="v_second" class="checkbox style-0" value="<?=$n?>">
-                                                                    <span style="margin-left:0px"> <?=$n?> </span>
-                                                                </label>
-                                                                <?php $n++; }?>
+                                                                    <label class="checkbox-inline v_secondList">
+                                                                        <input name="v_secondCheckbox" type="checkbox" for="v_second" class="checkbox style-0" value="<?=$n?>">
+                                                                        <span style="margin-left:0px"> <?=$n?> </span>
+                                                                    </label>
+                                                                    <?php $n++; }?>
                                                             </div>
                                                         </div>
-                                                        <?php } ?>
+                                                    <?php } ?>
 
-                                                    </div>
                                                 </div>
+                                            </div>
                                         </div>
                                         <div id="tabs-b">
                                             <div class="row">
@@ -138,7 +143,7 @@
                                                         </div>
                                                     </div>
                                                     <label class="radio state-success"><input type="radio" name="v_min" value="3"><i></i>
-                                                        从<span id="v_minX_1">X</span>分钟开始,每<span id="v_minY_1">Y</span>分钟执行一次
+                                                        从<span id="v_minX_1">X</span>分钟开始,到<span id="v_minY_1">Y</span>分钟,每<span id="v_minZ_1">Z</span>执行一次
                                                     </label>
                                                     <div class="row" style="padding-left: 50px">
                                                         <div class="col-md-2">
@@ -147,7 +152,12 @@
                                                         <div class="col-md-1">
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <input class="form-control spinner-left spinner" id="v_minEnd_1" type="text" value="1">
+                                                            <input class="form-control spinner-left spinner" id="v_minEnd_1" type="text" value="59">
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_minLoop_1" value="1"   type="text">
                                                         </div>
                                                     </div>
                                                     <label class="radio state-success"><input type="radio" name="v_min" value="4"><i></i>勾选具体值</label>
@@ -184,7 +194,7 @@
                                                         </div>
                                                     </div>
                                                     <label class="radio state-success"><input type="radio" name="v_hour" value="3"><i></i>
-                                                        从<span id="v_hourX_1">X</span>小时开始,每<span id="v_hourY_1">Y</span>小时执行一次
+                                                        从<span id="v_hourX_1">X</span>小时开始,到<span id="v_hourY_1">Y</span>小时,每<span id="v_hourZ_1">Z</span>小时执行一次
                                                     </label>
                                                     <div class="row" style="padding-left: 50px">
                                                         <div class="col-md-2">
@@ -193,7 +203,12 @@
                                                         <div class="col-md-1">
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <input class="form-control spinner-left spinner" id="v_hourEnd_1"  type="text" value="1">
+                                                            <input class="form-control spinner-left spinner" id="v_hourEnd_1"  type="text" value="23">
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_hourLoop_1" value="1"   type="text">
                                                         </div>
                                                     </div>
                                                     <label class="radio state-success"><input type="radio" name="v_hour" value="4"><i></i>勾选具体值</label>
@@ -231,7 +246,7 @@
                                                         </div>
                                                     </div>
                                                     <label class="radio state-success"><input type="radio" name="v_day" value="3"><i></i>
-                                                        从<span id="v_dayX_1">X</span>天开始,每<span id="v_dayY_1">Y</span>天执行一次
+                                                        从<span id="v_dayX_1">X</span>天开始,到<span id="v_dayY_1">Y</span>天,每<span id="v_dayZ_1">Z</span>天执行一次
                                                     </label>
                                                     <div class="row" style="padding-left: 50px">
                                                         <div class="col-md-2">
@@ -240,7 +255,12 @@
                                                         <div class="col-md-1">
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <input class="form-control spinner-left spinner"  id="v_dayEnd_1"  type="text" value="1">
+                                                            <input class="form-control spinner-left spinner"  id="v_dayEnd_1"  type="text" value="31">
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_dayLoop_1" value="1"   type="text">
                                                         </div>
                                                     </div>
                                                     <label class="radio state-success"><input type="radio" name="v_day" value="4"><i></i>勾选具体值</label>
@@ -278,7 +298,7 @@
                                                         </div>
                                                     </div>
                                                     <label class="radio state-success"><input type="radio" name="v_mon" value="3"><i></i>
-                                                        从<span id="v_monX_1">X</span>月开始,每<span id="v_monY_1">Y</span>月执行一次
+                                                        从<span id="v_monX_1">X</span>月开始,到<span id="v_monY_1">Y</span>月,每<span id="v_monZ_1">Z</span>月执行一次
                                                     </label>
                                                     <div class="row" style="padding-left: 50px">
                                                         <div class="col-md-2">
@@ -287,7 +307,12 @@
                                                         <div class="col-md-1">
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <input class="form-control spinner-left spinner" id="v_monEnd_1"  type="text" value="1">
+                                                            <input class="form-control spinner-left spinner" id="v_monEnd_1"  type="text" value="12">
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input class="form-control spinner-left spinner" id="v_monLoop_1" value="1"   type="text">
                                                         </div>
                                                     </div>
                                                     <label class="radio state-success"><input type="radio" name="v_mon" value="4"><i></i>勾选具体值</label>
@@ -387,9 +412,9 @@
                                         <label class="label">Agent</label>
                                         <div class="row">
                                             <?php foreach ($agents as $k=>$d){ ?>
-                                            <div class="col col-4">
-                                                <label class="checkbox state-success"><input type="checkbox" name="agents[]" <?php if (isset($d["checked"]) && $d["checked"]){?> checked="checked"<?php } ?> value="<?=$d["id"]?>"><i></i><?=$d["alias"]?>(<?=$d["ip"]?>)</label>
-                                            </div>
+                                                <div class="col col-4">
+                                                    <label class="checkbox state-success"><input type="checkbox" name="agents[]" <?php if (isset($d["checked"]) && $d["checked"]){?> checked="checked"<?php } ?> value="<?=$d["id"]?>"><i></i><?=$d["alias"]?>(<?=$d["ip"]?>)</label>
+                                                </div>
                                             <?php }?>
                                         </div>
                                     </section>

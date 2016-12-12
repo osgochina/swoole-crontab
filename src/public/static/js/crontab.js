@@ -41,8 +41,12 @@ var Crontab = {
                 max: 58
             },
             v_secondEnd_1:{
+                min: 2,
+                max: 59
+            },
+            v_secondLoop_1:{
                 min: 1,
-                max: 29
+                max: 30
             },
             v_minStart_0:{
                 min: 0,
@@ -60,6 +64,10 @@ var Crontab = {
                 min: 1,
                 max: 29
             },
+            v_minLoop_1:{
+                min: 1,
+                max: 30
+            },
             v_hourStart_0:{
                 min: 0,
                 max: 58
@@ -70,11 +78,15 @@ var Crontab = {
             },
             v_hourStart_1:{
                 min: 0,
-                max: 58
+                max: 24
             },
             v_hourEnd_1:{
                 min: 1,
-                max: 29
+                max: 24
+            },
+            v_hourLoop_1:{
+                min: 1,
+                max: 12
             },
             v_dayStart_0:{
                 min: 1,
@@ -89,6 +101,10 @@ var Crontab = {
                 max: 30
             },
             v_dayEnd_1:{
+                min: 1,
+                max: 31
+            },
+            v_dayLoop_1:{
                 min: 1,
                 max: 15
             },
@@ -105,6 +121,10 @@ var Crontab = {
                 max: 11
             },
             v_monEnd_1:{
+                min: 2,
+                max: 12
+            },
+            v_monLoop_1:{
                 min: 1,
                 max: 6
             },
@@ -116,7 +136,7 @@ var Crontab = {
                 min: 2,
                 max: 7
             }
-            
+
         };
         for (var spinner  in spinnerList)
         {
@@ -149,17 +169,18 @@ var Crontab = {
     cron_parse:function (strVal,strid)
     {
         var ary = null;
+        var end;
         var objRadio = $("input[name='" + strid + "'");
         if (strVal == '*'){
             objRadio.eq(0).prop("checked", true);
-        }else if (strVal.split('-').length > 1){
+        }else if (strVal.split('-').length > 1 && strVal.split('/').length < 1){
             ary = strVal.split('-');
             objRadio.eq(1).prop("checked", true);
             $("#" + strid + "Start_0").val(ary[0]);
             $("#" + strid + "X_0").text( ary[0]);
             $("#" + strid + "End_0").val(ary[1]);
             $("#" + strid + "Y_0").text( ary[1]);
-        }else if (strVal.split('/').length > 1)
+        }else if (strVal.split('/').length > 1 && strVal.split('-').length < 1)
         {
             ary = strVal.split('/');
             objRadio.eq(2).prop("checked", true);
@@ -169,13 +190,62 @@ var Crontab = {
                     case "v_second":
                     case "v_min":
                         ary[0]=0;
+                        end = 59;
+                        break;
+                    case "v_hour":
+                        end = 23;
+                        break;
+                    case "v_day":
+                        end = 31;
+                        break;
+                    case "v_mon":
+                        end = 12;
+                        break;
                 }
             }
             $("#" + strid + "Start_1").val( ary[0]);
             $("#" + strid + "X_1").text( ary[0]);
-            $("#" + strid + "End_1").val( ary[1]);
-            $("#" + strid + "Y_1").text( ary[1]);
-        }else
+            $("#" + strid + "End_1").val(end);
+            $("#" + strid + "Y_1").text( end);
+            $("#" + strid + "Loop_1").val( ary[1]);
+            $("#" + strid + "Z_1").text( ary[1]);
+        }else if(strVal.split('/').length > 1 && strVal.split('-').length > 1){
+
+            ary = strVal.split('/');
+            objRadio.eq(2).prop("checked", true);
+            if (ary[0] == '*') {
+                ary[0]=1;
+                switch (strid){
+                    case "v_second":
+                    case "v_min":
+                        ary[0]=0;
+                        end = 59;
+                        break;
+                    case "v_hour":
+                        end = 23;
+                        break;
+                    case "v_day":
+                        end = 31;
+                        break;
+                    case "v_mon":
+                        end = 12;
+                        break;
+
+                }
+            }else if(ary[0].split("-").length > 1){
+                var ary1 = ary[0].split("-");
+                ary[0] = ary1[0];
+                end = ary1[1];
+            }
+            $("#" + strid + "Start_1").val( ary[0]);
+            $("#" + strid + "X_1").text( ary[0]);
+            $("#" + strid + "End_1").val(end);
+            $("#" + strid + "Y_1").text(end);
+            $("#" + strid + "Loop_1").val(ary[1]);
+            $("#" + strid + "Z_1").text(ary[1]);
+
+        }
+        else
         {
 
             objRadio.eq(3).attr("checked", "checked");
@@ -199,7 +269,7 @@ var Crontab = {
         if (type == 1){
             return "*";
         }
-        var n1,n2;
+        var n1,n2,n3;
         if (type == 2){
             n1 = $("#" + strid + "Start_0").val();
             n2 = $("#" + strid + "End_0").val();
@@ -208,7 +278,8 @@ var Crontab = {
         if (type == 3){
             n1 = $("#" + strid + "Start_1").val();
             n2 = $("#" + strid + "End_1").val();
-            return n1+"/"+n2;
+            n3 = $("#" + strid + "Loop_1").val();
+            return n1+"-"+n2+"/"+n3;
         }
         if (type == 4){
             var arry = [];

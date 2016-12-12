@@ -25,7 +25,13 @@ class Client extends SOAClient
         $insance = new self($ip,$port);
         self::$insance[$ip.":".$port] = $insance;
         return $insance;
-        
+
+    }
+    public static function removeInstance($ip="",$port="")
+    {
+        if (isset(self::$insance[$ip.":".$port]) && !empty(self::$insance[$ip.":".$port])){
+            unset(self::$insance[$ip.":".$port]);
+        }
     }
 
     function call()

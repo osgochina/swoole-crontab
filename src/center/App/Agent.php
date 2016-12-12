@@ -43,7 +43,7 @@ class Agent
                 $runStatus = Lib\LoadTasks::RunStatusFailed;
                 Lib\Report::taskFailed($task["taskId"], $task["runid"], $task["code"]);
             }
-            $header->set($task["taskId"],["runStatus"=>$runStatus,"runUpdateTime"=>microtime()]);
+            $header->set($task["taskId"],["runStatus"=>$runStatus,"runUpdateTime"=>time()]);
             $header->decr($task["taskId"],'execNum');//减少当前执行数量
             if ( Lib\Tasks::$table->exist($task["runid"]))  Lib\Tasks::$table->set($task["runid"],["runStatus"=>$runStatus]);
             Lib\TermLog::log($task["runid"],$task["taskId"],"任务已经执行完成",$task);

@@ -109,7 +109,7 @@ class SOAServer
     function onShutdown($server)
     {
         $this->log("Worker is stop");
-        FLog::flush();
+        Flog::flush();
     }
 
     function onTimer($serv, $interval)

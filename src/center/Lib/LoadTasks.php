@@ -18,7 +18,7 @@ class LoadTasks
         "runStatus" => [\swoole_table::TYPE_INT, 1],
         "runTimeStart" => [\swoole_table::TYPE_INT, 8],
         "runUpdateTime" => [\swoole_table::TYPE_INT, 8],
-        "taskname" => [\swoole_table::TYPE_STRING, 64],
+        "taskname" => [\swoole_table::TYPE_STRING, 256],
         "gid" => [\swoole_table::TYPE_INT, 4],
         "rule" => [\swoole_table::TYPE_STRING, 32],
         "runnumber" => [\swoole_table::TYPE_INT, 1],

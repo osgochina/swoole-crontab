@@ -76,7 +76,9 @@ class Tasks
                 }else{
                     if (intval($minute) > intval($task["minute"])+5){
                         $ids[] = $id;
-                        if ($task["runStatus"] == LoadTasks::RunStatusStart || $task["runStatus"] == LoadTasks::RunStatusToTaskSuccess){
+                        if ($task["runStatus"] == LoadTasks::RunStatusStart
+                            || $task["runStatus"] == LoadTasks::RunStatusToTaskSuccess
+                            || $task["runStatus"] == LoadTasks::RunStatusError){
                             $ids2[] = $task["id"];
                         }
                     }

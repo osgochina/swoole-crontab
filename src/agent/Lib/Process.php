@@ -24,8 +24,9 @@ class Process
     const PROCESS_STOP = 1;//程序结束运行
 
     public $task;
-
+    static public $process_list = [];
     private  static $process_stdout = [];
+    private static $max_stdout = 1024*10;
 
     public static function init()
     {
@@ -52,9 +53,10 @@ class Process
                     $task["code"] = $ret["code"];
                     self::$table->set($pid,$task);
                     swoole_event_del($task["pipe"]);
-
+                    unset(self::$process_list[$pid]);
                     self::log($task["runid"],$task["taskId"],"进程运行完成,输出值",isset(self::$process_stdout[$pid])?self::$process_stdout[$pid]:"");
                     unset(self::$process_stdout[$pid]);
+
                 }
             }
         });
@@ -68,7 +70,7 @@ class Process
     {
         if (count(self::$table) >0){
             $procs= [];
-            $client = new Client();
+            $client = Client::getInstance();
             foreach (self::$table as $pid=>$process){
                 if ($process["status"] == self::PROCESS_STOP){
                     $procs[$pid] = [
@@ -86,7 +88,6 @@ class Process
             }
             $rect = $client->call("Agent::notify",$procs);
             $ret = $rect->getResult(10);
-            unset($service);
             if (empty($ret)){
                 Flog::log("tasks通知中心服失败,code".$rect->code.",msg".$rect->msg);
                 return false;
@@ -108,14 +109,22 @@ class Process
         $cls = new self();
         $cls->task = $task;
         $process = new \swoole_process(array($cls, "run"),true,true);
-        if (($pid = $process->start())) {
-            swoole_event_add($process->pipe, function($pipe) use ($process,$pid) {
+        $pid = $process->start();
+        if ($pid) {
+            swoole_event_add($process->pipe, function($pipe) use ($pid) {
                 if (!isset(self::$process_stdout[$pid])) self::$process_stdout[$pid]="";
-                self::$process_stdout[$pid] .= $process->read();
+                $tmp = self::$process_list[$pid]->read();
+                $len = strlen(self::$process_stdout[$pid]);
+                if ($len+strlen($tmp) <= self::$max_stdout){
+                    self::$process_stdout[$pid] .= $tmp;
+                }
             });
             self::log($task["runid"],$task["id"],"进程开始执行",$task);
             self::$table->set($pid,["taskId"=>$task["id"],"runid"=>$task["runid"],"status"=>self::PROCESS_START,"start"=>microtime(true),"pipe"=>$process->pipe]);
+            self::$process_list[$pid] = $process;
             return true;
+        }else{
+            self::log($task["runid"],$task["id"],"创建子进程失败",$task);
         }
         return false;
     }
@@ -126,6 +135,9 @@ class Process
      */
     public function run($worker)
     {
+        foreach (self::$process_list as $p){
+            unset($p);
+        }
         $exec = $this->task["execute"];
         $worker->name($exec ."#". $this->task["id"]);
         $exec = explode(" ",trim($exec));
@@ -173,6 +185,6 @@ class Process
             "msg"=>is_scalar($msg) ? $msg : json_encode($msg),
             "createtime"=>date("Y-m-d H:i:s"),
         ];
-        (new Client())->call("Termlog::addLogs",[$log])->getResult();
+        Client::getInstance()->call("Termlog::addLogs",[$log])->getResult();
     }
 }

@@ -58,12 +58,11 @@ class AgentServer extends SOAServer
     public function register()
     {
         $listenHost = Util::listenHost();
-        $service = new Client();
-        $ret = $service->call("Agent::register",$listenHost,PORT)->getResult(3);
+        $ret = Client::getInstance()->call("Agent::register",$listenHost,PORT)->getResult(3);
         if (empty($ret) || $ret["code"]){
             Flog::log($ret["msg"]);
+            Client::removeInstance();
         }
-        unset($service);
     }
 
     public function call($request, $header)

@@ -11,14 +11,14 @@ else
 
 if ($dst == 'agent')
 {
-    $pharFile = __DIR__ . '/crontab-agent.phar';
+    $pharFile = __DIR__ . '/agent.phar';
     if (file_exists($pharFile)) unlink($pharFile);
     $phar = new Phar($pharFile);
     $phar->buildFromDirectory(dirname(__DIR__) . "/src/agent/");
     //$phar->compressFiles(\Phar::GZ);
     $phar->stopBuffering();
     $phar->setStub($phar->createDefaultStub('agent.php'));
-    echo "crontab-agent.phar打包成功\n";
+    echo "agent.phar打包成功\n";
 }
 elseif ($dst == 'centre')
 {

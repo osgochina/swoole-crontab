@@ -51,9 +51,9 @@ class Report
 
     static public function alert($content,$users)
     {
-        $url = vsprintf(self::report_url."?content=%s&users=%s",array($content,$users));
-        $curl = new Swoole\Client\CURL();
-        $ret = $curl->get($url);
-        Flog::log("告警信息返回结果".$ret);
+//        $url = vsprintf(self::report_url."?content=%s&users=%s",array($content,$users));
+//        $curl = new Swoole\Client\CURL();
+//        $ret = $curl->get($url);
+//        Flog::log("告警信息返回结果".$ret);
     }
 }
