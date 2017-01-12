@@ -46,7 +46,7 @@ class ParseCrontab
 
         if (count($cron) == 6) {
             $date = array(
-                'second' => self::_parse_cron_number($cron[0], 0, 59),
+                'second' => ($cron[0] == 0)?array(1 => 1):self::_parse_cron_number($cron[0], 0, 59),
                 'minutes' => self::_parse_cron_number($cron[1], 0, 59),
                 'hours' => self::_parse_cron_number($cron[2], 0, 23),
                 'day' => self::_parse_cron_number($cron[3], 1, 31),
