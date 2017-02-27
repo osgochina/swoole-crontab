@@ -10,7 +10,7 @@ define('SERVICE', true);
 define('WEBPATH', __DIR__);
 define('SWOOLE_SERVER', true);
 
-const ROBOT_MAX_PROCESS = 128;//单个worker同时执行任务数量
+const ROBOT_MAX_PROCESS = 1024;//单个worker同时执行任务数量
 const CENTER_PORT = 8901;//中心端口号
 const WORKER_NUM = 2;//worker进程数量
 const TASK_NUM = 2;//task进程数量

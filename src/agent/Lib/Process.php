@@ -53,6 +53,7 @@ class Process
                     $task["code"] = $ret["code"];
                     self::$table->set($pid,$task);
                     swoole_event_del($task["pipe"]);
+                    self::$process_list[$pid]->close();
                     unset(self::$process_list[$pid]);
                     self::log($task["runid"],$task["taskId"],"进程运行完成,输出值",isset(self::$process_stdout[$pid])?self::$process_stdout[$pid]:"");
                     unset(self::$process_stdout[$pid]);
@@ -136,8 +137,9 @@ class Process
     public function run($worker)
     {
         foreach (self::$process_list as $p){
-            unset($p);
+            $p->close();
         }
+        self::$process_list = [];
         $exec = $this->task["execute"];
         $worker->name($exec ."#". $this->task["id"]);
         $exec = explode(" ",trim($exec));

@@ -18,7 +18,7 @@ Lib\Server::start(function ()
     $setting = array(
         'worker_num' => WORKER_NUM,
         'task_worker_num'=>TASK_NUM,
-        'max_request' => 1000,
+        //'max_request' => 1000,
         'dispatch_mode' => 3,
         'log_file' => getRunPath() . '/logs/swoole.log',
         'open_length_check' => 1,
