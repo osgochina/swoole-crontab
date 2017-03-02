@@ -68,10 +68,9 @@
                                 <table id="data_table_stats" class="table table-hover table-bordered table-striped">
                                     <thead>
                                     <tr>
-                                        <th width="6%">ID</th>
                                         <th width="8%">分组名</th>
                                         <th width="8%">任务名</th>
-                                        <th width="10%">规则</th>
+                                        <th width="15%">规则</th>
                                         <th width="5%">并发数</th>
                                         <th width="5%">状态</th>
                                         <th width="20%">命令</th>
@@ -88,10 +87,15 @@
                                     {
                                         ?>
                                         <tr height="32">
-                                            <td><?= $d["id"] ?></td>
+                                            <td style="display: none;"><?= $d["id"] ?></td>
                                             <td><?= $d["gname"] ?></td>
                                             <td><a href="/termlog/index?taskid=<?=$d['id']?>"><?= $d["taskname"] ?></a></td>
-                                            <td><?= $d["rule"] ?></td>
+                                            <td>
+                                                <?php foreach (explode(" ",$d["rule"])as $v){?>
+                                                    <em style="padding:5px;"><?=$v?></em>
+                                                <?php  } ?>
+                                            </td>
+                                            <!--                                            <td>--><?//= $d["rule"] ?><!--</td>-->
                                             <td><?= $d["runnumber"] ?></td>
                                             <td><?= $d["status_f"] ?></td>
                                             <td><?= $d["execute"] ?></td>

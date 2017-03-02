@@ -73,7 +73,13 @@
                                             <td><?= $d["ip"] ?></td>
                                             <td><?= $d["port"] ?></td>
                                             <td><?= $d["status_f"] ?></td>
-                                            <td><?= $d["isregister_f"] ?></td>
+                                            <td>
+                                                <?php if ($d["isregister"] == 1){?>
+                                                    <button class="btn btn-primary btn-xs"><?= $d["isregister_f"] ?></button>
+                                                <?php }else{?>
+                                                    <button class="btn btn-warning btn-xs"><?= $d["isregister_f"] ?></button>
+                                                <?php }?>
+                                            </td>
                                             <td><?php if (isset($d["lasttime"])){echo date("Y-m-d H:i:s",$d["lasttime"]);} ?></td>
                                             <td>
                                                 <a class="btn btn-primary btn-xs" href="/agent/addOrEdit?id=<?=$d["id"]?>">编辑</a>
