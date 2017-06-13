@@ -31,9 +31,11 @@ class CenterServer  extends Swoole\Protocol\SOAServer
                 });
             }
             if ($worker_id == WORKER_NUM+self::GET_TASKS){
-                $server->tick(1000, function () use ($server) {
+                $server->tick(500, function () use ($server) {
                     $tasks = Tasks::getTasks();
-                    $server->sendMessage(json_encode($tasks),(WORKER_NUM+self::EXEC_TASKS));
+                    if (!empty($tasks)){
+                        $server->sendMessage(json_encode($tasks),(WORKER_NUM+self::EXEC_TASKS));
+                    }
                 });
             }
             if ($worker_id == WORKER_NUM+self::CLEAN_TASKS){
@@ -72,8 +74,6 @@ class CenterServer  extends Swoole\Protocol\SOAServer
                 $tmp["taskname"] = $task["taskname"];
                 $tmp["runuser"] = $task["runuser"];
                 $tmp["runid"] = $k;
-                //任务标示
-                $loadtasks->set($id,["runStatus"=>LoadTasks::RunStatusStart,"runTimeStart"=>time()]);
                 //正在运行标示
                 if ( Tasks::$table->exist($k)) Tasks::$table->set($k,["runStatus"=>LoadTasks::RunStatusStart,"runid"=>$k]);
                 TermLog::log($tmp["runid"],$id,"任务开始",$tmp);

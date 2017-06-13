@@ -117,6 +117,11 @@ class Tasks
                 }
             }
         }
+        if (!empty($data)){
+            foreach ($data as $k=>$val){
+                self::$table->set($k,["runStatus"=>LoadTasks::RunStatusStart,"runTimeStart"=>time()]);
+            }
+        }
         return $data;
     }
 }
