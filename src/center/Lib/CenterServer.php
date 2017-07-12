@@ -20,9 +20,8 @@ class CenterServer extends Swoole\Protocol\SOAServer
 
     const LOAD_TASKS = 0;//载入任务tasks进程
     const GET_TASKS = 1;//获取到期task进程
-    const CLEAN_TASKS = 2;//清理过期task进程
-    const EXEC_TASKS = 3;//执行task
-    const MANAGER_TASKS = 4;//管理task状态
+    const EXEC_TASKS = 2;//执行task
+    const MANAGER_TASKS = 3;//管理task状态
 
     function onWorkerStart($server, $worker_id)
     {
@@ -42,12 +41,6 @@ class CenterServer extends Swoole\Protocol\SOAServer
                     if (!empty($tasks)) {
                         $server->sendMessage(json_encode($tasks), (WORKER_NUM + self::EXEC_TASKS));
                     }
-                });
-            }
-            if ($worker_id == WORKER_NUM + self::CLEAN_TASKS) {
-                //清理过期的服务器
-                $server->tick(1000, function () use ($server) {
-                    Robot::clean();
                 });
             }
         }

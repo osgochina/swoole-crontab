@@ -24,6 +24,9 @@ class TermLog
 
     function put($log)
     {
+        if (DEBUG == "on") {
+            echo $log["createtime"] . "\t" . $log["runid"] . "\t" . $log["taskid"] . "\t" . $log["explain"] . "\t" . $log["msg"], "\n";
+        }
         \Swoole::$php->db->insert($log, $this->table);
     }
 
@@ -44,9 +47,6 @@ class TermLog
             "msg" => is_scalar($msg) ? $msg : json_encode($msg),
             "createtime" => date("Y-m-d H:i:s"),
         ];
-        if (DEBUG == "on") {
-            echo $log["createtime"] . "\t" . $log["runid"] . "\t" . $log["taskid"] . "\t" . $log["explain"] . "\t" . $log["msg"], "\n";
-        }
         self::getInstance()->put($log);
     }
 }

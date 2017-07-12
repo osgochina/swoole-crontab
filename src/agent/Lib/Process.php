@@ -200,11 +200,10 @@ class Process
         if (!empty(self::$logs) && ($count = self::$logs->count()) > 0){
             $logs = [];
             for ($n = 1;$n <= $count;$n++){
-                $log = self::$logs->pop();
+                $log = self::$logs->shift();
                 if (empty($log)){
                     break;
                 }
-                print_r($log);
                 $logs[] = $log;
             }
             if (count($logs) > 0){

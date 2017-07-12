@@ -16,7 +16,7 @@ const LOAD_SIZE = 8192;//最多载入任务数量
 const TASKS_SIZE = 1024;//同时运行任务最大数量
 const ROBOT_MAX = 128;//同时挂载worker数量
 const WORKER_NUM = 4;//worker进程数量
-const TASK_NUM = 5;//task进程数量
+const TASK_NUM = 4;//task进程数量
 
 define("CENTRE_PORT",8901);
 $env = get_cfg_var('env.name');

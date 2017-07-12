@@ -55,8 +55,7 @@ class Termlog
         $gets['page'] = !empty($page) ? $page : 1;
         $gets["order"] = "runid DESC,createtime ASC";
         $pager = "";
-        $db = table("term_logs");
-        $list = $db->gets($gets, $pager);
+        $list = table("term_logs")->gets($gets, $pager);
         $tasks = Lib\LoadTasks::getTasks();
         foreach ($list as &$value) {
             $tmp = $tasks->get($value["taskid"]);
