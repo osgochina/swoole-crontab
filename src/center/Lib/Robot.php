@@ -10,6 +10,7 @@
 namespace Lib;
 
 use Swoole;
+
 class Robot
 {
 
@@ -19,12 +20,13 @@ class Robot
     static private $ips;
 
     static private $column = [
-        "lasttime"=>[\swoole_table::TYPE_INT, 8],
+        "fd" => [\swoole_table::TYPE_INT, 8],
+        "lasttime" => [\swoole_table::TYPE_INT, 8],
     ];
     static private $aColumn = [
-        "ip" => [\swoole_table::TYPE_STRING, 15],
-        "port" => [\swoole_table::TYPE_INT, 4],
+        "ip" => [\swoole_table::TYPE_STRING, 15]
     ];
+
     public static function init()
     {
         self::$table = new \swoole_table(ROBOT_MAX);
@@ -47,15 +49,13 @@ class Robot
      */
     public static function loadAgents()
     {
-        $agents = table("agents")->gets(["status"=>0]);
-        if (empty($agents))
-        {
+        $agents = table("agents")->gets(["status" => 0]);
+        if (empty($agents)) {
             return false;
         }
-        foreach ($agents as $agent){
-            self::$aTable->set($agent["id"],[
-                "ip"=>$agent["ip"],
-                "port"=>$agent["port"],
+        foreach ($agents as $agent) {
+            self::$aTable->set($agent["id"], [
+                "ip" => $agent["ip"]
             ]);
         }
         return true;
@@ -63,33 +63,28 @@ class Robot
 
     /**
      * 注册服务
+     * @param $fd
      * @param $ip
-     * @param $port
      * @return bool
      */
-    public static function register($ip,$port)
+    public static function register($fd, $ip)
     {
-        if (self::$table->set($ip.":".$port,["lasttime"=>time()])){
+        if (self::$table->set($ip, ['fd' => $fd, "lasttime" => time()])) {
             return true;
         }
         return false;
     }
 
     /**
-     * 清除过期的worker
+     * 注销服务
+     * @param $fd
+     * @return mixed
      */
-    public static function clean()
+    public static function unRegister($fd)
     {
-        if (count(self::$table)>0){
-            $keys = [];
-            foreach (self::$table as $k=>$v){
-                if ($v["lasttime"] < time()-10){
-                    $keys[] = $k;
-                }
-            }
-
-            foreach ($keys as $k){
-                self::$table->del($k);
+        foreach (self::$table as $ip => $value) {
+            if ($value["fd"] == $fd) {
+                return self::$table->del($ip);
             }
         }
     }
@@ -97,7 +92,7 @@ class Robot
 
     private static function loadIps()
     {
-        foreach (self::$table as $k=>$v){
+        foreach (self::$table as $k => $v) {
             self::$ips[$k] = $v;
         }
     }
@@ -111,11 +106,11 @@ class Robot
     {
         self::loadIps();//载入配置到本地变量
 
-        if (($robot = self::selectWorker($task["agents"])) == false){
+        if (($robot = self::selectWorker($task["agents"])) == false) {
             return false;
         }
-        if (!self::sendTask($robot,$task)){
-            TermLog::log($task["runid"],$task["id"],"发送业务失败",$task);
+        if (!self::sendTask($robot, $task)) {
+            TermLog::log($task["runid"], $task["id"], "发送业务失败", $task);
             return false;
         }
         return true;
@@ -127,22 +122,19 @@ class Robot
      * @param $task
      * @return bool
      */
-    private static function sendTask($robot,$task)
+    private static function sendTask($robot, $task)
     {
-        TermLog::log($task["runid"],$task["id"],"发送到agent服务器",$robot);
-        $client = new Client(explode(":",$robot)[0],explode(":",$robot)[1]);
-        $rect = $client->call("Exec::run",$task);
-        $rect->getResult(3);
-        if($rect->code == Swoole\Client\SOA_Result::ERR_CLOSED || $rect->code == Swoole\Client\SOA_Result::ERR_CONNECT){
-            TermLog::log($task["runid"],$task["id"],"agent服务器停止服务",$robot."已停止服务,code:".$rect->code);
+        TermLog::log($task["runid"], $task["id"], "发送到agent服务器", $robot);
+        $client = new Client($robot);
+        $rect = $client->call("Exec::run", $task);
+        if (!$rect) {
+            TermLog::log($task["runid"], $task["id"], "agent服务器停止服务", $robot . "已停止服务");
             unset(self::$ips[$robot]);
-            unset($server);
-            if (($robot = self::selectWorker($task["agents"])) == false){
+            if (($robot = self::selectWorker($task["agents"])) == false) {
                 return false;
             }
-            return self::sendTask($robot,$task);
+            return self::sendTask($robot, $task);
         }
-        unset($server);
         return true;
     }
 
@@ -153,31 +145,33 @@ class Robot
     private static function selectWorker($agents)
     {
         $num = count(self::$ips);
-        if (!$num){
+        if (!$num) {
             Flog::log("No workers available");
             return false;
         }
-        $agents = explode(",",$agents);
-        if (empty($agents))
-        {
+        $agents = explode(",", $agents);
+        if (empty($agents)) {
             Flog::log("没有配置运行服务器");
             return false;
         }
 
-        $rand = rand(1,count($agents));
-        $n=0;
-        foreach ($agents as $k=>$aid)
-        {
+        $rand = rand(1, count($agents));
+        $n = 0;
+        foreach ($agents as $k => $aid) {
             $n++;
-            if ($rand <= $n){
+            if ($rand <= $n) {
                 $aip = self::$aTable->get($aid);
-                if (empty($aip)) continue;
-                $robot = $aip["ip"].":".$aip["port"];
-                if (!isset(self::$ips[$robot])) continue;
+                if (empty($aip)) {
+                    continue;
+                }
+                $robot = $aip["ip"];
+                if (!isset(self::$ips[$robot])) {
+                    continue;
+                }
                 return $robot;
             }
         }
-        Flog::log("没有选中任何服务器,服务器数量:".$num.",随机数:".$rand);
+        Flog::log("没有选中任何服务器,服务器数量:" . $num . ",随机数:" . $rand);
         return false;
     }
 

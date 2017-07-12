@@ -17,13 +17,14 @@ class Flog
     private static $key = "master";
 
 
-    public static function startLog($request_name,$key = "master")
+    public static function startLog($request_name, $key = "master")
     {
         self::$request_name = $request_name;
         self::$request_id = Donkeyid::getInstance()->dk_get_next_id();
 
         self::$key = $key;
     }
+
     public static function endLog()
     {
         self::$request_name = -1;
@@ -41,9 +42,9 @@ class Flog
      */
     public static function log($value)
     {
-        $text="";
-        if (self::$request_name != -1 && self::$request_id != -1){
-            $text = self::$request_id."\t"."[".self::$request_name."]"."\t";
+        $text = "";
+        if (self::$request_name != -1 && self::$request_id != -1) {
+            $text = self::$request_id . "\t" . "[" . self::$request_name . "]" . "\t";
         }
         $text .= is_scalar($value) ? $value : json_encode($value);
         \Swoole::$php->log(self::$key)->info($text);

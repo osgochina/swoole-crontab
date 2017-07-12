@@ -10,7 +10,11 @@ Swoole-Crontab(基于Swoole扩展)
 + 请使用swoole扩展1.8.0+
 + [v0.8版本入口](https://github.com/osgochina/swoole-crontab/tree/v0.8)
 
-2.Crontab配置
+2.架构图
+--------------
+![](https://raw.githubusercontent.com/osgochina/swoole-crontab/master/doc/x.png)
+
+3.Crontab配置
 --------------
 介绍一下时间配置
 
@@ -23,7 +27,7 @@ Swoole-Crontab(基于Swoole扩展)
     |   +------------ min (0 - 59)
     +-------------- sec (0-59)[可省略，如果没有0位,则最小时间粒度是分钟]
     
-5.开始使用
+4.开始使用
 -----------
 1.修改配置
 
@@ -61,13 +65,25 @@ server {
 
 4.启动中心服
 
-    /path/to/php /path/to/src/center/center  start -d
+    /path/to/php /path/to/src/center/center  start -d -h 127.0.0.1 -p 8901
    
 5.启动客户端
-    
-    /path/to/php /path/to/src/agent/agent.php start -d
+
+    -h 是指中心服地址 -p 中心服端口
+    /path/to/php /path/to/src/agent/agent.php start -d -h 127.0.0.1 -p 8901
    
 6.web界面访问
 
 >输入nginx配置的地址访问web界面，默认用户名/密码是admin/admin
+
+7.各配置文件的修改
+
+7.1 admin管理后台的配置文件修改
+
+    src/admin/configs/dev/db.php  修改数据库配置
+    src/admin/configs/dev/service.php  中心服启动时候监听的ip端口,需要跟中心服通讯
+
+7.2 中心服配置
+
+    src/center/configs/dev/db.php 修改数据库配置
 

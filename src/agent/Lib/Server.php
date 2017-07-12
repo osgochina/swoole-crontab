@@ -1,34 +1,43 @@
 <?php
-namespace Lib;
 /**
- * Class Server
- * @package Swoole\Network
+ * Created by PhpStorm.
+ * User: liuzhiming
+ * Date: 2017/7/10
+ * Time: 23:39
  */
-class Server extends ServerBase
+
+namespace Lib;
+
+class Server
 {
+    protected static $options = array();
     protected static $beforeStopCallback;
     protected static $beforeReloadCallback;
 
-    static $swooleMode;
-    static $optionKit;
+    public $server;
+
+    /**
+     * @var \Swoole\Client
+     */
+    protected $sw;
+    protected $processName;
+
     static $pidFile;
+    static $optionKit;
 
     static $defaultOptions = array(
         'd|daemon' => '启用守护进程模式',
-        'h|host?' => '指定监听地址',
-        'p|port?' => '指定监听端口',
+        'h|host:' => '中心服host',
+        'p|port:' => '中心服port',
+        'l|log?' => 'log文件地址',
+        'pid?' => 'pid文件地址',
         'help' => '显示帮助界面',
-        'b|base' => '使用BASE模式启动',
-        'w|worker?' => '设置Worker进程的数量',
-        'r|thread?' => '设置Reactor线程的数量',
-        't|tasker?' => '设置Task进程的数量',
     );
 
-    /**
-     * @var \swoole_server
-     */
-    protected $sw;
-    protected $pid_file;
+    protected $host;
+    protected $port;
+    protected $flag;
+
 
     /**
      * 设置PID文件
@@ -37,54 +46,6 @@ class Server extends ServerBase
     static function setPidFile($pidFile)
     {
         self::$pidFile = $pidFile;
-    }
-
-    /**
-     * 杀死所有进程
-     * @param $name
-     * @param int $signo
-     * @return string
-     */
-    static function killProcessByName($name, $signo = 9)
-    {
-        $cmd = 'ps -eaf |grep "' . $name . '" | grep -v "grep"| awk "{print $2}"|xargs kill -'.$signo;
-        return exec($cmd);
-    }
-
-    /**
-     *
-     * $opt->add( 'f|foo:' , 'option requires a value.' );
-     * $opt->add( 'b|bar+' , 'option with multiple value.' );
-     * $opt->add( 'z|zoo?' , 'option with optional value.' );
-     * $opt->add( 'v|verbose' , 'verbose message.' );
-     * $opt->add( 'd|debug'   , 'debug message.' );
-     * $opt->add( 'long'   , 'long option name only.' );
-     * $opt->add( 's'   , 'short option name only.' );
-     *
-     * @param $specString
-     * @param $description
-     * @throws ServerOptionException
-     */
-    static function addOption($specString, $description)
-    {
-        if (!self::$optionKit)
-        {
-            Loader::addNameSpace('GetOptionKit', WEBPATH."/Lib/GetOptionKit/src/GetOptionKit");
-            self::$optionKit = new \GetOptionKit\GetOptionKit;
-        }
-        foreach (self::$defaultOptions as $k => $v)
-        {
-            if ($k[0] == $specString[0])
-            {
-                throw new ServerOptionException("不能添加系统保留的选项名称");
-            }
-        }
-        //解决Windows平台乱码问题
-        if (PHP_OS == 'WINNT')
-        {
-            $description = iconv('utf-8', 'gbk', $description);
-        }
-        self::$optionKit->add($specString, $description);
     }
 
     /**
@@ -103,85 +64,61 @@ class Server extends ServerBase
         self::$beforeReloadCallback = $function;
     }
 
+
+
     /**
      * 显示命令行指令
      */
     static function start($startFunction)
     {
-        if (empty(self::$pidFile))
-        {
-            throw new \Exception("require pidFile.");
-        }
-        $pid_file = self::$pidFile;
-        if (is_file($pid_file))
-        {
-            $server_pid = file_get_contents($pid_file);
-        }
-        else
-        {
-            $server_pid = 0;
-        }
-
-        if (!self::$optionKit)
-        {
+        if (!self::$optionKit) {
             Loader::addNameSpace('GetOptionKit', WEBPATH."/Lib/GetOptionKit/src/GetOptionKit");
             self::$optionKit = new \GetOptionKit\GetOptionKit;
         }
 
         $kit = self::$optionKit;
-        foreach(self::$defaultOptions as $k => $v)
-        {
+        foreach(self::$defaultOptions as $k => $v) {
             //解决Windows平台乱码问题
-            if (PHP_OS == 'WINNT')
-            {
+            if (PHP_OS == 'WINNT') {
                 $v = iconv('utf-8', 'gbk', $v);
             }
             $kit->add($k, $v);
         }
         global $argv;
         $opt = $kit->parse($argv);
-        if (empty($argv[1]) or isset($opt['help']))
-        {
+        if (isset($opt['pid'])){
+            self::$pidFile = $opt['pid'];
+        }
+        if (empty(self::$pidFile)) {
+            throw new \Exception("require pidFile.");
+        }
+        $pid_file = self::$pidFile;
+        if (is_file($pid_file)) {
+            $server_pid = file_get_contents($pid_file);
+        } else {
+            $server_pid = 0;
+        }
+
+        if (empty($argv[1]) or isset($opt['help'])) {
             goto usage;
-        }
-        elseif ($argv[1] == 'reload')
-        {
-            if (empty($server_pid))
-            {
-                exit("Server is not running");
-            }
-            if (self::$beforeReloadCallback)
-            {
-                call_user_func(self::$beforeReloadCallback, $opt);
-            }
-            posix_kill($server_pid, SIGUSR1);
-            exit;
-        }
-        elseif ($argv[1] == 'stop')
-        {
-            if (empty($server_pid))
-            {
+        } elseif ($argv[1] == 'stop') {
+            if (empty($server_pid)) {
                 exit("Server is not running\n");
             }
-            if (self::$beforeStopCallback)
-            {
+            if (self::$beforeStopCallback) {
                 call_user_func(self::$beforeStopCallback, $opt);
             }
             posix_kill($server_pid, SIGTERM);
             exit;
-        }
-        elseif ($argv[1] == 'start')
-        {
+        } elseif ($argv[1] == 'start') {
             //已存在ServerPID，并且进程存在
             if (!empty($server_pid) and posix_kill($server_pid, 0))
             {
                 exit("Server is already running.\n");
             }
-        }
-        else
-        {
+        } else {
             usage:
-            $kit->specs->printOptions("php {$argv[0]} start|stop|reload");
+            $kit->specs->printOptions("php {$argv[0]} start|stop");
             exit;
         }
         self::$options = $opt;
@@ -189,11 +126,7 @@ class Server extends ServerBase
     }
 
     /**
-     * 自动推断扩展支持
-     * 默认使用swoole扩展,其次是libevent,最后是select(支持windows)
-     * @param      $host
-     * @param      $port
-     * @param bool $ssl
+     * 自动创建对象
      * @return Server
      */
     static function autoCreate($host, $port, $ssl = false)
@@ -201,174 +134,135 @@ class Server extends ServerBase
 
         return new self($host, $port, $ssl);
     }
-
-    function __construct($host, $port, $ssl = false)
+    protected static function setProcessTitle($title)
     {
-        $flag = $ssl ? (SWOOLE_SOCK_TCP | SWOOLE_SSL) : SWOOLE_SOCK_TCP;
-        if (!empty(self::$options['base']))
-        {
-            self::$swooleMode = SWOOLE_BASE;
+        // >=php 5.5
+        if (function_exists('cli_set_process_title')) {
+            @cli_set_process_title($title);
+        } // Need proctitle when php<=5.5 .
+        elseif (extension_loaded('proctitle') && function_exists('setproctitle')) {
+            @setproctitle($title);
         }
-        elseif (extension_loaded('swoole'))
-        {
-            self::$swooleMode = SWOOLE_PROCESS;
-        }
+    }
 
-        $this->sw = new \swoole_server($host, $port, self::$swooleMode, $flag);
+    public function __construct($host, $port, $ssl = false)
+    {
+        $this->flag = $ssl ? (SWOOLE_SOCK_TCP | SWOOLE_SSL) : SWOOLE_SOCK_TCP;
         $this->host = $host;
         $this->port = $port;
-        $this->runtimeSetting = array(
-            //'reactor_num' => 4,      //reactor thread num
-            //'worker_num' => 4,       //worker process num
-            'backlog' => 128,        //listen backlog
-            //'open_cpu_affinity' => 1,
-            //'open_tcp_nodelay' => 1,
-            //'log_file' => '/tmp/swoole.log',
-        );
     }
 
-    function daemonize()
+    function run($setting)
     {
-        $this->runtimeSetting['daemonize'] = 1;
-    }
-
-    function connection_info($fd)
-    {
-        return $this->sw->connection_info($fd);
-    }
-
-    function onMasterStart($serv)
-    {
-        swoole_set_process_name($this->getProcessName() . ': master -host=' . $this->host . ' -port=' . $this->port);
-        if (!empty($this->runtimeSetting['pid_file']))
-        {
-            file_put_contents(self::$pidFile, $serv->master_pid);
+        if (!empty(self::$options['daemon'])) {
+            \swoole_process::daemon();
         }
-        if (method_exists($this->protocol, 'onMasterStart'))
-        {
-            $this->protocol->onMasterStart($serv);
+        if (!empty($this->processName)){
+            self::setProcessTitle($this->processName." host:".$this->host." port:".$this->port);
+        }
+        $this->sw = new \swoole_client($this->flag,SWOOLE_SOCK_ASYNC);
+        $this->sw->on("Connect",[$this,"_onConnect"]);
+        $this->sw->on("Error",[$this,"_onError"]);
+        $this->sw->on("Receive",[$this,"_onReceive"]);
+        $this->sw->on("Close",[$this,"_onClose"]);
+        $this->sw->set($setting);
+        $this->connect();
+    }
+
+    public function _onConnect($client)
+    {
+        if (is_callable([$this->server,'onConnect'])){
+            call_user_func([$this->server,'onConnect'], $client);
         }
     }
 
-    function onMasterStop($serv)
+    public function _onError($client)
     {
-        if (!empty($this->runtimeSetting['pid_file']))
-        {
-            unlink(self::$pidFile);
-        }
-        if (method_exists($this->protocol, 'onMasterStop'))
-        {
-            $this->protocol->onMasterStop($serv);
+        if (is_callable([$this->server,'onError'])){
+            call_user_func([$this->server,'onError'], $client);
         }
     }
 
-    function onManagerStop()
+    public function _onReceive($client, $data)
     {
-
-    }
-
-    function onWorkerStart($serv, $worker_id)
-    {
-        if ($worker_id >= $serv->setting['worker_num'])
-        {
-            swoole_set_process_name($this->getProcessName() . ': task');
-        }
-        else
-        {
-            swoole_set_process_name($this->getProcessName() . ': worker');
-        }
-        if (method_exists($this->protocol, 'onStart'))
-        {
-            $this->protocol->onStart($serv, $worker_id);
-        }
-        if (method_exists($this->protocol, 'onWorkerStart'))
-        {
-            $this->protocol->onWorkerStart($serv, $worker_id);
-        }
-    }
-
-    function run($setting = array())
-    {
-        $this->runtimeSetting = array_merge($this->runtimeSetting, $setting);
-        if (self::$pidFile)
-        {
-            $this->runtimeSetting['pid_file'] = self::$pidFile;
-        }
-        if (!empty(self::$options['daemon']))
-        {
-            $this->runtimeSetting['daemonize'] = true;
-        }
-        if (!empty(self::$options['worker']))
-        {
-            $this->runtimeSetting['worker_num'] = intval(self::$options['worker']);
-        }
-        if (!empty(self::$options['thread']))
-        {
-            $this->runtimeSetting['reator_num'] = intval(self::$options['thread']);
-        }
-        if (!empty(self::$options['tasker']))
-        {
-            $this->runtimeSetting['task_worker_num'] = intval(self::$options['tasker']);
-        }
-        $this->sw->set($this->runtimeSetting);
-        $version = explode('.', SWOOLE_VERSION);
-        //1.7.0
-        if ($version[1] >= 7)
-        {
-            $this->sw->on('ManagerStart', function ($serv)
-            {
-                swoole_set_process_name($this->getProcessName() . ': manager');
-            });
-        }
-
-        $this->sw->on('Start', array($this, 'onMasterStart'));
-        $this->sw->on('Shutdown', array($this, 'onMasterStop'));
-        $this->sw->on('ManagerStop', array($this, 'onManagerStop'));
-        $this->sw->on('WorkerStart', array($this, 'onWorkerStart'));
-        $this->sw->on('Connect', array($this->protocol, 'onConnect'));
-        $this->sw->on('Receive', array($this->protocol, 'onReceive'));
-        $this->sw->on('Close', array($this->protocol, 'onClose'));
-        $this->sw->on('WorkerStop', array($this->protocol, 'onShutdown'));
-
-        //swoole-1.8已经移除了onTimer回调函数
-        if ($version[1] < 8)
-        {
-            if (is_callable(array($this->protocol, 'onTimer')))
-            {
-                $this->sw->on('Timer', array($this->protocol, 'onTimer'));
+        if (is_callable([$this->server,'onReceive'])){
+            if (!is_callable(["\\Lib\\SOAProtocol",'decode'])){
+                throw new \Exception("protocol not found");
             }
+            $data = SOAProtocol::decode($data);
+            call_user_func([$this->server,'onReceive'], $client,$data);
         }
-
-        if (is_callable(array($this->protocol, 'onTask')))
-        {
-            $this->sw->on('Task', array($this->protocol, 'onTask'));
-            $this->sw->on('Finish', array($this->protocol, 'onFinish'));
+    }
+    public function _onClose($client)
+    {
+        if (is_callable([$this->server,'onClose'])){
+            call_user_func([$this->server,'onClose'], $client);
         }
-        $this->sw->start();
     }
 
-    function shutdown()
+    public function connect()
     {
-        return $this->sw->shutdown();
+        if ($this->sw->isConnected()){
+            return true;
+        }
+        return $this->sw->connect($this->host,$this->port,30);
     }
 
-    function close($client_id)
+    public function call()
     {
-        return $this->sw->close($client_id);
+        if (!$this->sw->isConnected()){
+            return false;
+        }
+        $args = func_get_args();
+        $function = $args[0];
+        $params = array_slice($args, 1);
+        $env = array_slice($args, 2);
+
+        if (!is_callable(["\\Lib\\SOAProtocol",'encode'])){
+            throw new \Exception("protocol not found");
+        }
+        return $this->sw->send(SOAProtocol::encode($function, $params, $env));
     }
 
-    function send($client_id, $data)
+    public function getError()
     {
-        return $this->sw->send($client_id, $data);
+        return [
+            'code'=>$this->sw->errCode,
+            'message'=>socket_strerror($this->sw->errCode),
+        ];
     }
 
-    function __call($func, $params)
+    public function getRemoteIp()
     {
-        return call_user_func_array(array($this->sw, $func), $params);
-    }
-}
 
-class ServerOptionException extends \Exception
-{
+    }
+
+    public function getRemotePort()
+    {
+
+    }
+
+    function setServer($server)
+    {
+        $this->server = $server;
+        $server::$client = $this;
+    }
+
+    /**
+     * 设置进程名称
+     * @param $name
+     */
+    function setProcessName($name)
+    {
+        $this->processName = $name;
+    }
+
+
+    public function close()
+    {
+        if ($this->sw){
+            $this->sw->close(true);
+        }
+    }
 
 }

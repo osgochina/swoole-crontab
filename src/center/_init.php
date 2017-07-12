@@ -1,6 +1,6 @@
 <?php
+date_default_timezone_set("Asia/Shanghai");
 set_include_path(get_include_path() . PATH_SEPARATOR . "/data/www/public/");
-
 define('SERVICE', true);
 define('WEBPATH', __DIR__);
 define('SWOOLE_SERVER', true);
@@ -18,20 +18,20 @@ const ROBOT_MAX = 128;//同时挂载worker数量
 const WORKER_NUM = 4;//worker进程数量
 const TASK_NUM = 5;//task进程数量
 
-
 define("CENTRE_PORT",8901);
 $env = get_cfg_var('env.name');
-if (empty($env))
+if (empty($env) || $env == "product")
 {
     $env = 'product';
     define('DEBUG', 'off');
-    define("CENTER_HOST","192.168.1.244");
+    define("CENTER_HOST","127.0.0.1");
 }
 else
 {
     define('DEBUG', 'on');
     define("CENTER_HOST","127.0.0.1");
 }
+
 define('ENV_NAME', $env);
 
 require_once 'framework/libs/lib_config.php';

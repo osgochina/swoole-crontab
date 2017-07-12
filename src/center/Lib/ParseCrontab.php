@@ -1,5 +1,7 @@
 <?php
+
 namespace Lib;
+
 /**
  * 解析Crontab格式
  * Created by PhpStorm.
@@ -31,8 +33,12 @@ class ParseCrontab
      */
     static public function parse($crontab_string, $start_time = null)
     {
-        if (!preg_match('/^((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)$/i', trim($crontab_string))) {
-            if (!preg_match('/^((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)$/i', trim($crontab_string))) {
+        if (!preg_match('/^((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)$/i',
+            trim($crontab_string))
+        ) {
+            if (!preg_match('/^((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)\s+((\*(\/[0-9]+)?)|[0-9\-\,\/]+)$/i',
+                trim($crontab_string))
+            ) {
                 self::$error = "Invalid cron string: " . $crontab_string;
                 return false;
             }
@@ -46,7 +52,7 @@ class ParseCrontab
 
         if (count($cron) == 6) {
             $date = array(
-                'second' => (empty($cron[0]))?array(1 => 1):self::_parse_cron_number($cron[0], 0, 59),
+                'second' => (empty($cron[0])) ? array(1 => 1) : self::_parse_cron_number($cron[0], 0, 59),
                 'minutes' => self::_parse_cron_number($cron[1], 0, 59),
                 'hours' => self::_parse_cron_number($cron[2], 0, 23),
                 'day' => self::_parse_cron_number($cron[3], 1, 31),
@@ -94,11 +100,11 @@ class ParseCrontab
             $_min = count($v4) == 2 ? $v4[0] : ($v3[0] == "*" ? $min : $v3[0]);
             $_max = count($v4) == 2 ? $v4[1] : ($v3[0] == "*" ? $max : $v3[0]);
             for ($i = $_min; $i <= $_max; $i += $step) {
-                if (intval($i) < $min){
+                if (intval($i) < $min) {
                     $result[$min] = $min;
-                }elseif (intval($i) > $max){
+                } elseif (intval($i) > $max) {
                     $result[$max] = $max;
-                }else{
+                } else {
                     $result[$i] = intval($i);
                 }
             }

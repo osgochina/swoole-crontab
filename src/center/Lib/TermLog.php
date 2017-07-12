@@ -29,23 +29,23 @@ class TermLog
 
     public static function getInstance()
     {
-        if (empty($handle)){
+        if (empty($handle)) {
             self::$handle = new self();
         }
         return self::$handle;
     }
 
-    public static function log($runid,$taskid,$explain,$msg="")
+    public static function log($runid, $taskid, $explain, $msg = "")
     {
         $log = [
-            "taskid"=>$taskid,
-            "runid"=>$runid,
-            "explain"=>$explain,
-            "msg"=>is_scalar($msg) ? $msg : json_encode($msg),
-            "createtime"=>date("Y-m-d H:i:s"),
+            "taskid" => $taskid,
+            "runid" => $runid,
+            "explain" => $explain,
+            "msg" => is_scalar($msg) ? $msg : json_encode($msg),
+            "createtime" => date("Y-m-d H:i:s"),
         ];
-        if (DEBUG == "on"){
-            echo $log["createtime"]."\t".$log["runid"]."\t".$log["taskid"]."\t".$log["explain"]."\t".$log["msg"],"\n";
+        if (DEBUG == "on") {
+            echo $log["createtime"] . "\t" . $log["runid"] . "\t" . $log["taskid"] . "\t" . $log["explain"] . "\t" . $log["msg"], "\n";
         }
         self::getInstance()->put($log);
     }

@@ -19,36 +19,36 @@ class Tasks
      * 获取分组列表
      * @return array
      */
-    public static function getGroups($uid="")
+    public static function getGroups($uid = "")
     {
         $table = table("crongroup");
         $table->primary = "gid";
-        $list=[];
-        if (empty($uid)){
-            $list = $table->gets(["order"=>"gid asc"]);
-        }else{
+        $list = [];
+        if (empty($uid)) {
+            $list = $table->gets(["order" => "gid asc"]);
+        } else {
             $t = table("group_user");
             $t->select = "*";
-            $gids = $t->gets(["uid"=>$uid]);
+            $gids = $t->gets(["uid" => $uid]);
             $tmp = [];
-            foreach ($gids as $gid){
+            foreach ($gids as $gid) {
                 $tmp[] = $gid["gid"];
             }
-            if (!empty($tmp)){
-                $list = $table->gets(["in"=>["gid",$tmp]]);
+            if (!empty($tmp)) {
+                $list = $table->gets(["in" => ["gid", $tmp]]);
             }
         }
 
-        if (empty($list)){
+        if (empty($list)) {
             $list = [];
-        }else{
+        } else {
             $data = [];
-            foreach ($list as $value){
+            foreach ($list as $value) {
                 $data[$value["gid"]] = $value["gname"];
             }
             $list = $data;
         }
-        return  $list;
+        return $list;
     }
 
     /**
@@ -61,17 +61,17 @@ class Tasks
         $table = table("crongroup");
         $table->primary = "gid";
         $data = $table->get($gid);
-        if (!$data->exist()){
-            return Util::errCodeMsg(101,"不存在");
+        if (!$data->exist()) {
+            return Util::errCodeMsg(101, "不存在");
         }
         $t = table("group_user");
         $t->select = "uid";
-        $uids = $t->gets(["gid"=>$gid]);
+        $uids = $t->gets(["gid" => $gid]);
         $da = [];
-        foreach ($uids as $v){
+        foreach ($uids as $v) {
             $da[] = $v["uid"];
         }
-        return Util::errCodeMsg(0,"",["gid"=>$gid,"gname"=>$data["gname"],"uids"=>$da]);
+        return Util::errCodeMsg(0, "", ["gid" => $gid, "gname" => $data["gname"], "uids" => $da]);
     }
 
     /**
@@ -81,19 +81,21 @@ class Tasks
      */
     public static function addGroup($group)
     {
-        if (empty($group)) return Util::errCodeMsg(101,"参数为空");
+        if (empty($group)) {
+            return Util::errCodeMsg(101, "参数为空");
+        }
         $table = table("crongroup");
         $table->primary = "gid";
         $uids = $group["uids"];
         unset($group["uids"]);
-        if (!($gid =$table->put($group))){
-            return Util::errCodeMsg(102,"添加失败");
+        if (!($gid = $table->put($group))) {
+            return Util::errCodeMsg(102, "添加失败");
         }
         $t = table("group_user");
-        foreach ($uids as $uid){
-            $t->put(["gid"=>$gid,"uid"=>$uid]);
+        foreach ($uids as $uid) {
+            $t->put(["gid" => $gid, "uid" => $uid]);
         }
-        return Util::errCodeMsg(0,"保存成功",$gid);
+        return Util::errCodeMsg(0, "保存成功", $gid);
     }
 
     /**
@@ -102,25 +104,27 @@ class Tasks
      * @param $group
      * @return array
      */
-    public static function updateGroup($gid,$group)
+    public static function updateGroup($gid, $group)
     {
-        if (empty($gid) || empty($group)) return Util::errCodeMsg(101,"参数为空");
+        if (empty($gid) || empty($group)) {
+            return Util::errCodeMsg(101, "参数为空");
+        }
         $table = table("crongroup");
         $table->primary = "gid";
-        $uids=[];
-        if (isset($group["uids"])){
+        $uids = [];
+        if (isset($group["uids"])) {
             $uids = $group["uids"];
             unset($group["uids"]);
         }
-        if (!$table->set($gid,$group)){
-            return Util::errCodeMsg(102,"更新失败");
+        if (!$table->set($gid, $group)) {
+            return Util::errCodeMsg(102, "更新失败");
         }
         $t = table("group_user");
-        $t->dels(["gid"=>$gid]);
-        foreach ($uids as $uid){
-            $t->put(["gid"=>$gid,"uid"=>$uid]);
+        $t->dels(["gid" => $gid]);
+        foreach ($uids as $uid) {
+            $t->put(["gid" => $gid, "uid" => $uid]);
         }
-        return Util::errCodeMsg(0,"更新成功",$gid);
+        return Util::errCodeMsg(0, "更新成功", $gid);
     }
 
     /**
@@ -130,58 +134,55 @@ class Tasks
      */
     public static function deleteGroup($gid)
     {
-        if (empty($gid)) return Util::errCodeMsg(101,"参数为空");
-        if (table("crontab")->count(["gid"=>$gid]) > 0){
-            return Util::errCodeMsg(101,"该分组下有定时任务，不能删除");
+        if (empty($gid)) {
+            return Util::errCodeMsg(101, "参数为空");
+        }
+        if (table("crontab")->count(["gid" => $gid]) > 0) {
+            return Util::errCodeMsg(101, "该分组下有定时任务，不能删除");
         }
         $table = table("crongroup");
         $table->primary = "gid";
-        if (!$table->del($gid)){
-            return Util::errCodeMsg(102,"删除失败");
+        if (!$table->del($gid)) {
+            return Util::errCodeMsg(102, "删除失败");
         }
         $t = table("group_user");
-        $t->dels(["gid"=>$gid]);
-        return Util::errCodeMsg(0,"删除成功");
+        $t->dels(["gid" => $gid]);
+        return Util::errCodeMsg(0, "删除成功");
     }
-
 
 
     /**
      * 获取任务列表
      * @return array
      */
-    public static function getList($gets=[],$page=1,$pagesize=10)
+    public static function getList($gets = [], $page = 1, $pagesize = 10)
     {
-        
+
         //页数
-        if (!empty($pagesize))
-        {
+        if (!empty($pagesize)) {
             $gets['pagesize'] = intval($pagesize);
-        }
-        else
-        {
+        } else {
             $gets['pagesize'] = 20;
         }
-        if (isset($gets["agentid"]) && !empty($gets["agentid"])){
+        if (isset($gets["agentid"]) && !empty($gets["agentid"])) {
             $gets["where"] = "agents REGEXP '(^{$gets["agentid"]}$)|(,{$gets["agentid"]})|({$gets["agentid"]},)'";
             unset($gets["agentid"]);
         }
         $gets['page'] = !empty($page) ? $page : 1;
-        $pager="";
-        $list =   table("crontab")->gets($gets, $pager);
+        $pager = "";
+        $list = table("crontab")->gets($gets, $pager);
         $tasks = LoadTasks::getTasks();
         $group = self::getGroups();
-        foreach ($list as &$task)
-        {
+        foreach ($list as &$task) {
             $tmp = $tasks->get($task["id"]);
             $task["runStatus"] = $tmp["runStatus"];
             $task["runTimeStart"] = $tmp["runTimeStart"];
             $task["runUpdateTime"] = $tmp["runUpdateTime"];
-            if (isset($group[$task["gid"]])){
+            if (isset($group[$task["gid"]])) {
                 $task["gname"] = $group[$task["gid"]];
             }
         }
-        return  ["total"=>$pager->total,"rows"=>$list];
+        return ["total" => $pager->total, "rows" => $list];
     }
 
     /**
@@ -193,8 +194,8 @@ class Tasks
     {
         $tasks = table("crontab");
         $task = $tasks->get($id);
-        if (!$task->exist($id)){
-            return Util::errCodeMsg(101,"不存在");
+        if (!$task->exist($id)) {
+            return Util::errCodeMsg(101, "不存在");
         }
         $data["id"] = $id;
         $data["gid"] = $task["gid"];
@@ -207,10 +208,10 @@ class Tasks
         $data["manager"] = $task["manager"];
         $data["agents"] = $task["agents"];
         $group = self::getGroups();
-        if (isset($group[$task["gid"]])){
+        if (isset($group[$task["gid"]])) {
             $data["gname"] = $group[$task["gid"]];
         }
-        return Util::errCodeMsg(0,"",$data);
+        return Util::errCodeMsg(0, "", $data);
     }
 
     /**
@@ -220,13 +221,15 @@ class Tasks
      */
     public static function add($task)
     {
-        if (empty($task)) return Util::errCodeMsg(101,"参数为空");
+        if (empty($task)) {
+            return Util::errCodeMsg(101, "参数为空");
+        }
         $task["id"] = Donkeyid::getInstance()->dk_get_next_id();
         $ids = LoadTasks::saveTasks([$task]);
-        if ($ids === false){
-            return Util::errCodeMsg(102,"添加失败");
+        if ($ids === false) {
+            return Util::errCodeMsg(102, "添加失败");
         }
-        return Util::errCodeMsg(0,"保存成功",$ids);
+        return Util::errCodeMsg(0, "保存成功", $ids);
     }
 
     /**
@@ -235,13 +238,15 @@ class Tasks
      * @param $task
      * @return array
      */
-    public static function update($id,$task)
+    public static function update($id, $task)
     {
-        if (empty($id) || empty($task)) return Util::errCodeMsg(101,"参数为空");
-        if (!LoadTasks::updateTask($id,$task)){
-            return ["code"=>102,"msg"=>"更新失败"];
+        if (empty($id) || empty($task)) {
+            return Util::errCodeMsg(101, "参数为空");
         }
-        return Util::errCodeMsg(0,"更新成功");
+        if (!LoadTasks::updateTask($id, $task)) {
+            return ["code" => 102, "msg" => "更新失败"];
+        }
+        return Util::errCodeMsg(0, "更新成功");
     }
 
     /**
@@ -251,35 +256,40 @@ class Tasks
      */
     public static function delete($id)
     {
-        if (empty($id)) return Util::errCodeMsg(101,"参数为空");
-        if (!LoadTasks::delTask($id)){
-            return Util::errCodeMsg(102,"删除失败");
+        if (empty($id)) {
+            return Util::errCodeMsg(101, "参数为空");
         }
-        return Util::errCodeMsg(0,"删除成功");
+        if (!LoadTasks::delTask($id)) {
+            return Util::errCodeMsg(102, "删除失败");
+        }
+        return Util::errCodeMsg(0, "删除成功");
     }
 
 
     /**
      * 获取即将运行和已经运行的任务
      */
-    public static function getRuntimeTasks($page=1,$size=20)
+    public static function getRuntimeTasks($page = 1, $size = 20)
     {
-        $start = ($page-1)*$size;
-        $end = $start+$size;
+        $start = ($page - 1) * $size;
+        $end = $start + $size;
         $data = [];
         $list = \Lib\Tasks::$table;
         $tasks = LoadTasks::getTasks();
-        $n=0;
-        foreach ($list as $id=>$rb)
-        {
+        $n = 0;
+        foreach ($list as $id => $rb) {
             $n++;
-            if ($n <= $start) continue;
-            if ($n > $end) break;
+            if ($n <= $start) {
+                continue;
+            }
+            if ($n > $end) {
+                break;
+            }
             $tmp = $tasks->get($rb["id"]);
             $rb["taskname"] = $tmp["taskname"];
             $data[$id] = $rb;
         }
-        return  ["total"=>count($list),"rows"=>$data];
+        return ["total" => count($list), "rows" => $data];
     }
 
 }

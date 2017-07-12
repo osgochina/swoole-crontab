@@ -2,40 +2,40 @@
 /**
  * Created by PhpStorm.
  * User: liuzhiming
- * Date: 16-8-19
- * Time: 下午5:50
+ * Date: 2017/7/11
+ * Time: 13:22
  */
+define('SERVICE', true);
+define('WEBPATH', __DIR__);
+define('SWOOLE_SERVER', true);
+date_default_timezone_set("Asia/Shanghai");
+require WEBPATH . "/Lib/Loader.php";
+spl_autoload_register('\\Lib\\Loader::autoload');
+Lib\Loader::addNameSpace('Lib', WEBPATH."/Lib");
+Lib\Loader::addNameSpace('App', WEBPATH."/App");
 
-include "_init.php";
-
-Lib\Server::setPidFile(getRunPath() . '/logs/agent'.PORT.'.pid');
-Lib\Server::start(function ()
+const ROBOT_MAX_PROCESS = 1024;//单个worker同时执行任务数量
+Lib\Server::setPidFile('/data/logs/agent.pid');
+Lib\Server::start(function ($opt)
 {
-    $logger = new Lib\FileLog(['file' => getRunPath() . '/logs/agent'.PORT.'.log']);
-    $AppSvr = new Lib\AgentServer;
-    $AppSvr->setLogger($logger);
-
+    $AppSvr = new Lib\Agent;
     $setting = array(
-        'worker_num' => WORKER_NUM,
-        'task_worker_num'=>TASK_NUM,
-        //'max_request' => 1000,
-        'dispatch_mode' => 3,
-        'log_file' => getRunPath() . '/logs/swoole.log',
         'open_length_check' => 1,
-        'package_max_length' => $AppSvr->packet_maxlen,
+        'package_max_length' => 2465792,
         'package_length_type' => 'N',
-        'package_body_offset' => Lib\SOAServer::HEADER_SIZE,
-        'package_length_offset' => 0,
+        'package_body_offset' => Lib\SOAProtocol::HEADER_SIZE,
+        'package_length_offset' => 0
     );
-    //重定向PHP错误日志到logs目录
-    ini_set('error_log', getRunPath() . '/logs/php_errors.log');
+    $host = isset($opt["host"])?$opt["host"]:"127.0.0.1";
+    $port = isset($opt["port"])?$opt["port"]:8901;
 
-    $listenHost = Lib\Util::listenHost();
-    
-    Lib\Process::init();//载入任务处理表
-
-    $server = Lib\Server::autoCreate($listenHost, PORT);
-    $server->setProtocol($AppSvr);
+    Lib\Process::signal();//注册信号
+    //5秒同步一次日志
+    swoole_timer_tick(5000,function (){
+        Lib\Process::notify();
+    });
+    $server = Lib\Server::autoCreate($host,$port);
+    $server->setServer($AppSvr);
     $server->setProcessName("AgentServer");
     $server->run($setting);
 });

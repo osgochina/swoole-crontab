@@ -7,6 +7,7 @@
  * Date: 16-8-18
  * Time: 下午5:44
  */
+
 namespace Lib;
 
 use Swoole;
@@ -77,12 +78,14 @@ class LoadTasks
     {
         $db = table("crontab");
         $start = 0;
-        while (true){
-            $where["limit"] = $start.",1000";
+        while (true) {
+            $where["limit"] = $start . ",1000";
             $tasks = $db->gets($where);
-            if (empty($tasks)) break;
+            if (empty($tasks)) {
+                break;
+            }
             foreach ($tasks as $task) {
-                if (count(self::$table) > LOAD_SIZE){
+                if (count(self::$table) > LOAD_SIZE) {
                     return true;
                 }
                 self::$table->set($task["id"],
@@ -98,10 +101,11 @@ class LoadTasks
                     ]
                 );
             }
-            $start+=1000;
+            $start += 1000;
         }
         return true;
     }
+
     /**
      * 获取需要执行的任务
      * @return array
@@ -123,13 +127,13 @@ class LoadTasks
         foreach ($tasks as $task) {
             $task["execute"] = self::merge_spaces($task["execute"]);
             $ids[] = $task["id"];
-            if (self::$table->exist($task["id"])){
-                if (!$db->set($task["id"],$task)){
+            if (self::$table->exist($task["id"])) {
+                if (!$db->set($task["id"], $task)) {
                     return false;
                 }
-            }else{
+            } else {
                 $task["createtime"] = date("Y-m-d H:i:s");
-                if (!$db->put($task)){
+                if (!$db->put($task)) {
                     return false;
                 }
             }
@@ -149,9 +153,9 @@ class LoadTasks
         return $ids;
     }
 
-    static public function merge_spaces ( $string )
+    static public function merge_spaces($string)
     {
-        return preg_replace("/\s(?=\s)/","\\1", $string );
+        return preg_replace("/\s(?=\s)/", "\\1", $string);
     }
 
     /**
@@ -160,14 +164,15 @@ class LoadTasks
      * @param $task
      * @return bool
      */
-    public static function updateTask($id,$task)
+    public static function updateTask($id, $task)
     {
-        if (isset($task["execute"]))
+        if (isset($task["execute"])) {
             $task["execute"] = self::merge_spaces($task["execute"]);
-        if (!table("crontab")->set($id,$task)){
+        }
+        if (!table("crontab")->set($id, $task)) {
             return false;
         }
-        if (!self::$table->set($id,$task)){
+        if (!self::$table->set($id, $task)) {
             return false;
         }
         return true;
@@ -180,10 +185,10 @@ class LoadTasks
      */
     public static function delTask($id)
     {
-        if (!table("crontab")->del($id)){
+        if (!table("crontab")->del($id)) {
             return false;
         }
-        if (!self::$table->del($id)){
+        if (!self::$table->del($id)) {
             return false;
         }
         return true;

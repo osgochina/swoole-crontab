@@ -10,7 +10,7 @@ require_once __DIR__ . '/_init.php';
 
 Swoole\Network\Server::setPidFile(getRunPath() . '/logs/center.pid');
 
-Swoole\Network\Server::start(function ()
+Swoole\Network\Server::start(function ($opt)
 {
     $logger = new Swoole\Log\FileLog(['file' => getRunPath() . '/logs/center.log']);
     $AppSvr = new Lib\CenterServer;
@@ -35,8 +35,18 @@ Swoole\Network\Server::start(function ()
     \Lib\Donkeyid::init();//初始化donkeyid对象
     \Lib\Tasks::init();//创建task表
     \Lib\Robot::init();//创建任务处理服务表
+
+    $host = CENTER_HOST;
+    $port = CENTRE_PORT;
+    if (isset($opt['host'])){
+        $host = $opt['host'];
+    }
+    if (isset($opt['port'])){
+        $port = $opt['port'];
+    }
     
-    $server = Swoole\Network\Server::autoCreate(CENTER_HOST, CENTRE_PORT);
+    $server = Swoole\Network\Server::autoCreate($host, $port);
+    $AppSvr::$_server = $server;
     $server->setProtocol($AppSvr);
     $server->setProcessName("CenterServer");
     $server->on("PipeMessage",array($AppSvr, 'onPipeMessage'));
