@@ -8,6 +8,8 @@
 
 namespace Lib;
 
+use Lib;
+
 class Server
 {
     protected static $options = array();
@@ -22,31 +24,17 @@ class Server
     protected $sw;
     protected $processName;
 
-    static $pidFile;
     static $optionKit;
 
     static $defaultOptions = array(
         'd|daemon' => '启用守护进程模式',
         'h|host:' => '中心服host',
         'p|port:' => '中心服port',
-        'l|log?' => 'log文件地址',
-        'pid?' => 'pid文件地址',
         'help' => '显示帮助界面',
     );
 
-    protected $host;
-    protected $port;
-    protected $flag;
+    public $configFromDefault = [];
 
-
-    /**
-     * 设置PID文件
-     * @param $pidFile
-     */
-    static function setPidFile($pidFile)
-    {
-        self::$pidFile = $pidFile;
-    }
 
     /**
      * @param callable $function
@@ -86,39 +74,9 @@ class Server
         }
         global $argv;
         $opt = $kit->parse($argv);
-        if (isset($opt['pid'])){
-            self::$pidFile = $opt['pid'];
-        }
-        if (empty(self::$pidFile)) {
-            throw new \Exception("require pidFile.");
-        }
-        $pid_file = self::$pidFile;
-        if (is_file($pid_file)) {
-            $server_pid = file_get_contents($pid_file);
-        } else {
-            $server_pid = 0;
-        }
 
-        if (empty($argv[1]) or isset($opt['help'])) {
-            goto usage;
-        } elseif ($argv[1] == 'stop') {
-            if (empty($server_pid)) {
-                exit("Server is not running\n");
-            }
-            if (self::$beforeStopCallback) {
-                call_user_func(self::$beforeStopCallback, $opt);
-            }
-            posix_kill($server_pid, SIGTERM);
-            exit;
-        } elseif ($argv[1] == 'start') {
-            //已存在ServerPID，并且进程存在
-            if (!empty($server_pid) and posix_kill($server_pid, 0))
-            {
-                exit("Server is already running.\n");
-            }
-        } else {
-            usage:
-            $kit->specs->printOptions("php {$argv[0]} start|stop");
+        if (isset($opt['help'])) {
+            $kit->specs->printOptions("php {$argv[0]}");
             exit;
         }
         self::$options = $opt;
@@ -129,10 +87,9 @@ class Server
      * 自动创建对象
      * @return Server
      */
-    static function autoCreate($host, $port, $ssl = false)
+    static function autoCreate()
     {
-
-        return new self($host, $port, $ssl);
+        return new self();
     }
     protected static function setProcessTitle($title)
     {
@@ -145,30 +102,28 @@ class Server
         }
     }
 
-    public function __construct($host, $port, $ssl = false)
-    {
-        $this->flag = $ssl ? (SWOOLE_SOCK_TCP | SWOOLE_SSL) : SWOOLE_SOCK_TCP;
-        $this->host = $host;
-        $this->port = $port;
-    }
-
     function run($setting)
     {
         if (!empty(self::$options['daemon'])) {
-            \swoole_process::daemon();
+            \swoole_process::daemon(true,false);
         }
         if (!empty($this->processName)){
-            self::setProcessTitle($this->processName." host:".$this->host." port:".$this->port);
+            self::setProcessTitle($this->processName);
         }
-        $this->sw = new \swoole_client($this->flag,SWOOLE_SOCK_ASYNC);
+        $this->sw = new \swoole_client(SWOOLE_SOCK_TCP,SWOOLE_SOCK_ASYNC);
         $this->sw->on("Connect",[$this,"_onConnect"]);
         $this->sw->on("Error",[$this,"_onError"]);
         $this->sw->on("Receive",[$this,"_onReceive"]);
         $this->sw->on("Close",[$this,"_onClose"]);
         $this->sw->set($setting);
-        $this->connect();
+        $this->_onWorkStart();
     }
-
+    public function _onWorkStart()
+    {
+        if (is_callable([$this->server,'onWorkStart'])){
+            call_user_func([$this->server,'onWorkStart']);
+        }
+    }
     public function _onConnect($client)
     {
         if (is_callable([$this->server,'onConnect'])){
@@ -205,7 +160,23 @@ class Server
         if ($this->sw->isConnected()){
             return true;
         }
-        return $this->sw->connect($this->host,$this->port,30);
+        $config = $this->getConfig();
+        echo "connect=>host:".$config["host"]." port:".$config["port"]."\n";
+        return $this->sw->connect($config["host"],$config["port"],30);
+    }
+
+    public function getConfig()
+    {
+        $host = "127.0.0.1";
+        $port = 8901;
+        if (isset($this->configFromDefault["host"])){
+            $host = $this->configFromDefault["host"];
+        }
+
+        if (isset($this->configFromDefault["port"])){
+            $port = $this->configFromDefault["port"];
+        }
+        return ["host"=>$host,"port"=>$port];
     }
 
     public function call()
@@ -232,15 +203,6 @@ class Server
         ];
     }
 
-    public function getRemoteIp()
-    {
-
-    }
-
-    public function getRemotePort()
-    {
-
-    }
 
     function setServer($server)
     {

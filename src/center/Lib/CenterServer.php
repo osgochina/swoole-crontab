@@ -25,6 +25,7 @@ class CenterServer extends Swoole\Protocol\SOAServer
 
     function onWorkerStart($server, $worker_id)
     {
+        Swoole::$php->db->connect();
         if ($server->taskworker) {
             if ($worker_id == (WORKER_NUM + self::LOAD_TASKS)) {
                 //准点载入任务

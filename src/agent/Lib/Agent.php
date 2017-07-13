@@ -8,6 +8,7 @@
 
 namespace Lib;
 
+use Lib;
 
 class Agent
 {
@@ -27,8 +28,20 @@ class Agent
      */
     const RE_CONNECT_TIME = 10*1000;
 
+
+    public function onWorkStart()
+    {
+        self::$client->connect();
+        Lib\Process::signal();//注册信号
+        //5秒同步一次日志
+        swoole_timer_tick(5000,function (){
+            Lib\Process::notify();
+        });
+    }
+
     public function onConnect($client)
     {
+        echo "连接成功\n";
         //清除重连定时器
         $this->clearTimer();
         //连接上了注册服务
@@ -41,10 +54,13 @@ class Agent
      */
     public function onError($client)
     {
-        if ($client->errCode == 61){
+        if ($client->errCode == 61 || $client->errCode == 111){
             echo date("Y-m-d H:i:s")." 连接中心服失败\n";
             $this->reConnect();
+        }else{
+            echo "Error=>code:".$client->errCode."msg:".socket_strerror($client->errCode)."\n";
         }
+
     }
 
     /**
@@ -65,6 +81,7 @@ class Agent
      */
     public function onClose($client)
     {
+        echo "连接关闭\n";
         $this->reConnect();
     }
 
