@@ -87,3 +87,6 @@ server {
 
     src/center/configs/dev/db.php 修改数据库配置
 
+4.使用交流
+-----------
+QQ群:560807006
