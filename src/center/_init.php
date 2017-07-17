@@ -20,14 +20,15 @@ const TASK_NUM = 4;//task进程数量
 
 define("CENTRE_PORT",8901);
 $env = get_cfg_var('env.name');
-if (empty($env) || $env == "product")
+if ($env == "product")
 {
-    $env = 'product';
     define('DEBUG', 'off');
     define("CENTER_HOST","127.0.0.1");
-}
-else
-{
+}elseif ($env == "test"){
+    define('DEBUG', 'on');
+    define("CENTER_HOST","127.0.0.1");
+} else {
+    $env = 'dev';
     define('DEBUG', 'on');
     define("CENTER_HOST","127.0.0.1");
 }
