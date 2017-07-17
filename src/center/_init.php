@@ -1,10 +1,8 @@
 <?php
-date_default_timezone_set("Asia/Shanghai");
-set_include_path(get_include_path() . PATH_SEPARATOR . "/data/www/public/");
 define('SERVICE', true);
 define('WEBPATH', __DIR__);
 define('SWOOLE_SERVER', true);
-
+date_default_timezone_set("Asia/Shanghai");
 function getRunPath()
 {
     $path = Phar::running(false);
@@ -35,7 +33,9 @@ if ($env == "product")
 
 define('ENV_NAME', $env);
 
-require_once 'framework/libs/lib_config.php';
+define('PUBLIC_PATH', '/data/www/public/');
+require_once PUBLIC_PATH.'framework/libs/lib_config.php';
+
 Swoole::$php->config->setPath(__DIR__ . '/configs/' . ENV_NAME);//共有配置
 Swoole::$php->config->setPath(__DIR__ . '/configs');//共有配置
 Swoole\Loader::addNameSpace('App', __DIR__ . '/App');
