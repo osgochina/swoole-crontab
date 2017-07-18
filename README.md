@@ -87,12 +87,21 @@ server {
 >输入nginx配置的地址访问web界面，默认用户名/密码是admin/admin
 
 7.操作步骤
+
     请按照以上步骤操作,因为admin后台是通过接口连接上中心服来进行管理.所以必须先启动中心服,再打开admin管理后台
 
 
 
 4.使用交流
 -----------
+
+1.后台截图
+
 ![](https://raw.githubusercontent.com/osgochina/swoole-crontab/master/doc/demo.png)
+
+2.更加清晰的架构图.感谢@xufei100 
+
+![](https://raw.githubusercontent.com/osgochina/swoole-crontab/master/doc/xufei100.png)
+
 
 QQ群:560807006
