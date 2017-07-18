@@ -31,10 +31,19 @@ Swoole-Crontab(基于Swoole扩展)
 -----------
 1.修改配置
 
-    /path/to/src/admin/config/dev/db.php 中修改mysql配置。
-    /path/to/src/center/config/dev/db.php 中修改mysql配置。
+1.1 中心服配置
+    
+    /path/to/src/center/configs/dev/db.php 修改数据库配置
     进入mysql数据库执行/path/to/doc/crontab.sql 的sql文件
     src/center/_init.php   修改 PUBLIC_PATH   swoole framework框架所在的路径
+    
+1.2 admin管理后台的配置文件修改
+    
+    src/admin/configs/dev/db.php  修改数据库配置
+    src/admin/configs/dev/service.php  中心服启动时候监听的ip端口,需要跟中心服通讯
+    src/public/index.php  
+        修改 WEBROOT       域名
+        修改 PUBLIC_PATH   swoole framework框架所在的路径
     
     
 2.下载swoole framework框架到本地/data/www/public/ [framework](https://github.com/swoole/framework.git)
@@ -77,18 +86,10 @@ server {
 
 >输入nginx配置的地址访问web界面，默认用户名/密码是admin/admin
 
-7.各配置文件的修改
+7.操作步骤
+    请按照以上步骤操作,因为admin后台是通过接口连接上中心服来进行管理.所以必须先启动中心服,再打开admin管理后台
 
-7.1 admin管理后台的配置文件修改
 
-    src/admin/configs/dev/db.php  修改数据库配置
-    src/admin/configs/dev/service.php  中心服启动时候监听的ip端口,需要跟中心服通讯
-    src/public/index.php  
-         修改 WEBROOT       域名
-         修改 PUBLIC_PATH   swoole framework框架所在的路径
-7.2 中心服配置
-
-    src/center/configs/dev/db.php 修改数据库配置
 
 4.使用交流
 -----------
