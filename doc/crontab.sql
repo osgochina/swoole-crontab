@@ -8,10 +8,9 @@ CREATE TABLE `agents` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `alias` varchar(64) NOT NULL COMMENT '别名',
   `ip` varchar(20) NOT NULL,
-  `port` int(10) NOT NULL,
   `status` tinyint(5) NOT NULL DEFAULT '0' COMMENT '0 正常 1暂停',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of agents
@@ -27,7 +26,7 @@ CREATE TABLE `agent_group` (
   `gid` int(10) NOT NULL,
   `aid` int(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of agent_group
@@ -102,7 +101,7 @@ CREATE TABLE `rbac_group` (
   `lastupdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`gid`),
   UNIQUE KEY `gname` (`gname`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of rbac_group
@@ -118,7 +117,7 @@ CREATE TABLE `rbac_node` (
   `gid` int(11) NOT NULL COMMENT '分组id',
   `node` varchar(255) NOT NULL,
   PRIMARY KEY (`idx`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of rbac_node
@@ -147,7 +146,7 @@ CREATE TABLE `rbac_user` (
   `lastupdate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of rbac_user
@@ -163,7 +162,7 @@ CREATE TABLE `rbac_user_group` (
   `userid` bigint(20) NOT NULL,
   `gid` int(11) NOT NULL,
   PRIMARY KEY (`idx`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of rbac_user_group

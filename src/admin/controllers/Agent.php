@@ -94,7 +94,6 @@ class Agent extends App\CommonController
             if ($_POST["id"]){
                 $ret = App\Service::getInstance()->call("Agent::updateAgent",$_POST["id"],$task)->getResult(10);
             }else{
-                $task["port"] = 8902;
                 $ret = App\Service::getInstance()->call("Agent::addAgent",$task)->getResult(10);
             }
             if (empty($ret)){

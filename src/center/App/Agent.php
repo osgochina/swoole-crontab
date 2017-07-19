@@ -206,7 +206,7 @@ class Agent
             $agent_group->put(["gid" => $gid, "aid" => $id]);
         }
         //重新加载代理
-        Lib\Robot::$aTable->set($id, ["ip" => $agent["ip"], "port" => $agent["port"]]);
+        Lib\Robot::$aTable->set($id, ["ip" => $agent["ip"]]);
         return Lib\Util::errCodeMsg(0, "保存成功", $id);
     }
 

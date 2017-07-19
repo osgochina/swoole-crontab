@@ -52,7 +52,6 @@
                                         <th width="10%">名称</th>
                                         <th width="10%">分组</th>
                                         <th width="10%">IP</th>
-                                        <th width="10%">PORT</th>
                                         <th width="10%">状态</th>
                                         <th width="10%">是否注册</th>
                                         <th width="10%">心跳时间</th>
@@ -71,7 +70,6 @@
                                                     echo $gname." ";
                                                 }}else{echo $d["gname"];} ?></td>
                                             <td><?= $d["ip"] ?></td>
-                                            <td><?= $d["port"] ?></td>
                                             <td><?= $d["status_f"] ?></td>
                                             <td>
                                                 <?php if ($d["isregister"] == 1){?>
