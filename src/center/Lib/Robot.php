@@ -21,7 +21,7 @@ class Robot
 
     static private $column = [
         "fd" => [\swoole_table::TYPE_INT, 8],
-        "lasttime" => [\swoole_table::TYPE_INT, 8],
+        "lasttime" => [\swoole_table::TYPE_STRING, 16],
     ];
     static private $aColumn = [
         "ip" => [\swoole_table::TYPE_STRING, 15]

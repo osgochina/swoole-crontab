@@ -58,7 +58,7 @@ class Donkeyid
     private function create_table()
     {
         $this->table = new \swoole_table(3);
-        $this->table->column("last_timestamp", \swoole_table::TYPE_INT, 8);
+        $this->table->column("last_timestamp", \swoole_table::TYPE_STRING, 20);
         $this->table->column("sequence", \swoole_table::TYPE_INT, 4);
         $this->table->create();
         $this->lock = new \swoole_lock();

@@ -15,15 +15,15 @@ use Swoole;
 class LoadTasks
 {
     static private $column = [
-        "execNum" => [\swoole_table::TYPE_INT, 1],
-        "runStatus" => [\swoole_table::TYPE_INT, 1],
-        "runTimeStart" => [\swoole_table::TYPE_INT, 8],
-        "runUpdateTime" => [\swoole_table::TYPE_INT, 8],
+        "execNum" => [\swoole_table::TYPE_STRING, 8],
+        "runStatus" => [\swoole_table::TYPE_STRING, 2],
+        "runTimeStart" => [\swoole_table::TYPE_STRING, 20],
+        "runUpdateTime" => [\swoole_table::TYPE_STRING, 20],
         "taskname" => [\swoole_table::TYPE_STRING, 256],
-        "gid" => [\swoole_table::TYPE_INT, 4],
+        "gid" => [\swoole_table::TYPE_STRING, 8],
         "rule" => [\swoole_table::TYPE_STRING, 32],
-        "runnumber" => [\swoole_table::TYPE_INT, 1],
-        "status" => [\swoole_table::TYPE_INT, 1],
+        "runnumber" => [\swoole_table::TYPE_STRING, 8],
+        "status" => [\swoole_table::TYPE_STRING, 2],
         "runuser" => [\swoole_table::TYPE_STRING, 64],
         "execute" => [\swoole_table::TYPE_STRING, 512],
         "agents" => [\swoole_table::TYPE_STRING, 512],

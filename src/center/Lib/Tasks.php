@@ -16,11 +16,11 @@ class Tasks
     static public $table;
 
     static private $column = [
-        "minute" => [\swoole_table::TYPE_INT, 8],
-        "sec" => [\swoole_table::TYPE_INT, 8],
-        "id" => [\swoole_table::TYPE_INT, 8],
-        "runid" => [\swoole_table::TYPE_INT, 8],
-        "runStatus" => [\swoole_table::TYPE_INT, 1],
+        "minute" => [\swoole_table::TYPE_STRING, 12],
+        "sec" => [\swoole_table::TYPE_STRING, 12],
+        "id" => [\swoole_table::TYPE_STRING, 20],
+        "runid" => [\swoole_table::TYPE_STRING, 20],
+        "runStatus" => [\swoole_table::TYPE_STRING, 2],
     ];
 
     /**
