@@ -1,4 +1,12 @@
 <?php
+if (!extension_loaded('swoole')){
+    echo "Please install the Swoole expansion\n";
+    exit();
+}
+if (!extension_loaded('pcre')){
+    echo "Please install the pcre expansion\n";
+    exit();
+}
 define('SERVICE', true);
 define('WEBPATH', __DIR__);
 define('SWOOLE_SERVER', true);
