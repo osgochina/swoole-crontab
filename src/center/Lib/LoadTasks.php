@@ -62,7 +62,7 @@ class LoadTasks
      */
     private static function createConfigTable()
     {
-        self::$table = new \swoole_table(LOAD_SIZE);
+        self::$table = new \swoole_table(LOAD_SIZE*2);
         foreach (self::$column as $key => $v) {
             self::$table->column($key, $v[0], $v[1]);
         }
@@ -125,6 +125,10 @@ class LoadTasks
         $ids = [];
         $db = table("crontab");
         foreach ($tasks as $task) {
+            if (count(self::$table) > LOAD_SIZE){
+                Flog::log("saveTasks fail ,because load size Max");
+                return $ids;
+            }
             $task["execute"] = self::merge_spaces($task["execute"]);
             $ids[] = $task["id"];
             if (self::$table->exist($task["id"])) {

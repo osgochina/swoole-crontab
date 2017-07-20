@@ -29,13 +29,13 @@ class Robot
 
     public static function init()
     {
-        self::$table = new \swoole_table(ROBOT_MAX);
+        self::$table = new \swoole_table(ROBOT_MAX*2);
         foreach (self::$column as $key => $v) {
             self::$table->column($key, $v[0], $v[1]);
         }
         self::$table->create();
 
-        self::$aTable = new \swoole_table(1024);
+        self::$aTable = new \swoole_table(ROBOT_MAX*2);
         foreach (self::$aColumn as $key => $v) {
             self::$aTable->column($key, $v[0], $v[1]);
         }
@@ -54,6 +54,10 @@ class Robot
             return false;
         }
         foreach ($agents as $agent) {
+            if (count(self::$aTable) > ROBOT_MAX){
+                Flog::log("loadAgents fail ,because robot size Max");
+                return true;
+            }
             self::$aTable->set($agent["id"], [
                 "ip" => $agent["ip"]
             ]);

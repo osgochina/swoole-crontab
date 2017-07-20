@@ -9,8 +9,6 @@
 
 namespace Lib;
 
-use Swoole;
-
 class Tasks
 {
     static public $table;
@@ -28,7 +26,7 @@ class Tasks
      */
     public static function init()
     {
-        self::$table = new \swoole_table(TASKS_SIZE);
+        self::$table = new \swoole_table(TASKS_SIZE*2);
         foreach (self::$column as $key => $v) {
             self::$table->column($key, $v[0], $v[1]);
         }
@@ -54,6 +52,10 @@ class Tasks
                     $min = date("YmdHi");
                     $time = strtotime(date("Y-m-d H:i"));
                     foreach ($ret as $sec) {
+                        if (count(self::$table) > TASKS_SIZE){
+                            Flog::log("checkTasks fail ,because tasks size Max");
+                            break;
+                        }
                         $k = Donkeyid::getInstance()->dk_get_next_id();
                         self::$table->set($k, [
                             "minute" => $min,
