@@ -167,4 +167,10 @@ class User extends App\CommonController
         $this->display();
     }
 
+
+    public function welcome()
+    {
+        $this->display();
+    }
+
 }

@@ -9,5 +9,4 @@
 return [
     "login_table"=>"rbac_user",
     "login_url"=>"/page/index",
-    "home_url"=>"/auth/index",
 ];

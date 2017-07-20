@@ -18,7 +18,7 @@ class Page extends Swoole\Controller
     {
         $this->session->start();
         if ($this->user->isLogin()){
-            $this->http->redirect($this->config["user"]["home_url"]);
+            $this->http->redirect($this->config["common"]["home_url"]);
             return;
         }
         if (!empty($_POST)){
@@ -31,7 +31,7 @@ class Page extends Swoole\Controller
                     $this->user->updateStatus();
                     $_SESSION["rbac_list"] = RBAC::loadAccess($_SESSION['user_id']);
 
-                    $this->http->redirect($this->config["user"]["home_url"]);
+                    $this->http->redirect($this->config["common"]["home_url"]);
                     return;
                 }
                 else
