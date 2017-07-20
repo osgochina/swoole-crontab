@@ -369,7 +369,9 @@
                                     <section>
                                         <label class="label">表达式</label>
                                         <label class="input">
-                                            <input type="text" value="<?php echo isset($rule)?$rule:"* * * * * *" ?>"   name="rule" id="rule" onblur="Crontab.init($(this));" maxlength="128" class="input-sm" placeholder="规则">
+                                            <input type="text" value="<?php echo isset($rule)?$rule:"* * * * * *" ?>"
+                                                   name="rule" id="rule" onblur="Crontab.init($(this));"
+                                                   maxlength="256" class="input-sm" placeholder="规则">
                                         </label>
                                     </section>
                                     <section>

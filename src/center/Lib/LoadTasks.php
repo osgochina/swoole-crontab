@@ -21,7 +21,7 @@ class LoadTasks
         "runUpdateTime" => [\swoole_table::TYPE_STRING, 20],
         "taskname" => [\swoole_table::TYPE_STRING, 256],
         "gid" => [\swoole_table::TYPE_STRING, 8],
-        "rule" => [\swoole_table::TYPE_STRING, 32],
+        "rule" => [\swoole_table::TYPE_STRING, 256],
         "runnumber" => [\swoole_table::TYPE_STRING, 8],
         "status" => [\swoole_table::TYPE_STRING, 2],
         "runuser" => [\swoole_table::TYPE_STRING, 64],

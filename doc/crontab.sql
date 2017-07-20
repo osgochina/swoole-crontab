@@ -57,7 +57,7 @@ CREATE TABLE `crontab` (
   `id` bigint(20) NOT NULL COMMENT 'id',
   `gid` int(10) NOT NULL,
   `taskname` varchar(64) NOT NULL,
-  `rule` varchar(32) NOT NULL COMMENT '规则 可以是crontab规则也可以是启动的间隔时间',
+  `rule` varchar(256) NOT NULL COMMENT '规则 可以是crontab规则也可以是启动的间隔时间',
   `runnumber` tinyint(5) NOT NULL DEFAULT '0' COMMENT '并发任务数 0不限制  其他表示限制的数量',
   `execute` varchar(512) NOT NULL COMMENT '运行命令行',
   `status` tinyint(5) NOT NULL DEFAULT '0' COMMENT ' 0正常 1 暂停',
