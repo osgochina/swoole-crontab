@@ -75,7 +75,7 @@ server {
 
 4.启动中心服
 
-    /path/to/php /path/to/src/center/center  start -d -h 127.0.0.1 -p 8901
+    /path/to/php /path/to/src/center/center.php  start -d -h 127.0.0.1 -p 8901
    
 5.启动客户端
 
