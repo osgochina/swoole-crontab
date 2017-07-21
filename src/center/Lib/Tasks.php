@@ -38,6 +38,8 @@ class Tasks
      */
     public static function checkTasks()
     {
+        //清理完成任务
+        self::clean();
         $tasks = LoadTasks::getTasks();
         if (count($tasks) > 0) {
             $time = time();
@@ -67,7 +69,6 @@ class Tasks
                 }
             }
         }
-        self::clean();
         return true;
     }
 
