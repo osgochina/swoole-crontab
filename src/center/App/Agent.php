@@ -139,7 +139,6 @@ class Agent
             "id" => $agent["id"],
             "alias" => $agent["alias"],
             "ip" => $agent["ip"],
-            "port" => $agent["port"],
             "status" => $agent["status"],
             "gids" => ["-1"],
         ];
