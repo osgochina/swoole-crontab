@@ -15,7 +15,7 @@ CREATE TABLE `agents` (
 -- ----------------------------
 -- Records of agents
 -- ----------------------------
-INSERT INTO `agents` VALUES ('1', 'Crontab服务', '127.0.0.1', '8902', '0');
+INSERT INTO `agents` VALUES ('1', 'Crontab服务', '127.0.0.1', '0');
 
 -- ----------------------------
 -- Table structure for agent_group
