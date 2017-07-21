@@ -15,7 +15,7 @@ use Swoole;
 class LoadTasks
 {
     static private $column = [
-        "execNum" => [\swoole_table::TYPE_STRING, 8],
+        "execNum" => [\swoole_table::TYPE_INT, 8],
         "runStatus" => [\swoole_table::TYPE_STRING, 2],
         "runTimeStart" => [\swoole_table::TYPE_STRING, 20],
         "runUpdateTime" => [\swoole_table::TYPE_STRING, 20],
