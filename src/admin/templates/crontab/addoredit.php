@@ -349,7 +349,7 @@
                                                         </div>
                                                     </div>
                                                     <label class="radio state-success"><input type="radio" name="v_week" value="4"><i></i>勾选具体值</label>
-                                                    <?php $n=1; for($i=0;$i<1;$i++){?>
+                                                    <?php $n=0; for($i=0;$i<1;$i++){?>
                                                         <div class="row" style="padding-left: 40px">
                                                             <div class="col-md-12">
                                                                 <?php for($j=0;$j<7;$j++){?>

@@ -6,14 +6,23 @@ var Crontab = {
     init:function (ruleObj) {
         var rule = ruleObj.val();
         rule = explode(" ",rule);
-        if (rule.length < 6) return;
-        //解析秒
-        this.cron_parse(rule[0],"v_second");
-        this.cron_parse(rule[1],"v_min");
-        this.cron_parse(rule[2],"v_hour");
-        this.cron_parse(rule[3],"v_day");
-        this.cron_parse(rule[4],"v_mon");
-        this.cron_parse(rule[5],"v_week");
+        if (rule.length < 5) return;
+        if (rule.length  == 5) {
+            this.cron_parse(rule[0],"v_min");
+            this.cron_parse(rule[1],"v_hour");
+            this.cron_parse(rule[2],"v_day");
+            this.cron_parse(rule[3],"v_mon");
+            this.cron_parse(rule[4],"v_week");
+        }else{
+            //解析秒
+            this.cron_parse(rule[0],"v_second");
+            this.cron_parse(rule[1],"v_min");
+            this.cron_parse(rule[2],"v_hour");
+            this.cron_parse(rule[3],"v_day");
+            this.cron_parse(rule[4],"v_mon");
+            this.cron_parse(rule[5],"v_week");
+        }
+
     },
     bind:function () {
         var list = ["v_second","v_min","v_hour","v_day","v_mon","v_week"];
