@@ -109,9 +109,9 @@ QQ群:560807006
 5.TODO
 ----------
 
-- [x] 去除nginx依赖
-- [x] 配置文件统一
-- [x] 去除swoole framework框架的依赖
-- [x] restful api接口
-- [x] 通过命令行管理任务
-- [x] 无中心服依赖
+- [ ] 去除nginx依赖
+- [ ] 配置文件统一
+- [ ] 去除swoole framework框架的依赖
+- [ ] restful api接口
+- [ ] 通过命令行管理任务
+- [ ] 无中心服依赖
