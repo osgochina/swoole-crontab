@@ -73,6 +73,11 @@ class Robot
      */
     public static function register($fd, $ip)
     {
+        if (self::$table->exist($ip)){
+            $client = new Client($ip);
+            $client->call("close",[]);
+        }
+
         if (self::$table->set($ip, ['fd' => $fd, "lasttime" => time()])) {
             return true;
         }

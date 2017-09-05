@@ -53,6 +53,19 @@ class Process
     }
 
     /**
+     * 检查agent是否可以结束
+     */
+    public static function check_exit()
+    {
+        if (Agent::$is_close){
+            if (count(self::$task_list) == 0 && count(self::$process_list) == 0){
+                echo date("Y-m-d H:i:s")." 服务端已发送强制关闭命令,任务处理完毕,结束进程\n";
+                exit();
+            }
+        }
+    }
+
+    /**
      * 通知中心任务执行结果
      * @return bool
      */
@@ -75,18 +88,21 @@ class Process
                 }
             }
             if (empty($procs)) {
-                return true;
+                goto end;
             }
             $ret = Agent::$client->call("App\\Agent::notify", $procs);
             if (empty($ret)) {
                 $error = Agent::$client->getError();
                 echo("tasks通知中心服失败,code:" . $error['code'] . ",msg:" . $error['message'] . "\n");
+                self::check_exit();
                 return false;
             }
             foreach ($procs as $pid => $v) {
                 unset(self::$task_list[$pid]);
             }
         }
+        end:
+        self::check_exit();
         return true;
     }
 

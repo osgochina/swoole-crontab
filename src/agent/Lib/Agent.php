@@ -28,6 +28,8 @@ class Agent
      */
     const RE_CONNECT_TIME = 10*1000;
 
+    static $is_close = false;
+
 
     public function onWorkStart()
     {
@@ -96,6 +98,11 @@ class Agent
             return $data;
         }
 
+        if ($data['call'] == "App\\close"){
+            echo date("Y-m-d H:i:s")." 服务端已发送强制关闭命令,等待正在运行任务结束\n";
+            $this->clearTimer();
+            self::$is_close = true;
+        }
         //函数不存在
         if (!is_callable($data['call'])) {
             return false;
