@@ -18,7 +18,7 @@ const ROBOT_MAX_PROCESS = 1024;//单个worker同时执行任务数量
 
 
 $env = get_cfg_var('env.name');
-if ($env == "product") {
+if (empty($env) || $env == "product") {
     $env = 'product';
     define('DEBUG', 'off');
 } else {
