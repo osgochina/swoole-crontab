@@ -94,10 +94,7 @@ class LoginController extends \Swoole\Controller
         return RBAC::auth(["controller"=>$m,"view"=>$v]);
     }
 
-    public function validate(array $data, callable $callback, &$errors)
-    {
-        return call_user_func_array($callback, [$data, &$errors]);
-    }
+
 
     protected function redirect($url)
     {
