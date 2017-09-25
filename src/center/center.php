@@ -20,7 +20,7 @@ Swoole\Network\Server::start(function ($opt)
         'worker_num' => WORKER_NUM,
         'task_worker_num'=>TASK_NUM,
         'max_request' => 1000,
-        'dispatch_mode' => 3,
+        'dispatch_mode' => 4,//IP分配，根据客户端IP进行取模hash，分配给一个固定的worker进程
         'log_file' => getRunPath() . '/logs/swoole.log',
         'open_length_check' => 1,
         'package_max_length' => $AppSvr->packet_maxlen,
