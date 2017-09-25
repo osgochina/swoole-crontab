@@ -179,7 +179,7 @@ var Crontab = {
     {
         var ary = null;
         var end;
-        var objRadio = $("input[name='" + strid + "'");
+        var objRadio = $("input[name='" + strid + "']");
         if (strVal == '*'){
             objRadio.eq(0).prop("checked", true);
         }else if (strVal.split('-').length > 1 && strVal.split('/').length < 1){
