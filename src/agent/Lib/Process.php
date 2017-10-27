@@ -42,7 +42,6 @@ class Process
                     self::$task_list[$pid]["code"] = $ret["code"];
                     self::log($task["runid"], $task["taskId"], "进程运行完成,输出值",
                         isset(self::$process_stdout[$pid]) ? self::$process_stdout[$pid] : "");
-
                     swoole_event_del($task["pipe"]);
                     self::$process_list[$pid]->close();
                     unset(self::$process_list[$pid]);
@@ -50,6 +49,23 @@ class Process
                 }
             }
         });
+    }
+
+    /**
+     * 判断超时
+     */
+    public static function timeout()
+    {
+        if (!empty( self::$task_list)){
+            foreach ( self::$task_list as $pid=>$task){
+                if (!empty($task["timeout"]) && ($task["start"])+($task["timeout"]) < time()){
+                    if (\swoole_process::kill($pid,0)){
+                        \swoole_process::kill($pid,SIGTERM);
+                        self::log($task["runid"], $task["taskId"], "该任务已经执行超时,已发送结束任务信号");
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -132,6 +148,7 @@ class Process
             self::$task_list[$pid] = [
                 "taskId" => $task["id"],
                 "runid" => $task["runid"],
+                "timeout" => $task["timeout"],
                 "status" => self::PROCESS_START,
                 "start" => microtime(true),
                 "pipe" => $process->pipe

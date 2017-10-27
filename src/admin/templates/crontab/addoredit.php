@@ -392,10 +392,19 @@
                                     <section>
                                         <label class="label">并发任务数</label>
                                         <label class="input">
-                                            <input type="text" value="<?php echo isset($runnumber)?$runnumber:"0" ?>"  name="runnumber" id="runnumber" maxlength="32" class="input-sm" placeholder="并发任务数">
+                                            <input type="text" value="<?php echo isset($runnumber)?$runnumber:"0" ?>"  name="runnumber" id="runnumber" maxlength="2" class="input-sm" placeholder="并发任务数">
                                         </label>
                                         <div class="note">
                                             <strong>Note:</strong>并发任务数 0不限制  其他表示限制的数量
+                                        </div>
+                                    </section>
+                                    <section>
+                                        <label class="label">任务超时时间</label>
+                                        <label class="input">
+                                            <input type="text" value="<?php echo isset($timeout)?$timeout:"0" ?>"  name="timeout" id="timeout" maxlength="10" class="input-sm" placeholder="任务超时时间">
+                                        </label>
+                                        <div class="note">
+                                            <strong>Note:</strong>任务超时时间(单位是秒) 0不限制  其他表示超时时间
                                         </div>
                                     </section>
                                     <section>
@@ -480,6 +489,12 @@
                     digits:true,
                     max:64,
                     min:0
+                },
+                timeout:{
+                    required : true,
+                    digits:true,
+                    max:60*60*24,
+                    min:0
                 }
 
             },
@@ -505,6 +520,12 @@
                     required : '必填项',
                     digits:"必须是数字",
                     max:"最多开64个进程",
+                    min:'不能为负数'
+                },
+                timeout:{
+                    required : '必填项',
+                    digits:"必须是数字",
+                    max:"最多超时时间为1天",
                     min:'不能为负数'
                 }
             },

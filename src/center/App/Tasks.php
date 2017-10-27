@@ -202,6 +202,7 @@ class Tasks
         $data["taskname"] = $task["taskname"];
         $data["rule"] = $task["rule"];
         $data["runnumber"] = $task["runnumber"];
+        $data["timeout"] = $task["timeout"];
         $data["execute"] = $task["execute"];
         $data["status"] = $task["status"];
         $data["runuser"] = $task["runuser"];

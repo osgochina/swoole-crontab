@@ -92,7 +92,10 @@ class Crontab extends App\CommonController
                 $task["rule"] =trim($_POST["rule"]);
             }
             if (isset($_POST["runnumber"])){
-                $task["runnumber"] = trim($_POST["runnumber"]);
+                $task["runnumber"] = intval(trim($_POST["runnumber"]));
+            }
+            if (isset($_POST["timeout"])){
+                $task["timeout"] = intval(trim($_POST["timeout"]));
             }
             if (isset($_POST["execute"])){
                 $task["execute"] =  htmlspecialchars_decode(trim($_POST["execute"]),ENT_QUOTES);

@@ -78,6 +78,7 @@ class CenterServer extends Swoole\Protocol\SOAServer
                 $tmp["agents"] = $task["agents"];
                 $tmp["taskname"] = $task["taskname"];
                 $tmp["runuser"] = $task["runuser"];
+                $tmp["timeout"] = $task["timeout"];
                 $tmp["runid"] = $k;
                 //正在运行标示
                 if (Tasks::$table->exist($k)) {

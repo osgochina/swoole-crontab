@@ -39,6 +39,10 @@ class Agent
         swoole_timer_tick(5000,function (){
             Lib\Process::notify();
         });
+        //1秒执行一次超时判断
+        swoole_timer_tick(1000,function (){
+            Lib\Process::timeout();
+        });
     }
 
     public function onConnect($client)
