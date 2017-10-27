@@ -79,6 +79,7 @@ class Tasks
     {
         $ids = [];
         $ids2 = [];
+        $loadtasks = LoadTasks::getTasks();
         if (count(self::$table) > 0) {
             $minute = date("YmdHi");
             foreach (self::$table as $id => $task) {
@@ -86,7 +87,13 @@ class Tasks
                     $ids[] = $id;
                     continue;
                 } else {
-                    if (intval($minute) > intval($task["minute"]) + 5) {
+                    $info = $loadtasks->get($id);
+                    if (!array_key_exists("timeout",$info) || $info["timeout"] <= 0){
+                        continue;
+                    }
+                    $timeout = intval($info["timeout"]/60);
+                    $timeout = $timeout > 1?$timeout:1;
+                    if (intval($minute) > intval($task["minute"]) + $timeout) {
                         $ids[] = $id;
                         if ($task["runStatus"] == LoadTasks::RunStatusStart
                             || $task["runStatus"] == LoadTasks::RunStatusToTaskSuccess
@@ -104,7 +111,6 @@ class Tasks
             self::$table->del($id);
         }
         //超时则把运行中的数量-1
-        $loadtasks = LoadTasks::getTasks();
         foreach ($ids2 as $tid) {
             $loadtasks->decr($tid, "execNum");
         }
