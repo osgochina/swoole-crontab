@@ -59,6 +59,7 @@ CREATE TABLE `crontab` (
   `taskname` varchar(64) NOT NULL,
   `rule` varchar(256) NOT NULL COMMENT '规则 可以是crontab规则也可以是启动的间隔时间',
   `runnumber` tinyint(5) NOT NULL DEFAULT '0' COMMENT '并发任务数 0不限制  其他表示限制的数量',
+  `timeout` int(11) NOT NULL DEFAULT '0' COMMENT '脚本超时时间(单位是秒)',
   `execute` varchar(512) NOT NULL COMMENT '运行命令行',
   `status` tinyint(5) NOT NULL DEFAULT '0' COMMENT ' 0正常 1 暂停',
   `runuser` varchar(32) NOT NULL COMMENT '进程运行时用户',
@@ -72,7 +73,7 @@ CREATE TABLE `crontab` (
 -- ----------------------------
 -- Records of crontab
 -- ----------------------------
-INSERT INTO `crontab` VALUES ('3097968986801831941', '1', '测试任务', '* * * * *', '0', '/bin/echo &#039;hello swoole-crontab&#039;', '0', 'nobody', 'admin', '1', '2016-10-23 12:45:27', null);
+INSERT INTO `crontab` VALUES ('3097968986801831941', '1', '测试任务', '* * * * *', '0','0','/bin/echo &#039;hello swoole-crontab&#039;', '0', 'nobody', 'admin', '1', '2016-10-23 12:45:27', null);
 
 -- ----------------------------
 -- Table structure for group_user
