@@ -47,7 +47,7 @@ Swoole\Network\Server::start(function ()
 {
     $server = Swoole\Protocol\WebServer::create(__DIR__ . '/donkey.ini');
     $server->setAppPath(APPSPATH);                                 //设置应用所在的目录
-    $server->setDocumentRoot(WEBPATH."/../public");
+    $server->setDocumentRoot(WEBPATH."/public");
     $server->setLogger(new \Swoole\Log\EchoLog(__DIR__ . "/runtime/donkey_admin.log")); //Logger
 
     //$server->daemonize();                                                  //作为守护进程
