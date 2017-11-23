@@ -87,8 +87,8 @@ class Tasks
                     $ids[] = $id;
                     continue;
                 } else {
-                    $info = $loadtasks->get($id);
-                    if (!array_key_exists("timeout",$info) || $info["timeout"] <= 0){
+                    $info = $loadtasks->get($task["id"]);
+                    if (!is_array($info) || !array_key_exists("timeout",$info) || $info["timeout"] <= 0){
                         continue;
                     }
                     $timeout = intval($info["timeout"]/60);
