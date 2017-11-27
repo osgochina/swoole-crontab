@@ -80,30 +80,50 @@ class Tasks
         $ids = [];
         $ids2 = [];
         $loadtasks = LoadTasks::getTasks();
-        if (count(self::$table) > 0) {
+        $count = count(self::$table);
+        if ( $count > 0) {
             $minute = date("YmdHi");
             foreach (self::$table as $id => $task) {
-                if ($task["runStatus"] == LoadTasks::RunStatusSuccess || $task["runStatus"] == LoadTasks::RunStatusFailed) {
+                //以下状态,不需要在存储任务
+                if (in_array($task["runStatus"],
+                    [
+                        LoadTasks::RunStatusSuccess,
+                        LoadTasks::RunStatusFailed,
+                        LoadTasks::RunStatusError,
+                        LoadTasks::RunStatusToTaskFailed
+                    ]
+                )) {
                     $ids[] = $id;
                     continue;
-                } else {
-                    $info = $loadtasks->get($task["id"]);
-                    if (!is_array($info) || !array_key_exists("timeout",$info) || $info["timeout"] <= 0){
+                }
+                $info = $loadtasks->get($task["id"]);
+                if (!is_array($info) || !array_key_exists("timeout",$info)){
+                    continue;
+                }
+                //如果运行中的任务超过了阈值,则把超过1个小时没有响应的任务清除
+                if ($count > TASKS_SIZE && $task["runStatus"] == LoadTasks::RunStatusToTaskSuccess){
+                    if (intval($minute) > intval($task["minute"]) + 60) {
+                        $ids[] = $id;
+                        $ids2[] = $task["id"];
                         continue;
                     }
-                    $timeout = intval($info["timeout"]/60);
-                    $timeout = $timeout > 1?$timeout:1;
-                    if (intval($minute) > intval($task["minute"]) + $timeout) {
-                        $ids[] = $id;
-                        if ($task["runStatus"] == LoadTasks::RunStatusStart
-                            || $task["runStatus"] == LoadTasks::RunStatusToTaskSuccess
-                            || $task["runStatus"] == LoadTasks::RunStatusError
-                        ) {
-                            $ids2[] = $task["id"];
-                        }
+                }
+                //如果该任务无超时设置,则不进行处理
+                if ($info["timeout"] <= 0){
+                    continue;
+                }
+                //到了超时时间
+                $timeout = intval($info["timeout"]/60);
+                $timeout = $timeout > 1?$timeout:1;
+                if (intval($minute) > intval($task["minute"]) + $timeout) {
+                    $ids[] = $id;
+                    if ($task["runStatus"] == LoadTasks::RunStatusStart
+                        || $task["runStatus"] == LoadTasks::RunStatusToTaskSuccess
+                        || $task["runStatus"] == LoadTasks::RunStatusError
+                    ) {
+                        $ids2[] = $task["id"];
                     }
                 }
-
             }
         }
         //删除
