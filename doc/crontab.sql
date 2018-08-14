@@ -65,7 +65,7 @@ CREATE TABLE `crontab` (
   `runuser` varchar(32) NOT NULL COMMENT '进程运行时用户',
   `manager` varchar(255) DEFAULT NULL COMMENT '负责人',
   `agents` varchar(1024) DEFAULT NULL,
-  `createtime` timestamp NOT NULL ,
+  `createtime` timestamp NULL DEFAULT '0000-00-00 00:00:00',
   `updatetime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
