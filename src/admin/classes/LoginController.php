@@ -13,7 +13,7 @@ class LoginController extends \Swoole\Controller
         parent::__construct($swoole);
         $swoole->session->start();
         // 控制器方法名
-        define('VIEW_NAME', trim(\Swoole::$php->env['mvc']['view']));
+        !defined('VIEW_NAME') || define('VIEW_NAME', trim(\Swoole::$php->env['mvc']['view']));
         if (!$this->isLogin())
         {
             if (!empty($_SERVER['REQUEST_URI']))

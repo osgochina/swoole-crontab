@@ -1,4 +1,4 @@
-Swoole-Crontab(基于Swoole扩展)
+Donkey(基于Swoole的Crontab服务)
 ==============
 1.概述
 --------------
@@ -8,11 +8,11 @@ Swoole-Crontab(基于Swoole扩展)
 + 单中心-多客户端模式,能够横向扩展
 + web界面管理,增删改查任务,完整的权限控制.
 + 请使用swoole扩展1.8.0+
-+ [v0.8版本入口](https://github.com/osgochina/swoole-crontab/tree/v0.8)
++ [v0.8版本入口](https://github.com/osgochina/Donkey/tree/v0.8)
 
 2.架构图
 --------------
-![](https://raw.githubusercontent.com/osgochina/swoole-crontab/master/doc/x.png)
+![](https://raw.githubusercontent.com/osgochina/Donkey/master/doc/x.png)
 
 3.Crontab配置
 --------------
@@ -55,7 +55,7 @@ server {
     listen       80;
     server_name  crontab.test.com;
     
-    root /data/www/wwwroot/swoole-crontab/src/public;
+    root /data/www/wwwroot/Donkey/src/public;
     
     index index.php index.html;
     location / {
@@ -97,11 +97,11 @@ server {
 
 1.后台截图
 
-![](https://raw.githubusercontent.com/osgochina/swoole-crontab/master/doc/demo.png)
+![](https://raw.githubusercontent.com/osgochina/Donkey/master/doc/demo.png)
 
 2.更加清晰的架构图.感谢@xufei100 
 
-![](https://raw.githubusercontent.com/osgochina/swoole-crontab/master/doc/xufei100.png)
+![](https://raw.githubusercontent.com/osgochina/Donkey/master/doc/xufei100.png)
 
 
 QQ群:560807006
