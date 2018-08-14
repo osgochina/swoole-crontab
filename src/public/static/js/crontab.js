@@ -166,12 +166,13 @@ var Crontab = {
         var day = Crontab.cron_create("v_day");
         var mon = Crontab.cron_create("v_mon");
         var week = Crontab.cron_create("v_week");
-        if (second == undefined) second = '*';
-        if (min == undefined) second = '*';
-        if (hour == undefined) second = '*';
-        if (day == undefined) second = '*';
-        if (mon == undefined) second = '*';
-        if (week == undefined) second = '*';
+
+        if (typeof(second) == "undefined") second = '*';
+        if (typeof(min) == "undefined") min = '*';
+        if (typeof(hour) == "undefined") hour = '*';
+        if (typeof(day) == "undefined") day = '*';
+        if (typeof(mon) == "undefined") mon = '*';
+        if (typeof(week) == "undefined") week = '*';
         var cron = second+" "+min+" "+hour+" "+day+" "+mon+" "+week;
         $("#rule").val(cron);
     },
@@ -182,14 +183,18 @@ var Crontab = {
         var objRadio = $("input[name='" + strid + "']");
         if (strVal == '*'){
             objRadio.eq(0).prop("checked", true);
-        }else if (strVal.split('-').length > 1 && strVal.split('/').length < 1){
+        }
+        //1-23 结构
+        else if (strVal.split('-').length > 1 && strVal.split('/').length <= 1){
             ary = strVal.split('-');
             objRadio.eq(1).prop("checked", true);
             $("#" + strid + "Start_0").val(ary[0]);
             $("#" + strid + "X_0").text( ary[0]);
             $("#" + strid + "End_0").val(ary[1]);
             $("#" + strid + "Y_0").text( ary[1]);
-        }else if (strVal.split('/').length > 1 && strVal.split('-').length < 1)
+        }
+        //*/5 结构
+        else if (strVal.split('/').length > 1 && strVal.split('-').length <= 1)
         {
             ary = strVal.split('/');
             objRadio.eq(2).prop("checked", true);
@@ -218,7 +223,9 @@ var Crontab = {
             $("#" + strid + "Y_1").text( end);
             $("#" + strid + "Loop_1").val( ary[1]);
             $("#" + strid + "Z_1").text( ary[1]);
-        }else if(strVal.split('/').length > 1 && strVal.split('-').length > 1){
+        }
+        //1-23/1 结构
+        else if(strVal.split('/').length > 1 && strVal.split('-').length > 1){
 
             ary = strVal.split('/');
             objRadio.eq(2).prop("checked", true);
@@ -254,10 +261,15 @@ var Crontab = {
             $("#" + strid + "Z_1").text(ary[1]);
 
         }
+        // 1,2,3 规则
         else
         {
+            if(strid == 'v_week'){
+                objRadio.eq(2).attr("checked", "checked");
+            }else{
+                objRadio.eq(3).attr("checked", "checked");
+            }
 
-            objRadio.eq(3).attr("checked", "checked");
             if (strVal != "?")
             {
                 ary = strVal.split(",");
@@ -273,6 +285,9 @@ var Crontab = {
     },
     cron_create:function (strid)
     {
+        if(typeof(strid) == "undefined"){
+            return;
+        }
         var objRadio = $("input[name=" + strid + " ]:checked");
         var type = objRadio.val();
         if (type == 1){
