@@ -162,7 +162,12 @@ class Server
         }
         $config = $this->getConfig();
         echo "connect=>host:".$config["host"]." port:".$config["port"]."\n";
-        return $this->sw->connect($config["host"],$config["port"],30);
+        $res = $this->sw->connect($config["host"],$config["port"],30);
+        //https://wiki.swoole.com/wiki/page/30.html 修复Agent和Center网络断开重连连接不上的问题。
+        if($res === false){
+            $this->sw->close(true);
+        }
+        return $res;
     }
 
     public function getConfig()
