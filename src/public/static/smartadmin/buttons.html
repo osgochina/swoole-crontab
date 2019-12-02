@@ -1,0 +1,2216 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
+
+		<title> SmartAdmin </title>
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<!-- Use the correct meta names below for your web application
+			 Ref: http://davidbcalhoun.com/2010/viewport-metatag 
+			 
+		<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">-->
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<!-- Basic Styles -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+
+		<!-- SmartAdmin Styles : Please note (smartadmin-production.css) was created using LESS variables -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.css">
+
+		<!-- SmartAdmin RTL Support is under construction
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-rtl.css"> -->
+
+		<!-- We recommend you use "your_style.css" to override SmartAdmin
+		     specific styles this will also ensure you retrain your customization with each SmartAdmin update.
+		<link rel="stylesheet" type="text/css" media="screen" href="css/your_style.css"> -->
+
+		<!-- Demo purpose only: goes with demo.js, you can delete this css when designing your own WebApp -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/demo.css">
+
+		<!-- FAVICONS -->
+		<link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="img/favicon/favicon.ico" type="image/x-icon">
+
+		<!-- GOOGLE FONT -->
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+
+	</head>
+	<body class="">
+		<!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
+
+		<!-- HEADER -->
+		<header id="header">
+			<div id="logo-group">
+
+				<!-- PLACE YOUR LOGO HERE -->
+				<span id="logo"> <img src="img/logo.png" alt="SmartAdmin"> </span>
+				<!-- END LOGO PLACEHOLDER -->
+
+				<!-- Note: The activity badge color changes when clicked and resets the number to 0
+				Suggestion: You may want to set a flag when this happens to tick off all checked messages / notifications -->
+				<span id="activity" class="activity-dropdown"> <i class="fa fa-user"></i> <b class="badge"> 21 </b> </span>
+
+				<!-- AJAX-DROPDOWN : control this dropdown height, look and feel from the LESS variable file -->
+				<div class="ajax-dropdown">
+
+					<!-- the ID links are fetched via AJAX to the ajax container "ajax-notifications" -->
+					<div class="btn-group btn-group-justified" data-toggle="buttons">
+						<label class="btn btn-default">
+							<input type="radio" name="activity" id="ajax/notify/mail.html">
+							Msgs (14) </label>
+						<label class="btn btn-default">
+							<input type="radio" name="activity" id="ajax/notify/notifications.html">
+							notify (3) </label>
+						<label class="btn btn-default">
+							<input type="radio" name="activity" id="ajax/notify/tasks.html">
+							Tasks (4) </label>
+					</div>
+
+					<!-- notification content -->
+					<div class="ajax-notifications custom-scroll">
+
+						<div class="alert alert-transparent">
+							<h4>Click a button to show messages here</h4>
+							This blank page message helps protect your privacy, or you can show the first message here automatically.
+						</div>
+
+						<i class="fa fa-lock fa-4x fa-border"></i>
+
+					</div>
+					<!-- end notification content -->
+
+					<!-- footer: refresh area -->
+					<span> Last updated on: 12/12/2013 9:43AM
+						<button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Loading..." class="btn btn-xs btn-default pull-right">
+							<i class="fa fa-refresh"></i>
+						</button> </span>
+					<!-- end footer -->
+
+				</div>
+				<!-- END AJAX-DROPDOWN -->
+			</div>
+
+			<!-- projects dropdown -->
+			<div id="project-context">
+
+				<span class="label">Projects:</span>
+				<span id="project-selector" class="popover-trigger-element dropdown-toggle" data-toggle="dropdown">Recent projects <i class="fa fa-angle-down"></i></span>
+
+				<!-- Suggestion: populate this list with fetch and push technique -->
+				<ul class="dropdown-menu">
+					<li>
+						<a href="javascript:void(0);">Online e-merchant management system - attaching integration with the iOS</a>
+					</li>
+					<li>
+						<a href="javascript:void(0);">Notes on pipeline upgradee</a>
+					</li>
+					<li>
+						<a href="javascript:void(0);">Assesment Report for merchant account</a>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<a href="javascript:void(0);"><i class="fa fa-power-off"></i> Clear</a>
+					</li>
+				</ul>
+				<!-- end dropdown-menu-->
+
+			</div>
+			<!-- end projects dropdown -->
+
+			<!-- pulled right: nav area -->
+			<div class="pull-right">
+
+				<!-- collapse menu button -->
+				<div id="hide-menu" class="btn-header pull-right">
+					<span> <a href="javascript:void(0);" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
+				</div>
+				<!-- end collapse menu -->
+
+				<!-- logout button -->
+				<div id="logout" class="btn-header transparent pull-right">
+					<span> <a href="login.html" title="Sign Out"><i class="fa fa-sign-out"></i></a> </span>
+				</div>
+				<!-- end logout button -->
+
+				<!-- search mobile button (this is hidden till mobile view port) -->
+				<div id="search-mobile" class="btn-header transparent pull-right">
+					<span> <a href="javascript:void(0)" title="Search"><i class="fa fa-search"></i></a> </span>
+				</div>
+				<!-- end search mobile button -->
+
+				<!-- input: search field -->
+				<form action="#search.html" class="header-search pull-right">
+					<input type="text" placeholder="Find reports and more" id="search-fld">
+					<button type="submit">
+						<i class="fa fa-search"></i>
+					</button>
+					<a href="javascript:void(0);" id="cancel-search-js" title="Cancel Search"><i class="fa fa-times"></i></a>
+				</form>
+				<!-- end input: search field -->
+
+				<!-- multiple lang dropdown : find all flags in the image folder -->
+				<ul class="header-dropdown-list hidden-xs">
+					<li>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img alt="" src="img/flags/us.png"> <span> US </span> <i class="fa fa-angle-down"></i> </a>
+						<ul class="dropdown-menu pull-right">
+							<li class="active">
+								<a href="javascript:void(0);"><img alt="" src="img/flags/us.png"> US</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);"><img alt="" src="img/flags/es.png"> Spanish</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);"><img alt="" src="img/flags/de.png"> German</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<!-- end multiple lang -->
+
+			</div>
+			<!-- end pulled right: nav area -->
+
+		</header>
+		<!-- END HEADER -->
+
+		<!-- Left panel : Navigation area -->
+		<!-- Note: This width of the aside area can be adjusted through LESS variables -->
+		<aside id="left-panel">
+
+			<!-- User info -->
+			<div class="login-info">
+				<span> <!-- User image size is adjusted inside CSS, it should stay as it --> 
+					
+					<a href="javascript:void(0);" id="show-shortcut">
+						<img src="img/avatars/sunny.png" alt="me" class="online" /> 
+						<span>
+							john.doe 
+						</span>
+						<i class="fa fa-angle-down"></i>
+					</a> 
+					
+				</span>
+			</div>
+			<!-- end user info -->
+
+			<!-- NAVIGATION : This navigation is also responsive
+
+			To make this navigation dynamic please make sure to link the node
+			(the reference to the nav > ul) after page load. Or the navigation
+			will not initialize.
+			-->
+			<nav>
+				<!-- NOTE: Notice the gaps after each icon usage <i></i>..
+				Please note that these links work a bit different than
+				traditional hre="" links. See documentation for details.
+				-->
+
+				<ul>
+					<li>
+						<a href="index.html" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
+					</li>
+					<li>
+						<a href="inbox.html"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Inbox</span><span class="badge pull-right inbox-badge">14</span></a>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i> <span class="menu-item-parent">Graphs</span></a>
+						<ul>
+							<li>
+								<a href="flot.html">Flot Chart</a>
+							</li>
+							<li>
+								<a href="morris.html">Morris Charts</a>
+							</li>
+							<li>
+								<a href="inline-charts.html">Inline Charts</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent">Tables</span></a>
+						<ul>
+							<li>
+								<a href="table.html">Normal Tables</a>
+							</li>
+							<li>
+								<a href="datatables.html">Data Tables</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-lg fa-fw fa-pencil-square-o"></i> <span class="menu-item-parent">Forms</span></a>
+						<ul>
+							<li>
+								<a href="form-elements.html">Smart Form Elements</a>
+							</li>
+							<li>
+								<a href="form-templates.html">Smart Form Layouts</a>
+							</li>
+							<li>
+								<a href="validation.html">Smart Form Validation</a>
+							</li>
+							<li>
+								<a href="bootstrap-forms.html">Bootstrap Form Elements</a>
+							</li>
+							<li>
+								<a href="plugins.html">Form Plugins</a>
+							</li>
+							<li>
+								<a href="wizard.html">Wizards</a>
+							</li>
+							<li>
+								<a href="other-editors.html">Bootstrap Editors</a>
+							</li>
+							<li>
+								<a href="dropzone.html">Dropzone <span class="badge pull-right inbox-badge bg-color-yellow">new</span></a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">UI Elements</span></a>
+						<ul>
+							<li>
+								<a href="general-elements.html">General Elements</a>
+							</li>
+							<li class="active">
+								<a href="buttons.html">Buttons</a>
+							</li>
+							<li>
+								<a href="#">Icons</a>
+								<ul>
+									<li>
+										<a href="fa.html"><i class="fa fa-plane"></i> Font Awesome</a>
+									</li>		
+									<li>
+										<a href="glyph.html"><i class="glyphicon glyphicon-plane"></i> Glyph Icons </a>
+									</li>	
+								</ul>
+							</li>
+							<li>
+								<a href="grid.html">Grid</a>
+							</li>
+							<li>
+								<a href="treeview.html">Tree View</a>
+							</li>
+							<li>
+								<a href="nestable-list.html">Nestable Lists</a>
+							</li>
+							<li>
+								<a href="jqui.html">JQuery UI</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-lg fa-fw fa-folder-open"></i> <span class="menu-item-parent">6 Level Navigation</span></a>
+						<ul>
+							<li>
+								<a href="#"><i class="fa fa-fw fa-folder-open"></i> 2nd Level</a>
+								<ul>
+									<li>
+										<a href="#"><i class="fa fa-fw fa-folder-open"></i> 3ed Level </a>
+										<ul>
+											<li>
+												<a href="#"><i class="fa fa-fw fa-file-text"></i> File</a>
+											</li>
+											<li>
+												<a href="#"><i class="fa fa-fw fa-folder-open"></i> 4th Level</a>
+												<ul>
+													<li>
+														<a href="#"><i class="fa fa-fw fa-file-text"></i> File</a>
+													</li>
+													<li>
+														<a href="#"><i class="fa fa-fw fa-folder-open"></i> 5th Level</a>
+														<ul>
+															<li>
+																<a href="#"><i class="fa fa-fw fa-file-text"></i> File</a>
+															</li>
+															<li>
+																<a href="#"><i class="fa fa-fw fa-file-text"></i> File</a>
+															</li>
+														</ul>
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<a href="#"><i class="fa fa-fw fa-folder-open"></i> Folder</a>
+
+								<ul>
+									<li>
+										<a href="#"><i class="fa fa-fw fa-folder-open"></i> 3ed Level </a>
+										<ul>
+											<li>
+												<a href="#"><i class="fa fa-fw fa-file-text"></i> File</a>
+											</li>
+											<li>
+												<a href="#"><i class="fa fa-fw fa-file-text"></i> File</a>
+											</li>
+										</ul>
+									</li>
+								</ul>
+
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="calendar.html"><i class="fa fa-lg fa-fw fa-calendar"><em>3</em></i> <span class="menu-item-parent">Calendar</span></a>
+					</li>
+					<li>
+						<a href="widgets.html"><i class="fa fa-lg fa-fw fa-list-alt"></i> <span class="menu-item-parent">Widgets</span></a>
+					</li>
+					<li>
+						<a href="gallery.html"><i class="fa fa-lg fa-fw fa-picture-o"></i> <span class="menu-item-parent">Gallery</span></a>
+					</li>
+					<li>
+						<a href="gmap-xml.html"><i class="fa fa-lg fa-fw fa-map-marker"></i> <span class="menu-item-parent">Google Map Skins</span><span class="badge bg-color-greenLight pull-right inbox-badge">9</span></a>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-lg fa-fw fa-windows"></i> <span class="menu-item-parent">Miscellaneous</span></a>
+						<ul>
+							<li>
+								<a href="typography.html">Typography</a>
+							</li>
+							<li>
+								<a href="pricing-table.html">Pricing Tables</a>
+							</li>
+							<li>
+								<a href="invoice.html">Invoice</a>
+							</li>
+							<li>
+								<a href="login.html" target="_top">Login</a>
+							</li>
+							<li>
+								<a href="register.html" target="_top">Register</a>
+							</li>
+							<li>
+								<a href="lock.html" target="_top">Locked Screen</a>
+							</li>
+							<li>
+								<a href="error404.html">Error 404</a>
+							</li>
+							<li>
+								<a href="error500.html">Error 500</a>
+							</li>
+							<li>
+								<a href="blank_.html">Blank Page</a>
+							</li>
+							<li>
+								<a href="email-template.html">Email Template</a>
+							</li>
+							<li>
+								<a href="search.html">Search Page</a>
+							</li>
+							<li>
+								<a href="ckeditor.html">CK Editor</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-lg fa-fw fa-file"></i> <span class="menu-item-parent">Other Pages</span></a>
+						<ul>
+							<li>
+								<a href="forum.html">Forum Layout</a>
+							</li>
+							<li>
+								<a href="profile.html">Profile</a>
+							</li>
+							<li>
+								<a href="timeline.html">Timeline</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			<span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span>
+
+		</aside>
+		<!-- END NAVIGATION -->
+
+		<!-- MAIN PANEL -->
+		<div id="main" role="main">
+
+			<!-- RIBBON -->
+			<div id="ribbon">
+
+				<span class="ribbon-button-alignment"> <span id="refresh" class="btn btn-ribbon" data-title="refresh"  rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Warning! This will reset all your widget settings." data-html="true"><i class="fa fa-refresh"></i></span> </span>
+
+				<!-- breadcrumb -->
+				<ol class="breadcrumb">
+					<li>
+						UI Elements
+					</li>
+					<li>
+						Buttons
+					</li>
+				</ol>
+				<!-- end breadcrumb -->
+
+				<!-- You can also add more buttons to the
+				ribbon for further usability
+
+				Example below:
+
+				<span class="ribbon-button-alignment pull-right">
+				<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+				</span> -->
+
+			</div>
+			<!-- END RIBBON -->
+
+			<!-- MAIN CONTENT -->
+			<div id="content">
+
+				<div class="row">
+					<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+						<h1 class="page-title txt-color-blueDark"><i class="fa fa-desktop fa-fw "></i> UI Elements <span>>
+							Buttons </span></h1>
+					</div>
+					<div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
+						<ul id="sparks" class="">
+							<li class="sparks-info">
+								<h5> My Income <span class="txt-color-blue">$47,171</span></h5>
+								<div class="sparkline txt-color-blue hidden-mobile hidden-md hidden-sm">
+									1300, 1877, 2500, 2577, 2000, 2100, 3000, 2700, 3631, 2471, 2700, 3631, 2471
+								</div>
+							</li>
+							<li class="sparks-info">
+								<h5> Site Traffic <span class="txt-color-purple"><i class="fa fa-arrow-circle-up" data-rel="bootstrap-tooltip" title="Increased"></i>&nbsp;45%</span></h5>
+								<div class="sparkline txt-color-purple hidden-mobile hidden-md hidden-sm">
+									110,150,300,130,400,240,220,310,220,300, 270, 210
+								</div>
+							</li>
+							<li class="sparks-info">
+								<h5> Site Orders <span class="txt-color-greenDark"><i class="fa fa-shopping-cart"></i>&nbsp;2447</span></h5>
+								<div class="sparkline txt-color-greenDark hidden-mobile hidden-md hidden-sm">
+									110,150,300,130,400,240,220,310,220,300, 270, 210
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<!-- widget grid -->
+				<section id="widget-grid" class="">
+
+					<!-- row -->
+
+					<div class="row">
+
+						<!-- NEW WIDGET START -->
+						<article class="col-sm-12">
+
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget well" id="wid-id-0a" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+								<!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+								<header>
+									<span class="widget-icon"> <i class="fa fa-hand-o-up"></i> </span>
+									<h2>Buttons at a glance </h2>
+
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget edit box -->
+									<div class="jarviswidget-editbox">
+										<!-- This area used as dropdown edit box -->
+
+									</div>
+									<!-- end widget edit box -->
+
+									<!-- widget content -->
+									<div class="widget-body">
+										<h1>Buttons at a glance...</h1>
+										<p>
+											See how aspects of the Bootstrap button system look and feel like at a glance.
+										</p>
+										<div class="table-responsive">
+											<table class="table table-bordered">
+												<thead>
+													<tr>
+														<th>Button</th>
+														<th>btn-lg Button</th>
+														<th>Small Button</th>
+														<th>Small Mini</th>
+														<th>Disabled Button</th>
+														<th>Button with Icon</th>
+														<th>Split Button</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td><a class="btn btn-default" href="javascript:void(0);">Default</a></td>
+														<td><a class="btn btn-default btn-lg" href="javascript:void(0);">Default</a></td>
+														<td><a class="btn btn-default btn-sm" href="javascript:void(0);">Default</a></td>
+														<td><a class="btn btn-default btn-xs" href="javascript:void(0);">Default</a></td>
+														<td><a class="btn btn-default disabled" href="javascript:void(0);">Default</a></td>
+														<td><a class="btn btn-default" href="javascript:void(0);"><i class="fa fa-cog"></i> Default</a></td>
+														<td>
+														<div class="btn-group">
+															<a class="btn btn-default" href="javascript:void(0);">Default</a>
+															<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+															<ul class="dropdown-menu">
+																<li>
+																	<a href="javascript:void(0);">Action</a>
+																</li>
+																<li>
+																	<a href="javascript:void(0);">Another action</a>
+																</li>
+																<li>
+																	<a href="javascript:void(0);">Something else here</a>
+																</li>
+																<li class="divider"></li>
+																<li>
+																	<a href="javascript:void(0);">Separated link</a>
+																</li>
+															</ul>
+														</div><!-- /btn-group --></td>
+													</tr>
+													<tr>
+														<td><a class="btn btn-primary" href="javascript:void(0);">Primary</a></td>
+														<td><a class="btn btn-primary btn-lg" href="javascript:void(0);">Primary</a></td>
+														<td><a class="btn btn-primary btn-sm" href="javascript:void(0);">Primary</a></td>
+														<td><a class="btn btn-primary btn-xs" href="javascript:void(0);">Primary</a></td>
+														<td><a class="btn btn-primary disabled" href="javascript:void(0);">Primary</a></td>
+														<td><a class="btn btn-primary" href="javascript:void(0);"><i class="fa fa-shopping-cart"></i> Primary</a></td>
+														<td>
+														<div class="btn-group">
+															<a class="btn btn-primary" href="javascript:void(0);">Primary</a>
+															<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+															<ul class="dropdown-menu">
+																<li>
+																	<a href="javascript:void(0);">Action</a>
+																</li>
+																<li>
+																	<a href="javascript:void(0);">Another action</a>
+																</li>
+																<li>
+																	<a href="javascript:void(0);">Something else here</a>
+																</li>
+																<li class="divider"></li>
+																<li>
+																	<a href="javascript:void(0);">Separated link</a>
+																</li>
+															</ul>
+														</div><!-- /btn-group --></td>
+													</tr>
+													<tr>
+														<td><a class="btn btn-info" href="javascript:void(0);">Info</a></td>
+														<td><a class="btn btn-info btn-lg" href="javascript:void(0);">Info</a></td>
+														<td><a class="btn btn-info btn-sm" href="javascript:void(0);">Info</a></td>
+														<td><a class="btn btn-info btn-xs" href="javascript:void(0);">Info</a></td>
+														<td><a class="btn btn-info disabled" href="javascript:void(0);">Info</a></td>
+														<td><a class="btn btn-info" href="javascript:void(0);"><i class="fa fa-exclamation-sign"></i> Info</a></td>
+														<td>
+														<div class="btn-group">
+															<a class="btn btn-info" href="javascript:void(0);">Info</a>
+															<a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+															<ul class="dropdown-menu">
+																<li>
+																	<a href="javascript:void(0);">Action</a>
+																</li>
+																<li>
+																	<a href="javascript:void(0);">Another action</a>
+																</li>
+																<li>
+																	<a href="javascript:void(0);">Something else here</a>
+																</li>
+																<li class="divider"></li>
+																<li>
+																	<a href="javascript:void(0);">Separated link</a>
+																</li>
+															</ul>
+														</div><!-- /btn-group --></td>
+													</tr>
+													<tr>
+														<td><a class="btn btn-success" href="javascript:void(0);">Success</a></td>
+														<td><a class="btn btn-success btn-lg" href="javascript:void(0);">Success</a></td>
+														<td><a class="btn btn-success btn-sm" href="javascript:void(0);">Success</a></td>
+														<td><a class="btn btn-success btn-xs" href="javascript:void(0);">Success</a></td>
+														<td><a class="btn btn-success disabled" href="javascript:void(0);">Success</a></td>
+														<td><a class="btn btn-success" href="javascript:void(0);"><i class="fa fa-check"></i> Success</a></td>
+														<td>
+														<div class="btn-group">
+															<a class="btn btn-success" href="javascript:void(0);">Success</a>
+															<a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+															<ul class="dropdown-menu">
+																<li>
+																	<a href="javascript:void(0);">Action</a>
+																</li>
+																<li>
+																	<a href="javascript:void(0);">Another action</a>
+																</li>
+																<li>
+																	<a href="javascript:void(0);">Something else here</a>
+																</li>
+																<li class="divider"></li>
+																<li>
+																	<a href="javascript:void(0);">Separated link</a>
+																</li>
+															</ul>
+														</div><!-- /btn-group --></td>
+													</tr>
+													<tr>
+														<td><a class="btn btn-warning" href="javascript:void(0);">Warning</a></td>
+														<td><a class="btn btn-warning btn-lg" href="javascript:void(0);">Warning</a></td>
+														<td><a class="btn btn-warning btn-sm" href="javascript:void(0);">Warning</a></td>
+														<td><a class="btn btn-warning btn-xs" href="javascript:void(0);">Warning</a></td>
+														<td><a class="btn btn-warning disabled" href="javascript:void(0);">Warning</a></td>
+														<td><a class="btn btn-warning" href="javascript:void(0);"><i class="fa fa-warning-sign"></i> Warning</a></td>
+														<td>
+														<div class="btn-group">
+															<a class="btn btn-warning" href="javascript:void(0);">Warning</a>
+															<a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+															<ul class="dropdown-menu">
+																<li>
+																	<a href="javascript:void(0);">Action</a>
+																</li>
+																<li>
+																	<a href="javascript:void(0);">Another action</a>
+																</li>
+																<li>
+																	<a href="javascript:void(0);">Something else here</a>
+																</li>
+																<li class="divider"></li>
+																<li>
+																	<a href="javascript:void(0);">Separated link</a>
+																</li>
+															</ul>
+														</div><!-- /btn-group --></td>
+													</tr>
+													<tr>
+														<td><a class="btn btn-danger" href="javascript:void(0);">Danger</a></td>
+														<td><a class="btn btn-danger btn-lg" href="javascript:void(0);">Danger</a></td>
+														<td><a class="btn btn-danger btn-sm" href="javascript:void(0);">Danger</a></td>
+														<td><a class="btn btn-danger btn-xs" href="javascript:void(0);">Danger</a></td>
+														<td><a class="btn btn-danger disabled" href="javascript:void(0);">Danger</a></td>
+														<td><a class="btn btn-danger" href="javascript:void(0);"><i class="fa fa-remove"></i> Danger</a></td>
+														<td>
+														<div class="btn-group">
+															<a class="btn btn-danger" href="javascript:void(0);">Danger</a>
+															<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><span class="caret"></span></a>
+															<ul class="dropdown-menu">
+																<li>
+																	<a href="javascript:void(0);">Action</a>
+																</li>
+																<li>
+																	<a href="javascript:void(0);">Another action</a>
+																</li>
+																<li>
+																	<a href="javascript:void(0);">Something else here</a>
+																</li>
+																<li class="divider"></li>
+																<li>
+																	<a href="javascript:void(0);">Separated link</a>
+																</li>
+															</ul>
+														</div><!-- /btn-group --></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+
+						</article>
+						<!-- WIDGET END -->
+
+					</div>
+
+					<!-- end row -->
+
+					<!-- row -->
+					<div class="row">
+
+						<!-- NEW WIDGET START -->
+						<article class="col-sm-12 col-md-12 col-lg-6">
+
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+								<!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+								<header>
+									<span class="widget-icon"> <i class="fa fa-hand-o-up"></i> </span>
+									<h2>Basic Buttons</h2>
+
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget edit box -->
+									<div class="jarviswidget-editbox">
+										<!-- This area used as dropdown edit box -->
+
+									</div>
+									<!-- end widget edit box -->
+
+									<!-- widget content -->
+									<div class="widget-body">
+										<p class="alert alert-info">
+											The icons below are the most basic ones, without any icons or additional css applied to it
+										</p>
+
+										<p>
+											Buttons come in 6 different default color sets
+											<code>
+												.btn .btn-*
+											</code>
+											<code>
+												.btn-default, .btn-primary, .btn-success... etc
+											</code>
+										</p>
+										<a href="javascript:void(0);" class="btn btn-default">Default</a>
+										<a href="javascript:void(0);" class="btn btn-primary">Primary</a>
+										<a href="javascript:void(0);" class="btn btn-success">Success</a>
+										<a href="javascript:void(0);" class="btn btn-info">Info</a>
+										<a href="javascript:void(0);" class="btn btn-warning">Warning</a>
+										<a href="javascript:void(0);" class="btn btn-danger">Danger</a>
+										<a href="javascript:void(0);" class="btn btn-default disabled">Disabled</a>
+										<a href="javascript:void(0);" class="btn btn-link">Link</a>
+
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget" id="wid-id-2" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+								<!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+								<header>
+									<span class="widget-icon"> <i class="fa fa-hand-o-up"></i> </span>
+									<h2>Button Sizes </h2>
+
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget edit box -->
+									<div class="jarviswidget-editbox">
+										<!-- This area used as dropdown edit box -->
+
+									</div>
+									<!-- end widget edit box -->
+
+									<!-- widget content -->
+									<div class="widget-body">
+										<p>
+											Large buttons to attract call to action
+											<code>
+												.btn .btn-lg
+											</code>
+										</p>
+										<a href="javascript:void(0);" class="btn btn-primary btn-lg">Large button</a>&nbsp;<a href="javascript:void(0);" class="btn btn-default btn-lg">Large button</a>
+										<hr class="simple">
+
+										<p>
+											The Default button
+											<code>
+												.btn .btn-default
+											</code>
+										</p>
+										<a href="javascript:void(0);" class="btn btn-primary">Default button</a>&nbsp;<a href="javascript:void(0);" class="btn btn-default">Default button</a>
+										<hr class="simple">
+
+										<p>
+											Small button for elegance
+											<code>
+												.btn .btn-sm
+											</code>
+										</p>
+										<a href="javascript:void(0);" class="btn btn-primary btn-sm">Small button</a>&nbsp;<a href="javascript:void(0);" class="btn btn-default btn-sm">Small button</a>
+										<hr class="simple">
+
+										<p>
+											Extra small button for added info
+											<code>
+												.btn .btn-xs
+											</code>
+										</p>
+										<a href="javascript:void(0);" class="btn btn-primary btn-xs">Mini button</a>&nbsp;<a href="javascript:void(0);" class="btn btn-default btn-xs">Mini button</a>
+
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget" id="wid-id-4" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+								<!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+								<header>
+									<span class="widget-icon"> <i class="fa fa-hand-o-up"></i> </span>
+									<h2>Circle Buttons </h2>
+
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget edit box -->
+									<div class="jarviswidget-editbox">
+										<!-- This area used as dropdown edit box -->
+
+									</div>
+									<!-- end widget edit box -->
+
+									<!-- widget content -->
+									<div class="widget-body">
+
+										<p>
+											Extra Large round buttons
+											<code>
+												.btn-circle .btn-xl
+											</code>
+										</p>
+										<ul class="demo-btns">
+											<li>
+												<a href="javascript:void(0);" class="btn btn-primary btn-circle btn-xl"><i class="glyphicon glyphicon-list"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default btn-circle btn-xl"><i class="glyphicon glyphicon-ok"></i></a>
+											</li>
+										</ul>
+
+										<p>
+											Large round buttons
+											<code>
+												.btn-circle .btn-lg
+											</code>
+										</p>
+										<ul class="demo-btns">
+											<li>
+												<a href="javascript:void(0);" class="btn btn-primary btn-circle btn-lg"><i class="glyphicon glyphicon-list"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default btn-circle btn-lg"><i class="glyphicon glyphicon-ok"></i></a>
+											</li>
+										</ul>
+
+										<p>
+											Default round buttons
+											<code>
+												.btn-circle
+											</code>
+										</p>
+										<ul class="demo-btns">
+											<li>
+												<a href="javascript:void(0);" class="btn btn-primary btn-circle"><i class="glyphicon glyphicon-list"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default btn-circle"><i class="glyphicon glyphicon-ok"></i></a>
+											</li>
+										</ul>
+
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget" id="wid-id-6" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+								<!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+								<header>
+									<span class="widget-icon"> <i class="fa fa-hand-o-up"></i> </span>
+									<h2>Drop Down buttons </h2>
+
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget edit box -->
+									<div class="jarviswidget-editbox">
+										<!-- This area used as dropdown edit box -->
+
+									</div>
+									<!-- end widget edit box -->
+
+									<!-- widget content -->
+									<div class="widget-body">
+
+										<p>
+											Button group with dropup/dropdown toggle
+											<code>
+												.btn-group
+											</code>
+										</p>
+
+										<div class="btn-group">
+											<button class="btn btn-primary">
+												Drop Down
+											</button>
+											<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+												<span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu">
+												<li>
+													<a href="javascript:void(0);">Action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Another action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Something else here</a>
+												</li>
+												<li class="divider"></li>
+												<li>
+													<a href="javascript:void(0);">Separated link</a>
+												</li>
+											</ul>
+										</div>
+										<div class="btn-group dropup">
+											<button class="btn btn-default">
+												Drop Up
+											</button>
+											<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+												<span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu">
+												<li>
+													<a href="javascript:void(0);">Action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Another action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Something else here</a>
+												</li>
+												<li class="divider"></li>
+												<li>
+													<a href="javascript:void(0);">Separated link</a>
+												</li>
+											</ul>
+										</div>
+
+										<hr class="simple">
+
+										<p>
+											Default button dropdowns
+											<code>
+												.dropdown-toggle
+											</code>
+										</p>
+
+										<div class="btn-group">
+											<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+												Action <span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu">
+												<li>
+													<a href="javascript:void(0);">Action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Another action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Something else here</a>
+												</li>
+												<li class="divider"></li>
+												<li>
+													<a href="javascript:void(0);">Separated link</a>
+												</li>
+											</ul>
+										</div>
+										<div class="btn-group">
+											<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+												Action <span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu">
+												<li>
+													<a href="javascript:void(0);">Action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Another action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Something else here</a>
+												</li>
+												<li class="divider"></li>
+												<li>
+													<a href="javascript:void(0);">Separated link</a>
+												</li>
+											</ul>
+										</div>
+										<hr class="simple">
+										<p>
+											Smaller button dropdowns
+											<code>
+												.btn-sm .dropdown-toggle
+											</code>
+										</p>
+										<div class="btn-group">
+											<button class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+												Action <span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu">
+												<li>
+													<a href="javascript:void(0);">Action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Another action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Something else here</a>
+												</li>
+												<li class="divider"></li>
+												<li>
+													<a href="javascript:void(0);">Separated link</a>
+												</li>
+											</ul>
+										</div>
+										<div class="btn-group">
+											<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+												Action <span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu">
+												<li>
+													<a href="javascript:void(0);">Action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Another action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Something else here</a>
+												</li>
+												<li class="divider"></li>
+												<li>
+													<a href="javascript:void(0);">Separated link</a>
+												</li>
+											</ul>
+										</div>
+										<hr class="simple">
+
+										<p>
+											Extra small button dropdowns
+											<code>
+												.btn-xs .dropdown-toggle
+											</code>
+										</p>
+										<div class="btn-group">
+											<button class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+												Action <span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu">
+												<li>
+													<a href="javascript:void(0);">Action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Another action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Something else here</a>
+												</li>
+												<li class="divider"></li>
+												<li>
+													<a href="javascript:void(0);">Separated link</a>
+												</li>
+											</ul>
+										</div>
+										<div class="btn-group">
+											<button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+												Action <span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu">
+												<li>
+													<a href="javascript:void(0);">Action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Another action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Something else here</a>
+												</li>
+												<li class="divider"></li>
+												<li>
+													<a href="javascript:void(0);">Separated link</a>
+												</li>
+											</ul>
+										</div>
+
+										<hr class="simple">
+										<h3>Multiple Level Dropdown <small><span class="label label-warning">New!</span></small></h3>
+										<p>
+											Custom created Multiple Level dropdown that works with ease! Simply use the class
+											<code>
+												.dropdown-menu .multi-level
+											</code>
+										</p>
+										<div class="dropdown">
+											<a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary" data-target="#" href="javascript:void(0);"> Multi Level <span class="caret"></span> </a>
+											<ul class="dropdown-menu multi-level" role="menu">
+												<li>
+													<a href="javascript:void(0);">Some action</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);">Some other action</a>
+												</li>
+												<li class="divider"></li>
+												<li class="dropdown-submenu">
+													<a tabindex="-1" href="javascript:void(0);">Hover me for more options</a>
+													<ul class="dropdown-menu">
+														<li>
+															<a tabindex="-1" href="javascript:void(0);">Second level</a>
+														</li>
+														<li class="dropdown-submenu">
+															<a href="javascript:void(0);">Even More..</a>
+															<ul class="dropdown-menu">
+																<li>
+																	<a href="javascript:void(0);">3rd level</a>
+																</li>
+																<li>
+																	<a href="javascript:void(0);">3rd level</a>
+																</li>
+															</ul>
+														</li>
+														<li>
+															<a href="javascript:void(0);">Second level</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);">Second level</a>
+														</li>
+													</ul>
+												</li>
+											</ul>
+										</div>
+
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget" id="wid-id-8" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+								<!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+								<header>
+									<span class="widget-icon"> <i class="fa fa-hand-o-up"></i> </span>
+									<h2>Button Groups </h2>
+
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget edit box -->
+									<div class="jarviswidget-editbox">
+										<!-- This area used as dropdown edit box -->
+
+									</div>
+									<!-- end widget edit box -->
+
+									<!-- widget content -->
+									<div class="widget-body">
+
+										<p>
+											Group a series of buttons together on a single line with the button group. Wrap a series of buttons with
+											<code>
+												.btn
+											</code>
+											in
+											<code>
+												.btn-group
+											</code>
+											.
+										</p>
+
+										<div class="row">
+											<div class="col-md-12">
+												<table class="table table-bordered">
+													<thead>
+														<tr>
+															<th style="width:25%">Horizontal Group</th>
+															<th style="width:25%">With Icons</th>
+															<th style="width:50%">Multiple Button Groups</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>
+															<div class="btn-group">
+																<button type="button" class="btn btn-default">
+																	Left
+																</button>
+																<button type="button" class="btn btn-default">
+																	Middle
+																</button>
+																<button type="button" class="btn btn-default">
+																	Right
+																</button>
+															</div></td>
+															<td>
+															<div class="btn-group">
+																<button type="button" class="btn btn-default">
+																	<i class="fa fa-align-left"></i>
+																</button>
+																<button type="button" class="btn btn-default">
+																	<i class="fa fa-align-center"></i>
+																</button>
+																<button type="button" class="btn btn-default">
+																	<i class="fa fa-align-right"></i>
+																</button>
+																<button type="button" class="btn btn-default">
+																	<i class="fa fa-align-justify"></i>
+																</button>
+															</div></td>
+															<td>
+															<div class="btn-toolbar">
+																<div class="btn-group">
+																	<button type="button" class="btn btn-default">
+																		1
+																	</button>
+																	<button type="button" class="btn btn-default">
+																		2
+																	</button>
+																	<button type="button" class="btn btn-default">
+																		3
+																	</button>
+																	<button type="button" class="btn btn-default">
+																		4
+																	</button>
+																</div>
+																<div class="btn-group">
+																	<button type="button" class="btn btn-default">
+																		5
+																	</button>
+																	<button type="button" class="btn btn-default">
+																		6
+																	</button>
+																	<button type="button" class="btn btn-default">
+																		7
+																	</button>
+																</div>
+																<div class="btn-group">
+																	<button type="button" class="btn btn-default">
+																		8
+																	</button>
+																</div>
+															</div></td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+										<hr class="simple">
+										<p>
+											Make a set of buttons appear vertically stacked rather than horizontally by putting it in
+											<code>
+												.btn-group-vertical
+											</code>
+											.
+										</p>
+
+										<div class="row">
+											<div class="col-md-12">
+												<table class="table table-bordered">
+													<thead>
+														<tr>
+															<th style="width:25%">Vertical Group</th>
+															<th style="width:25%">With Dropdown</th>
+															<th style="width:25%">With Icons</th>
+															<th style="width:25%">Multiple Button Groups</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>
+															<div class="btn-group-vertical">
+																<button type="button" class="btn btn-default">
+																	Top
+																</button>
+																<button type="button" class="btn btn-default">
+																	Middle
+																</button>
+																<button type="button" class="btn btn-default">
+																	Bottom
+																</button>
+															</div></td>
+															<td>
+															<div class="btn-group-vertical">
+																<button type="button" class="btn btn-primary">
+																	Button 1
+																</button>
+																<button type="button" class="btn btn-primary">
+																	Button 2
+																</button>
+																<button type="button" class="btn btn-primary">
+																	Button 3
+																</button>
+																<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+																	Dropdown
+																	<i class="fa fa-caret-down"></i>
+																</button>
+																<ul class="dropdown-menu">
+																	<li>
+																		<a href="javascript:void(0);">Dropdown link</a>
+																	</li>
+																	<li>
+																		<a href="javascript:void(0);">Dropdown link</a>
+																	</li>
+																</ul>
+															</div></td>
+															<td>
+															<div class="btn btn-group-vertical">
+																<a class="btn btn-default" href="javascript:void(0);"><i class="fa fa-align-left"></i></a>
+																<a class="btn btn-default" href="javascript:void(0);"><i class="fa fa-align-center"></i></a>
+																<a class="btn btn-default" href="javascript:void(0);"><i class="fa fa-align-right"></i></a>
+																<a class="btn btn-default" href="javascript:void(0);"><i class="fa fa-align-justify"></i></a>
+															</div></td>
+															<td>
+															<div class="btn-toolbar">
+																<div class="btn-group-vertical">
+																	<button type="button" class="btn btn-primary">
+																		Page 1
+																	</button>
+																	<button type="button" class="btn btn-primary">
+																		Page 2
+																	</button>
+																	<button type="button" class="btn btn-primary">
+																		Page 3
+																	</button>
+																	<button type="button" class="btn btn-primary">
+																		Page 4
+																	</button>
+																</div>
+
+															</div></td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+
+						</article>
+						<!-- WIDGET END -->
+
+						<!-- NEW WIDGET START -->
+						<article class="col-sm-12 col-md-12 col-lg-6">
+
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+								<!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+								<header>
+									<span class="widget-icon"> <i class="fa fa-hand-o-up"></i> </span>
+									<h2> Mix and match colors </h2>
+
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget edit box -->
+									<div class="jarviswidget-editbox">
+										<!-- This area used as dropdown edit box -->
+
+									</div>
+									<!-- end widget edit box -->
+
+									<!-- widget content -->
+									<div class="widget-body">
+
+										<p class="alert alert-info">
+											Custom buttons with core CSS elements. Mix and match existing classes to come up with unique style buttons.
+											<strong>For example:</strong>
+											<code>
+												.btn .bg-color-blueLight .txt-color-white
+											</code>
+
+										</p>
+
+										<ul class="demo-btns">
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-blueLight txt-color-white">.bg-color-blueLight</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-blue txt-color-white">.bg-color-blue</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-teal txt-color-white">.bg-color-teal</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-blueDark txt-color-white">.bg-color-blueDark</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-green txt-color-white">.bg-color-green</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-greenDark txt-color-white">.bg-color-greenDark</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-greenLight txt-color-white">.bg-color-greenLight</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-purple txt-color-white">.bg-color-purple</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-magenta txt-color-white">.bg-color-magenta</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-pink txt-color-white">.bg-color-pink</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-pinkDark txt-color-white">.bg-color-pinkDark</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-yellow txt-color-white">.bg-color-yellow</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-orange txt-color-white">.bg-color-orange</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-red txt-color-white">.bg-color-red</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-redLight txt-color-white">.bg-color-redLight</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default txt-color-dark">.btn-default</a>
+											</li>
+										</ul>
+
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget" id="wid-id-3" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+								<!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+								<header>
+									<span class="widget-icon"> <i class="fa fa-hand-o-up"></i> </span>
+									<h2> Mix and match colors </h2>
+
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget edit box -->
+									<div class="jarviswidget-editbox">
+										<!-- This area used as dropdown edit box -->
+
+									</div>
+									<!-- end widget edit box -->
+
+									<!-- widget content -->
+									<div class="widget-body">
+
+										<p class="alert alert-info">
+											Custom text colors can also be applied
+											<strong>For example:</strong>
+											<code>
+												.txt-color-red
+											</code>
+
+										</p>
+
+										<ul class="demo-btns">
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default txt-color-blueLight"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default txt-color-blue"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default txt-color-teal"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default txt-color-blueDark"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default txt-color-green"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default txt-color-greenDark"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default txt-color-greenLight"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default txt-color-purple"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default txt-color-magenta"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default txt-color-pink"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default txt-color-pinkDark"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default txt-color-yellow"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default txt-color-orange"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default txt-color-red"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+
+										</ul>
+
+										<hr class="simple">
+										<p>
+											Mix and match color with backgrounds
+											<code>
+												.btn .bg-color-blueLight .txt-color-magenta
+											</code>
+										</p>
+										<ul class="demo-btns">
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-blueLight txt-color-magenta"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-blueDark txt-color-teal"><i class="fa fa-gear fa-3x"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn bg-color-red txt-color-white"><i class="fa fa-gear fa-4x fa-spin"></i></a>
+											</li>
+										</ul>
+
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget" id="wid-id-5" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+								<!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+								<header>
+									<span class="widget-icon"> <i class="fa fa-hand-o-up"></i> </span>
+									<h2>Button with icons </h2>
+
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget edit box -->
+									<div class="jarviswidget-editbox">
+										<!-- This area used as dropdown edit box -->
+
+									</div>
+									<!-- end widget edit box -->
+
+									<!-- widget content -->
+									<div class="widget-body">
+
+										<p>
+											Default buttons have a single line of text with or without one or two icons aligned left or right.
+										</p>
+										<ul class="demo-btns">
+											<li>
+												<a href="javascript:void(0);" class="btn btn-primary"><i class="fa fa-gear"></i> Icon Left</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-success"><i class="fa fa-gear"></i> Both Sides <i class="fa fa-gear"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-danger">Icon Right <i class="fa fa-gear"></i></a>
+											</li>
+										</ul>
+										<ul class="demo-btns">
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default"><i class="fa fa-gear"></i> Icon Left</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default"><i class="fa fa-gear"></i> Both Sides <i class="fa fa-gear"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default">Icon Right <i class="fa fa-gear"></i></a>
+											</li>
+										</ul>
+
+										<hr class="simple">
+
+										<ul class="demo-btns">
+											<li>
+
+												<div class="btn-group">
+													<button class="btn bg-color-blueDark txt-color-white">
+														<i class="fa fa-gear"></i> Drop Down
+													</button>
+													<button class="btn btn-primary dropdown-toggle">
+														<span class="caret"></span>
+													</button>
+												</div>
+
+											</li>
+											<li>
+
+												<div class="btn-group">
+													<button class="btn bg-color-blueDark txt-color-white">
+														<i class="fa fa-gear"></i> Drop Down <i class="fa fa-gear"></i>
+													</button>
+													<button class="btn btn-success dropdown-toggle">
+														<span class="caret"></span>
+													</button>
+												</div>
+
+											</li>
+											<li>
+
+												<div class="btn-group">
+													<button class="btn bg-color-blueDark txt-color-white">
+														Drop Down <i class="fa fa-gear"></i>
+													</button>
+													<button class="btn btn-danger dropdown-toggle">
+														<span class="caret"></span>
+													</button>
+												</div>
+
+											</li>
+										</ul>
+
+										<ul class="demo-btns">
+											<li>
+
+												<div class="btn-group">
+													<button class="btn btn-default">
+														<i class="fa fa-gear"></i> Drop Down
+													</button>
+													<button class="btn btn-default dropdown-toggle">
+														<span class="caret"></span>
+													</button>
+												</div>
+
+											</li>
+											<li>
+
+												<div class="btn-group">
+													<button class="btn btn-default">
+														<i class="fa fa-gear"></i> Drop Down <i class="fa fa-gear"></i>
+													</button>
+													<button class="btn btn-default dropdown-toggle">
+														<span class="caret"></span>
+													</button>
+												</div>
+
+											</li>
+											<li>
+
+												<div class="btn-group">
+													<button class="btn btn-default">
+														Drop Down <i class="fa fa-gear"></i>
+													</button>
+													<button class="btn btn-default dropdown-toggle">
+														<span class="caret"></span>
+													</button>
+												</div>
+
+											</li>
+										</ul>
+
+										<hr class="simple">
+
+										<ul class="demo-btns">
+
+											<li>
+												<a href="javascript:void(0);" class="btn btn-primary btn-xs"><i class="fa fa-gear"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default btn-sm"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-primary"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-primary btn-lg"><i class="fa fa-gear fa-lg"></i></a>
+											</li>
+
+										</ul>
+
+										<ul class="demo-btns">
+
+											<li>
+												<a href="javascript:void(0);" class="btn btn-primary btn-xs"><i class="fa fa-gear"></i> <i class="fa fa-caret-down"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-default btn-sm"><i class="fa fa-gear fa-lg"></i> <i class="fa fa-caret-down"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-primary"><i class="fa fa-gear fa-lg"></i> <i class="fa fa-caret-down"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-primary btn-lg"><i class="fa fa-gear fa-lg"></i> <i class="fa fa-caret-down"></i></a>
+											</li>
+
+										</ul>
+
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget" id="wid-id-7" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+								<!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+								<header>
+									<span class="widget-icon"> <i class="fa fa-hand-o-up"></i> </span>
+									<h2>Label Buttons </h2>
+
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget edit box -->
+									<div class="jarviswidget-editbox">
+										<!-- This area used as dropdown edit box -->
+
+									</div>
+									<!-- end widget edit box -->
+
+									<!-- widget content -->
+									<div class="widget-body">
+
+										<ul class="demo-btns">
+											<li>
+												<a href="javascript:void(0);" class="btn btn-labeled btn-success"> <span class="btn-label"><i class="glyphicon glyphicon-ok"></i></span>Success </a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-labeled btn-danger"> <span class="btn-label"><i class="glyphicon glyphicon-remove"></i></span>Cancel </a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-labeled btn-warning"> <span class="btn-label"><i class="glyphicon glyphicon-bookmark"></i></span>Bookmark </a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-labeled btn-primary"> <span class="btn-label"><i class="glyphicon glyphicon-camera"></i></span>Camera </a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-labeled btn-default"> <span class="btn-label"><i class="glyphicon glyphicon-chevron-left"></i></span>Left </a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-labeled btn-default"> <span class="btn-label"><i class="glyphicon glyphicon-chevron-right"></i></span> Right </a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-labeled btn-success"> <span class="btn-label"><i class="glyphicon glyphicon-thumbs-up"></i></span>Thumbs
+												Up </a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-labeled btn-danger"> <span class="btn-label"><i class="glyphicon glyphicon-thumbs-down"></i></span>Thumbs
+												Down </a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-labeled btn-info"> <span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span>Refresh </a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" class="btn btn-labeled btn-danger"> <span class="btn-label"><i class="glyphicon glyphicon-trash"></i></span>Trash </a>
+											</li>
+											<li>
+												<a class="btn btn-success btn-labeled" href="javascript:void(0);"> <span class="btn-label"><i class="glyphicon glyphicon-info-sign"></i></span>Info Web </a>
+											</li>
+
+										</ul>
+										<pre>
+&lt;button type="button" class="btn btn-labeled btn-success">
+ &lt;span class="btn-label">
+  &lt;i class="glyphicon glyphicon-ok">&lt;/i>
+ &lt;/>Success
+&lt;/button>
+</pre>
+										
+
+
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget" id="wid-id-9" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+								<!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+								<header>
+									<span class="widget-icon"> <i class="fa fa-hand-o-up"></i> </span>
+									<h2>Block Buttons </h2>
+
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget edit box -->
+									<div class="jarviswidget-editbox">
+										<!-- This area used as dropdown edit box -->
+
+									</div>
+									<!-- end widget edit box -->
+
+									<!-- widget content -->
+									<div class="widget-body">
+										<p>
+											Block buttons
+											<code>
+												.btn .btn-block
+											</code>
+										</p>
+
+										<div class="well">
+											<button type="button" class="btn btn-primary btn-lg btn-block">
+												Block level button
+											</button>
+											<button type="button" class="btn btn-default btn-sm btn-block">
+												Block level small button
+											</button>
+											<button type="button" class="btn btn-default btn-xs btn-block">
+												Block level extra small button
+											</button>
+										</div>
+
+										<hr class="simple">
+
+										<p>
+											Block group buttons
+											<code>
+												.btn-group .btn-group-justified
+											</code>
+										</p>
+
+										<div class="well">
+
+											<div class="btn-group btn-group-justified">
+												<a href="javascript:void(0);" class="btn btn-default">Left</a>
+												<a href="javascript:void(0);" class="btn btn-default">Middle</a>
+												<a href="javascript:void(0);" class="btn btn-default">Right</a>
+											</div>
+
+										</div>
+
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+
+						</article>
+						<!-- WIDGET END -->
+
+					</div>
+
+					<!-- end row -->
+
+					<!-- row -->
+					<div class="row">
+
+					</div>
+					<!-- end row -->
+
+				</section>
+				<!-- end widget grid -->
+
+			</div>
+			<!-- END MAIN CONTENT -->
+
+		</div>
+		<!-- END MAIN PANEL -->
+
+		<!-- SHORTCUT AREA : With large tiles (activated via clicking user name tag)
+		Note: These tiles are completely responsive,
+		you can add as many as you like
+		-->
+		<div id="shortcut">
+			<ul>
+				<li>
+					<a href="#inbox.html" class="jarvismetro-tile big-cubes bg-color-blue"> <span class="iconbox"> <i class="fa fa-envelope fa-4x"></i> <span>Mail <span class="label pull-right bg-color-darken">14</span></span> </span> </a>
+				</li>
+				<li>
+					<a href="#calendar.html" class="jarvismetro-tile big-cubes bg-color-orangeDark"> <span class="iconbox"> <i class="fa fa-calendar fa-4x"></i> <span>Calendar</span> </span> </a>
+				</li>
+				<li>
+					<a href="#gmap-xml.html" class="jarvismetro-tile big-cubes bg-color-purple"> <span class="iconbox"> <i class="fa fa-map-marker fa-4x"></i> <span>Maps</span> </span> </a>
+				</li>
+				<li>
+					<a href="#invoice.html" class="jarvismetro-tile big-cubes bg-color-blueDark"> <span class="iconbox"> <i class="fa fa-book fa-4x"></i> <span>Invoice <span class="label pull-right bg-color-darken">99</span></span> </span> </a>
+				</li>
+				<li>
+					<a href="#gallery.html" class="jarvismetro-tile big-cubes bg-color-greenLight"> <span class="iconbox"> <i class="fa fa-picture-o fa-4x"></i> <span>Gallery </span> </span> </a>
+				</li>
+				<li>
+					<a href="javascript:void(0);" class="jarvismetro-tile big-cubes selected bg-color-pinkDark"> <span class="iconbox"> <i class="fa fa-user fa-4x"></i> <span>My Profile </span> </span> </a>
+				</li>
+			</ul>
+		</div>
+		<!-- END SHORTCUT AREA -->
+
+		<!--================================================== -->
+
+		<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+		<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>
+
+		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+
+		<script>
+			if (!window.jQuery) {
+				document.write('<script src="js/libs/jquery-2.0.2.min.js"><\/script>');
+			}
+		</script>
+
+
+		<script>
+			if (!window.jQuery.ui) {
+				document.write('<script src="js/libs/jquery-ui-1.10.3.min.js"><\/script>');
+			}
+		</script>
+
+		<!-- JS TOUCH : include this plugin for mobile drag / drop touch events
+		<script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> -->
+
+		<!-- BOOTSTRAP JS -->
+		<script src="js/bootstrap/bootstrap.min.js"></script>
+
+		<!-- CUSTOM NOTIFICATION -->
+		<script src="js/notification/SmartNotification.min.js"></script>
+
+		<!-- JARVIS WIDGETS -->
+		<script src="js/smartwidgets/jarvis.widget.min.js"></script>
+
+		<!-- EASY PIE CHARTS -->
+		<script src="js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+
+		<!-- SPARKLINES -->
+		<script src="js/plugin/sparkline/jquery.sparkline.min.js"></script>
+
+		<!-- JQUERY VALIDATE -->
+		<script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>
+
+		<!-- JQUERY MASKED INPUT -->
+		<script src="js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+
+		<!-- JQUERY SELECT2 INPUT -->
+		<script src="js/plugin/select2/select2.min.js"></script>
+
+		<!-- JQUERY UI + Bootstrap Slider -->
+		<script src="js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+
+		<!-- browser msie issue fix -->
+		<script src="js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+
+		<!-- FastClick: For mobile devices -->
+		<script src="js/plugin/fastclick/fastclick.js"></script>
+
+		<!--[if IE 7]>
+
+		<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+
+		<![endif]-->
+
+		<!-- Demo purpose only -->
+		<script src="js/demo.js"></script>
+
+		<!-- MAIN APP JS FILE -->
+		<script src="js/app.js"></script>
+
+		<!-- PAGE RELATED PLUGIN(S)
+		<script src="..."></script>-->
+
+		<script type="text/javascript">
+
+		// DO NOT REMOVE : GLOBAL FUNCTIONS!
+		
+		$(document).ready(function() {
+		
+			pageSetUp();
+		
+		})
+
+		</script>
+
+		<!-- Your GOOGLE ANALYTICS CODE Below -->
+
+	</body>
+
+</html>
